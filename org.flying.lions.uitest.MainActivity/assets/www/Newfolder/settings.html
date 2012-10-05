@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- Adding a comment to test -->
+        <title>
+            MEM
+        </title>
+        
+        <!--  <link rel="stylesheet" href="./theme/Wikus/WikusTheme.css" />   
+        -->
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"> 
+        <link rel="stylesheet" href="./theme/Wikus/jquery.mobile-1.1.1.css" />	
+        <script type="text/javascript" src="cordova-1.9.0.js"></script> 
+        
+	    <script src="./theme/Wikus/jquery-1.7.1.min.js"></script>
+        <script src="./theme/Wikus/jquery.mobile-1.1.1.min.js"></script>        
+        
+    
+    	<script type="text/javascript" charset="utf-8">
+		function init(){
+			document.addEventListener("deviceready",onDeviceReady);
+			
+			//console.log("init");
+		
+		}
+		
+		function onDeviceReady(){
+			//console.log("deviceready");
+			navigator.splashscreen.hide();
+			document.addEventListener("menubutton", onMenuKeyDown, false);
+		}
+		
+		function onMenuKeyDown(){
+		
+			console.log("MENU");
+		}
+        
+        
+
+        </script>
+</head>
+<body onload="init()">
+		
+        <div data-role="page" data-theme="a" >
+        	<!-- Header -->
+        	<div data-role="header" data-position="fixed" data-id="homeheader">
+        		<h1>Settings</h1>
+        		<a href="javascript:navigator.app.exitApp();" data-icon="home" class="ui-btn-right">EXIT</a>
+        		<div data-role="navbar">
+					<ul>
+						<li><a href="index.html" data-icon="home">Home</a></li>
+						<li><a href="transactions.html" data-icon="star">Transactions</a></li>
+						<li><a href="graphMenu.html" data-icon="grid">Reports</a></li>
+						<li><a href="settings.html" class="ui-btn-active ui-state-persist" data-icon="gear">Settings</a></li>
+					</ul>
+				</div>
+	        </div>
+	        
+	        <div data-role="content">
+				<div data-role="controlgroup">
+				<a href="index.html" data-role="button">Accounts</a>
+				<a href="index.html" data-role="button">Import Inbox</a>
+				<a href="index.html" data-role="button">Import CSV</a>
+				<a href="index.html" data-role="button">Export CSV</a>
+				<a href="index.html" data-role="button">Graph Settings</a>
+				</div>
+	        	
+	        </div>
+	        
+       
+				
+	    </div>		
+	    
+
+    
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- Adding a comment to test -->
+        <title>
+            MEM
+        </title>
+        
+        <!--  <link rel="stylesheet" href="./theme/Wikus/WikusTheme.css" />   
+        -->
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"> 
+        <link rel="stylesheet" href="./theme/Wikus/jquery.mobile-1.1.1.css" />	
+        <script type="text/javascript" src="cordova-1.9.0.js"></script> 
+        
+	    <script src="./theme/Wikus/jquery-1.7.1.min.js"></script>
+        <script src="./theme/Wikus/jquery.mobile-1.1.1.min.js"></script>        
+        
+		<script type="text/javascript" src="./scripts/showaccounts.js"></script>
+    	<script type="text/javascript" charset="utf-8">
+		
+		
+		
+		function onDeviceReady(){
+			//console.log("deviceready");
+			
+			navigator.splashscreen.hide();
+			document.addEventListener("menubutton", onMenuKeyDown, false);
+			
+			// (open the database)
+			db = window.openDatabase("Database", "1.0", "Flying Lions Database", 10485760);
+			//in main index page -> show the accounts and their balances
+			db.transaction(queryDB, errorCB); //do the actual database queries
+		}
+		
+		function onMenuKeyDown(){
+		
+			console.log("MENU");
+			navigator.app.loadUrl("file:///android_asset/www/settings.html");
+		}
+		
+		onload=function (){
+			document.addEventListener("deviceready",onDeviceReady);
+			
+			//console.log("init");
+		
+		}
+        
+        
+
+        </script>
+</head>
+<body>
+		
+        <div data-role="page" data-theme="a">
+        	<!-- Header -->
+        	<div data-role="header" data-position="fixed" data-id="homeheader">
+        		<h1>MEM</h1>
+        		<a href="javascript:navigator.app.exitApp();" data-icon="home" class="ui-btn-right">EXIT</a>
+        		<div data-role="navbar">
+					<ul>
+						<li><a href="index.html" class="ui-btn-active ui-state-persist" data-icon="home" >Home</a></li>
+						<li><a href="transactions.html" data-icon="star">Transactions</a></li>
+						<li><a href="graphMenu.html" data-icon="grid">Reports</a></li>
+						<li><a href="settings.html" data-icon="gear">Settings</a></li>
+					</ul>
+				</div>
+	        </div>
+	        
+	        <div id="acc" data-role="content">
+	        	<h4>Overview:</h4>
+	        	<hr>
+	        	ABSA cheque account: Balance R1234<br>
+	        	Income: R20000<br>
+	        	Expenses: R1233<br>
+	        	<hr>
+	        	FNB cheque account: Balance R1345<br>
+	        	Income: R2454<br>
+	        	Expenses: R1655<br>
+	        	<hr>
+	        	
+	        </div>
+	        
+	        <!-- Footer -->
+	        <!-- data-fullscreen="true" makes footer hide when not used -->
+	        <div data-role="footer" data-position="fixed">
+	        	<div data-role="navbar">
+					<ul>
+						<li><a href="add.html">Add Account</a></li>
+						<li><a href="delete.html">Delete Account</a></li>
+					</ul>
+				</div>
+	        </div>	        
+				
+	    </div>		
+	    
+
+    
+</body>
+
+</html>

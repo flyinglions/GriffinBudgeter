@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--<meta charset="utf-8">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Expenses per Category</title>
+    <link rel="stylesheet" href="../theme/Wikus/WikusTheme.css" />
+    <link rel="stylesheet" href="../theme/Wikus/jquery.mobile.structure-1.1.0.min.css" />
+    <script src="../theme/Wikus/jquery-1.7.1.min.js"></script>
+    <script src="../theme/Wikus/jquery.mobile-1.1.0.min.js"></script>
+    <link class="include" rel="stylesheet" type="text/css" href="../report/jquery.jqplot.min.css" />
+    <script type="text/javascript" charset="utf-8" src="../cordova-1.9.0.js"></script>
+  </head>
+  <body>
+    <div data-role="page" data-theme="a">
+      <div data-role="header" data-position="inline">
+        <h1>Expenses per Category</h1>
+      </div>
+      <div data-role="content" data-theme="a" class="ReportContent">
+          <h3 class="loading">Loading data...</h3>
+        <script class="code" type="text/javascript">
+            document.addEventListener("deviceready", onDeviceReady, false);
+            var plot1 = new Array();
+            var accounts = new Array();
+            var acc_Num = new Array();
+            var Categories = new Array();
+            var Spent = new Array();
+            var Budgeted = new Array();
+            
+            // Query the database
+            ///
+            function queryDB(tx) {
+                tx.executeSql('SELECT * FROM Bank_Account', [], bank_accountSuccess, errorCB);
+                tx.executeSql('SELECT * FROM Budget_Items', [], budgetSuccess, errorCB);
+                tx.executeSql('SELECT * FROM sms', [], querySuccess, errorCB);
+            }
+            
+            function bank_accountSuccess(tx, results)
+            {
+                var len = results.rows.length;
+                //alert(len);
+                //len = 1;
+                for (var i=0; i<len; i++)
+                {
+                    //alert(results.rows.item(i).Acc_Name);
+                    accounts.push(results.rows.item(i).Acc_Name+ " " + results.rows.item(i).Bank + " : "+ results.rows.item(i).Account_Num);
+                    acc_Num.push(results.rows.item(i).Account_Num);
+                    //$("div h3").text();
+                }
+            }
+            
+            function sanitize(value)
+            {
+                var newValue = value;
+                
+                newValue = replaceAll(".", newValue);
+                newValue = replaceAll("/", newValue);
+                newValue = replaceAll(" ", newValue);
+                
+                return newValue;
+            }
+            
+            function replaceAll(exp, value)
+            {
+                var newValue = value;
+                while(newValue.indexOf(exp) > -1)
+                {
+                    newValue = newValue.replace(exp,"_");
+                }
+                return newValue;
+            }
+            
+            function getIndexInCategory(category)
+            {
+                for(var i = 0 ; i < Categories.length; i++)
+                {
+                    var tmpCat = Categories[i];
+                    if(category.toUpperCase() == tmpCat.toUpperCase())
+                    {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+            
+            function budgetSuccess(tx, results) {
+                var len = results.rows.length;
+                //alert(len);
+                //len = 1;
+                for (var i=0; i<len; i++)
+                {
+                    //alert(results.rows.item(i).Acc_Name);
+                    Categories.push(results.rows.item(i).Category);
+                    Budgeted.push(1*results.rows.item(i).Budget_Amount);
+                    //$("div h3").text();
+                }
+            }
+
+            // Query the success callback
+            //
+            function querySuccess(tx, results) {
+                var len = results.rows.length;
+                var output = "";
+                
+                $('h3.loading').detach();
+                if(accounts.length == 0)
+                {
+                    $('<h3>No Accounts Found.</h3>').appendTo('.ReportContent');
+                }
+                
+                /*
+                for (var i=0; i<len; i++)
+                {
+                    var tmpCategory = results.rows.item(i).Category;
+                    var exists = false;
+                    for(var j=0; j < Categories.length; j++)
+                    {
+                        var thisCategory = Categories[j];
+                        if(thisCategory.toUpperCase() == tmpCategory.toUpperCase())
+                        {
+                            exists = true;
+                        }
+                    }
+
+                    if(!exists)
+                    {
+                        Categories.push(tmpCategory);
+                    }
+                }
+                */
+                
+                for(var k = 0 ; k < accounts.length; k++)
+                {
+                    $('<h3>'+accounts[k]+'</h3>').appendTo('.ReportContent');
+                    $('<div id="'+sanitize(acc_Num[k])+'" style="height:300px; width:300px;"></div>').appendTo('.ReportContent');
+                    
+                    Spent = new Array();
+                    //Budgeted = new Array();
+                    
+                    for(var j=0; j < Categories.length; j++)
+                    {
+                        Spent.push(0);
+                    }
+                    
+                    for (var i=0; i<len; i++)
+                    {
+                        
+
+                        //alert(tmpCategory);
+                        if(sanitize(results.rows.item(i).Account_Num) == sanitize(acc_Num[k]))
+                        {
+                            var value = 1*results.rows.item(i).Amount;
+                            var tmpCategory = results.rows.item(i).Category;
+                            if(value < 0)
+                            {
+                                Spent[getIndexInCategory(tmpCategory)] = 1*Spent[getIndexInCategory(tmpCategory)] - 1*results.rows.item(i).Amount;
+                            }
+                        }
+                        //alert(Spent[getIndexInCategory(tmpCategory)]);
+                    }
+
+                    if(len > 0)
+                    {
+                        if(Spent.length == 0)
+                        {
+                            for(var i = 0; i < Categories.length; i++)
+                            {
+                                Spent.push(0);
+                            }
+                        }
+                        //alert(Spent);
+                        plotGraph(sanitize(acc_Num[k]));
+                    }
+                }
+            }
+            
+            function plotGraph(name)
+            {
+                //alert(income);
+                $.jqplot(name, [Spent, Budgeted], {
+                    title: 'Overview of Cash Flow',
+                    animate: true,
+                    animateReplot: true,
+                    cursor: {
+                        show: true,
+                        zoom: true,
+                        looseZoom: true,
+                        showTooltip: false
+                    },
+                    series:[
+                        {
+                        label:'Spent',
+                        color: '#FF0000',
+                        pointLabels: {
+                            //show: true
+                        },
+                        renderer: $.jqplot.BarRenderer,
+                        showHighlight: false,
+                        yaxis: 'yaxis',
+                        rendererOptions: {
+                            animation: {
+                            speed: 2500
+                            },
+                            barWidth: 15,
+                            barPadding: 0,
+                            barMargin: 0,
+                            highlightMouseOver: false
+                        }
+                        },
+                        {
+                        label:'Budgeted',
+                        color: '#00AA00',
+                        renderer:$.jqplot.BarRenderer,
+                        rendererOptions: {
+                            animation: {
+                            speed: 2000
+                            },
+                            barWidth: 15
+                        }
+                        }
+                    ],
+                    axesDefaults: {
+                        pad: 0
+                    },
+                    axes: {
+                        xaxis: {
+                        label: "Category",
+                        renderer: $.jqplot.CategoryAxisRenderer,
+                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        ticks: Categories,
+                        tickOptions: {
+                            angle: 90
+                        }
+                        },
+                        yaxis: {
+                        label: "Cash Amount",
+                        tickOptions: {
+                            formatString: "R%'d"
+                        },
+                        rendererOptions: {
+                            //forceTickAt0: true
+                        }
+                        },
+                        y2axis: {
+                        tickOptions: {
+                            formatString: "R%'d"
+                        },
+                        rendererOptions: {
+                            alignTicks: true
+                            //forceTickAt0: true
+                        }
+                        }
+                    },
+                    highlighter: {
+                        show: true,
+                        showLabel: true,
+                        tooltipAxes: 'y',
+                        sizeAdjust: 7.5 , tooltipLocation : 'ne'
+                    },
+                    legend: {
+                        show: true,
+                        location: 'sw',
+                        placement: 'outside'
+                    }  
+                    });
+            }
+          
+          // Transaction error callback
+            //
+            function errorCB(err) {
+                alert("Error processing SQL: "+err.code);
+            }
+
+
+            // Cordova is ready
+            //
+            function onDeviceReady() {
+                db = window.openDatabase("Database", "1.0", "Flying Lions Database", 10485760);
+                db.transaction(queryDB, errorCB);
+            }  
+        </script>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("table.jqplot-table-legend").attr({ 
+                    style: "left: 0px; top: 220px; "
+                });
+            });
+        </script>
+
+        
+        <!-- Don't touch this! -->
+        
+        
+        <script class="include" type="text/javascript" src="../report/jquery.jqplot.min.js"></script>
+        <script type="text/javascript" src="../report/syntaxhighlighter/scripts/shCore.min.js"></script>
+        <script type="text/javascript" src="../report/syntaxhighlighter/scripts/shBrushJScript.min.js"></script>
+        <script type="text/javascript" src="../report/syntaxhighlighter/scripts/shBrushXml.min.js"></script>
+        <script type="text/javascript" src="../report/plugins/jqplot.logAxisRenderer.min.js"></script>
+        <script type="text/javascript" src="../report/plugins/jqplot.canvasTextRenderer.min.js"></script>
+        <script type="text/javascript" src="../report/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+        <script type="text/javascript" src="../report/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+        <!-- Additional plugins go here -->
+        
+        <script class="include" type="text/javascript" src="../report/plugins/jqplot.barRenderer.min.js"></script>
+        <script type="text/javascript" src="../report/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+        <script class="include" type="text/javascript" src="../report/plugins/jqplot.highlighter.min.js"></script>
+        <script class="include" type="text/javascript" src="../report/plugins/jqplot.cursor.min.js"></script>
+        <script class="include" type="text/javascript" src="../report/plugins/jqplot.pointLabels.min.js"></script>
+        
+        <!-- End additional plugins -->
+      </div>
+    </div>
+  </body>
+</html>

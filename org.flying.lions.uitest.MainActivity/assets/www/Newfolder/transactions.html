@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- Adding a comment to test -->
+        <title>
+            MEM
+        </title>
+        
+        <!--  <link rel="stylesheet" href="./theme/Wikus/WikusTheme.css" />   
+        -->
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"> 
+        <link rel="stylesheet" href="./theme/Wikus/jquery.mobile-1.1.1.css" />	
+        <script type="text/javascript" src="cordova-1.9.0.js"></script> 
+        
+	    <script src="./theme/Wikus/jquery-1.7.1.min.js"></script>
+        <script src="./theme/Wikus/jquery.mobile-1.1.1.min.js"></script>        
+        
+    
+    	<script type="text/javascript" charset="utf-8">
+		function init(){
+			document.addEventListener("deviceready",onDeviceReady);
+			
+			//console.log("init");
+		
+		}
+		
+		function onDeviceReady(){
+			//console.log("deviceready");
+			navigator.splashscreen.hide();
+			document.addEventListener("menubutton", onMenuKeyDown, false);
+		}
+		
+		function onMenuKeyDown(){
+		
+			console.log("MENU");
+		}
+        
+        
+
+        </script>
+</head>
+<body onload="init()">
+		
+        <div data-role="page" data-theme="a" >
+        	<!-- Header -->
+        	<div data-role="header" data-position="fixed" data-id="homeheader">
+        		<h1>Transactions</h1>
+        		<a href="javascript:navigator.app.exitApp();" data-icon="home" class="ui-btn-right">EXIT</a>
+        		<div data-role="navbar">
+					<ul>
+						<li><a href="index.html" data-icon="home">Home</a></li>
+						<li><a href="transactions.html" class="ui-btn-active ui-state-persist" data-icon="star">Transactions</a></li>
+						<li><a href="graphMenu.html" data-icon="grid">Reports</a></li>
+						<li><a href="settings.html" data-icon="gear">Settings</a></li>
+					</ul>
+				</div>
+	        </div>
+	        
+	        <div data-role="content">
+				<ul data-role="listview" data-theme="d" data-divider-theme="d" class="ui-listview">
+					<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">
+						Friday, October 8, 2012 
+						<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">2</span>
+					</li>
+					
+					<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">
+						<div class="ui-btn-inner ui-li">
+							<div class="ui-btn-text">
+								<a href="transactions.html" class="ui-link-inherit">
+						
+									<h3 class="ui-li-heading">ABSA: cheque account</h3>
+									<p class="ui-li-desc">
+										<strong>Category: Other</strong>
+									</p>
+									
+									<p class=" ui-li-aside ui-li-desc">
+										R1021.00
+									</p>
+								</a>
+							</div>
+							
+							<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
+						</div>
+					</li>
+					
+					<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">
+						<div class="ui-btn-inner ui-li">
+							<div class="ui-btn-text">
+								<a href="transactions.html" class="ui-link-inherit">
+						
+									<h3 class="ui-li-heading">FNB: cheque account</h3>
+									<p class="ui-li-desc">
+										<strong>Category: Food</strong>
+									</p>
+									
+									<p class=" ui-li-aside ui-li-desc">
+										R2236.00
+									</p>
+								</a>
+							</div>
+							
+							<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
+						</div>
+					</li>				
+						
+					<!-- Other day -->
+					<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">
+						Thursday, October 7, 2012 
+						<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">1</span>
+					</li>
+					
+					<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">
+						<div class="ui-btn-inner ui-li">
+							<div class="ui-btn-text">
+								<a href="transactions.html" class="ui-link-inherit">
+						
+									<h3 class="ui-li-heading">ABSA: cheque account</h3>
+									<p class="ui-li-desc">
+										<strong>Category: Travel</strong>
+									</p>
+									
+									<p class=" ui-li-aside ui-li-desc">
+										R333.00
+									</p>
+								</a>
+							</div>
+							
+							<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
+						</div>
+					</li>
+					
+				</ul>
+	        	
+	        </div>
+	        
+	        <!-- Footer -->
+	        <!-- data-fullscreen="true" makes footer hide when not used -->
+	        <div data-role="footer" data-position="fixed">
+	        	<div data-role="navbar">
+					<ul>
+						<li><a href="add.html">New Transaction</a></li>
+						<li><a href="delete.html">Filter</a></li>
+					</ul>
+				</div>
+	        </div>	        
+				
+	    </div>		
+	    
+
+    
+</body>
+
+</html>
