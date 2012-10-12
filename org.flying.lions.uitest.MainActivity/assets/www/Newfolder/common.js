@@ -56,8 +56,9 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	
 	//in main index page -> show the accounts and their balances
 	//do the actual database queries
-	db.transaction(swacc_queryDB, errorCB);
+	db.transaction(swacc_queryDB, showaccounts_errorCB);
         db.transaction(transactions_queryDB, transactions_errorCB);
+        db.transaction(addaccqueryDB, errorInsert);
 	
 	
 	
@@ -70,7 +71,7 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
   
 		//in main index page -> show the accounts and their balances
 		//do the actual database queries
-		db.transaction(swacc_queryDB, errorCB);
+		db.transaction(swacc_queryDB, showaccounts_errorCB);
 		}
 	);
 	
