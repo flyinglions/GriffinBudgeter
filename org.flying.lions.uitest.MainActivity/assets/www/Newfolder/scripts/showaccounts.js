@@ -1,20 +1,11 @@
 var Accounts = new Array();
 var newAccounts = new Array();
 var tmpSQL ="";
-//var db;
 
 var Bank = new Array();
 var BankUp = new Array();
 var accName = new Array();
 var accNameUp = new Array();
-/*
-    * 
-    * ABSA cheque account: Balance R1234<br>
-            Income: R20000<br>
-            Expenses: R1233<br>
-    */
-
-// Query the database
 
 function swacc_queryDB(tx) {
             //alert("hh");
@@ -48,10 +39,8 @@ function showaccounts_content(theAccountName, theAccountNum)
 
 function showaccounts_Success(tx, results)
 {
-
     var len = results.rows.length;
-    //$('<h3>List of Accounts in use</h3>').appendTo('div.data');
-                    var ht_str ='<h4>Overview:</h4>';
+    var ht_str ='<h4>Overview:</h4>';
     if(len == 0)
     {
         ht_str +='<h3>No accounts yet</h3>';
@@ -63,13 +52,14 @@ function showaccounts_Success(tx, results)
     var tmpStr = "";
     var accCounter = 0;
     var lastBank = "";
+    
     if(len > 0)
     {
         tmpBank = results.rows.item(0).Bank;
     }
+    
     for (var i=0; i<len; i++)
     {
-        //ht_str += showaccounts_header(results.rows.item(i).Bank);
         var thisBank = results.rows.item(i).Bank;
         if(tmpBank.toUpperCase() == thisBank.toUpperCase())
         {
@@ -83,47 +73,12 @@ function showaccounts_Success(tx, results)
             tmpBank = thisBank;
             tmpStr = showaccounts_content(results.rows.item(i).Acc_Name, results.rows.item(i).Account_Num);
         }
-        
-        
-        /*
-        //Accounts.push(results.rows.item(i).Account_Num);
-        console.log(results.rows.item(i).Acc_Name);
-        var tmpBank = results.rows.item(i).Bank;
-        if(BankUp.indexOf(tmpBank.toUpperCase()) < 0)
-        {
-            BankUp.push(tmpBank.toUpperCase());
-            Bank.push(tmpBank);
-            ht_str += header(tmpBank);
-            //ht_str += content();
-        }
-        //ht_str+='<hr>'+results.rows.item(i).Acc_Name+'('+results.rows.item(i).Account_Num+'): Balance '+results.rows.item(i).Balance+'<br>';//.appendTo('div.data');
-        */
-       lastBank = thisBank;
+
+        lastBank = thisBank;
     }
     
     ht_str += showaccounts_header(lastBank, accCounter) + tmpStr;
-
-//Get Accounts
-/*
-    for (i=0; i<len; i++)
-    {
-        //Accounts.push(results.rows.item(i).Account_Num);
-        console.log(results.rows.item(i).Acc_Name);
-        var tmpAcc = results.rows.item(i).Acc_Name;
-        if(accNameUp.indexOf(tmpAcc.toUpperCase()) < 0)
-        {
-            accNameUp.push(tmpAcc.toUpperCase());
-            accName.push(tmpAcc);
-            alert(tmpAcc);
-            ht_str += content();
-        }
-        //ht_str+='<hr>'+results.rows.item(i).Acc_Name+'('+results.rows.item(i).Account_Num+'): Balance '+results.rows.item(i).Balance+'<br>';//.appendTo('div.data');
-    }
-    //$("<input class=\"button\" type=\"button\" value=\"Back\" onclick=\"redirect('../Accounts.html');\"/>").appendTo("div.data");
-
-*/
-                    $('ul#acc').html(ht_str);
-                    
+    $('ul#acc').html(ht_str);                
 }
 
 // Transaction error callback
