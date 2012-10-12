@@ -32,6 +32,11 @@ function errorInsert(err)
     alert("Error processing SQL: "+err.code+" : "+tmpSQL);
 }
 
+function errorCB(err) 
+{
+    alert("Error processing SQL: "+err.code+" : "+err.message);
+}
+
 function bank_add_Accountsuccess(tx, results)
 {
     var len = results.rows.length;
@@ -59,7 +64,7 @@ function querySuccess(tx, results) {
                 isNew = false;
             }
         }
-        for(var j = 0 ; j < newadd_Accounts.length; j++)
+        for(j = 0 ; j < newadd_Accounts.length; j++)
         {
             var tmp = newadd_Accounts[j];
             if(tmp.toUpperCase() == accNum.toUpperCase())
