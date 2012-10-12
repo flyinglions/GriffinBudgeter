@@ -57,7 +57,7 @@
 	        </div>
 	        
 	        <div data-role="content">
-				<ul data-role="listview" data-theme="d" data-divider-theme="d" class="ui-listview">
+				<ul id="first" data-role="listview" data-theme="d" data-divider-theme="d" class="ui-listview">
 					<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">
 						Friday, October 8, 2012 
 						<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">2</span>
@@ -140,9 +140,11 @@
 					<ul>
 						<li><a href="add.html">New Transaction</a></li>
 						<li><a href="delete.html">Filter</a></li>
+						
 					</ul>
 				</div>
 	        </div>	        
+			<input onclick="alert($('#first ul:selected').val());" value="hhh" type="submit" />
 				
 	    </div>		
 	    

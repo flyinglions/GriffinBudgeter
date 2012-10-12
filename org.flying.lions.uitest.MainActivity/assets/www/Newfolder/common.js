@@ -44,11 +44,14 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	isFirstRun = true;
 	
 	
-	/*read all files in MEM and delete them*/
-	getDirectoryEntries(got_direntries);
+	
 	
 	/*Code for opening the Database: Wikus*/
 	db = window.openDatabase("Database", "1.0", "Flying Lions Database", 10485760);
+	
+	/*read all files in MEM and delete them*/
+	getDirectoryEntries(got_direntries);
+	
 	//alert("ready");
 	//dropTables();	
 	createIfNotExistTables();
@@ -56,7 +59,10 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	
 	//in main index page -> show the accounts and their balances
 	//do the actual database queries
-	db.transaction(swacc_queryDB, errorCB);
+	//db.transaction(swacc_queryDB, errorCB);
+	db_queries.push('select Bank, Acc_Name,b.Acc_Name as Acc, sum(Amount) as Am from sms s JOIN Bank_Account b ON (s.Account_Num=b.Account_Num) where (s.Amount < 0) group by b.Account_Num ');
+	db_queries.push('select  sum(Amount) as Am from sms s JOIN Bank_Account b ON (s.Account_Num=b.Account_Num) where (s.Amount > 0) group by b.Account_Num ');
+	doTransactions(tmpcall);
 	
 	
 	
@@ -69,7 +75,11 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
   
 		//in main index page -> show the accounts and their balances
 		//do the actual database queries
-		db.transaction(swacc_queryDB, errorCB);
+		db_queries.push('select Bank, Acc_Name,b.Acc_Name as Acc, sum(Amount) as Am from sms s JOIN Bank_Account b ON (s.Account_Num=b.Account_Num) where (s.Amount < 0) group by b.Account_Num ');
+		db_queries.push('select Bank, Acc_Name,b.Acc_Name as Acc, sum(Amount) as Am from sms s JOIN Bank_Account b ON (s.Account_Num=b.Account_Num) where (s.Amount > 0) group by b.Account_Num ');
+		doTransactions(tmpcall);
+	
+		//db.transaction(swacc_queryDB, errorCB);
 		}
 	);
 	
@@ -82,9 +92,31 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 		}
 	);
 	
-
+	$( '#transactions' ).live( 'pageshow',
+		function(event){
+  
+		//execute add account scripts (addaccount page)
+		startINIwithoutStop(gettransactionslimit);
+		
+		}
+	);
 	
-
+	$( '#settingsAccounts' ).live( 'pageshow',
+		function(event){
+  
+		//execute add account scripts (addaccount page)
+		showsettingsaccounts();
+		}
+	);
+	
+	$( '#graphsettings' ).live( 'pageshow',
+		function(event){
+  
+		//execute add account scripts (addaccount page)
+		showgraphsettings();
+		}
+	);
+	
 }
 
 
@@ -164,22 +196,25 @@ function notificationCallback(){
 function got_direntries() {					
 	//alert("got entries");
 	
-	 //alert(text_array.length);
+	 
 	var k=0;
 	for (k=0;k<text_array.length; k++) 
         {
 	//alert(text_array[k]);//Wikus:)
             var tmpData = text_array[k].split('\r\n');
+			alert(tmpData.length);
             for(var i = 0 ; i < tmpData.length; i++)
             {
                 //alert(tmpData[i]);
                 var statement = tmpData[i];
+				console.log(statement);
                 statement = statement.toUpperCase();
                 
                 if(statement.indexOf("RECON") < 0)
                 {    
                     functionQueue.enqueue(tmpData[i]);
                     typeQueue.enqueue('INSERT');
+					
                 }
             }
 	//process text...sql

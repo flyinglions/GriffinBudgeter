@@ -4,8 +4,30 @@ var Accounts = new Array();
             //var db;
 
             // Query the database
-            
-            function swacc_queryDB(tx) {
+            function tmpcall() {
+				//alert("call");
+				
+				var db_expense = db_results.shift().rows;
+				var db_income = db_results.shift().rows;
+				var len = db_expense.length;
+				//alert(len);
+				var str = '<h4>Overview:</h4>';
+				for (var k=0; k<len; k++) {
+				var expense = Math.round(db_expense.item(k).Am);
+				var income =0;
+				if (k<db_income.length)
+				income = Math.round(db_income.item(k).Am);
+				var bal = income+expense;
+				str+='<hr>'+db_expense.item(k).Bank+' '+db_expense.item(k).Acc+': Balance '+bal+'<br />'; 
+				str+='Income: '+income+'<br />';
+				str+='Expenses: '+expense+'<br />';
+				}
+				$('div#acc').html(str);
+			
+			
+			}
+			
+           /* function swacc_queryDB(tx) {
 			//alert("hh");
                 tx.executeSql('SELECT * FROM Bank_Account', [], bank_accountSuccess, errorCB);
                 //tx.executeSql('SELECT * FROM sms', [], querySuccess, errorCB);
@@ -31,8 +53,7 @@ var Accounts = new Array();
 				$('div#acc').html(ht_str);
             }
 
-            // Transaction error callback
-            //
+            */
             function errorCB(err) 
             {
                 alert("Error processing SQL: "+err.code);
