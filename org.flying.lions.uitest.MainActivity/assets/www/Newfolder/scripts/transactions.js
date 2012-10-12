@@ -57,7 +57,6 @@ function transactions_Success(tx, results)
         if(prevDate != results.rows.item(i).Date)
         {
             prevDate = results.rows.item(i).Date;
-            alert('"'+results.rows.item(i).Date+'"');
             ht_str += transactions_Header(results.rows.item(i).Date, tmpCounter) + tmpStr;
             tmpStr = "";
             tmpCounter = 1;
