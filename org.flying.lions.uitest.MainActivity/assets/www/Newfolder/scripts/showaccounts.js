@@ -7,8 +7,8 @@ var BankUp = new Array();
 var accName = new Array();
 var accNameUp = new Array();
 
-function swacc_queryDB(tx) {
-            //alert("hh");
+function swacc_queryDB(tx) 
+{
     tx.executeSql('SELECT * FROM Bank_Account ORDER BY Bank', [], showaccounts_Success, showaccounts_errorCB);
     //tx.executeSql('SELECT * FROM sms', [], querySuccess, errorCB);
 }
@@ -30,7 +30,7 @@ function showaccounts_content(theAccountName, theAccountNum)
     tmp += '<a href="#transactions" class="ui-link-inherit">';
     tmp += '<h3 class="ui-li-heading">'+theAccountName+'</h3>';
     tmp += '<p class="ui-li-desc"><strong>'+theAccountNum+'</strong></p>';
-    tmp += '<p class=" ui-li-aside ui-li-desc"></p>';	
+    tmp += '<p class=" ui-li-aside ui-li-desc"><!-- Balance was here ... --></p>';	
     tmp += '</a>';
     tmp += '</div>';
     tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>';
@@ -76,8 +76,10 @@ function showaccounts_Success(tx, results)
 
         lastBank = thisBank;
     }
-    
-    ht_str += showaccounts_header(lastBank, accCounter) + tmpStr;
+    if(len > 0)
+    {
+        ht_str += showaccounts_header(lastBank, accCounter) + tmpStr;
+    }
     $('ul#acc').html(ht_str);                
 }
 
