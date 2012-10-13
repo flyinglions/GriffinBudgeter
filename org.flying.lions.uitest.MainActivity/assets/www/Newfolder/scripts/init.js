@@ -83,7 +83,7 @@ var db = null;
         function error(err) 
         {
             console.log("Error processing SQL: "+err.code);
-            alert("Error: Last SQL : "+lastSql);
+            //alert("Error: Last SQL : "+lastSql);
         }
 
         // Transaction success callback

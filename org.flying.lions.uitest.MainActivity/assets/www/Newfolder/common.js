@@ -210,6 +210,7 @@ function got_direntries() {
                 {    
                     functionQueue.enqueue(tmpData[i]);
                     typeQueue.enqueue('INSERT');
+					
                 }
             }
 	//process text...sql

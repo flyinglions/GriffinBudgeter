@@ -22,7 +22,7 @@ function showaccounts_header(headingTitle, theTotal)
     return tmp;			
 }
 
-function showaccounts_content(theAccountName, theAccountNum)
+function showaccounts_content(theAccountName, theAccountNum,TheBalance)
 {
     var tmp = '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
     tmp += '<div class="ui-btn-inner ui-li">';
@@ -30,7 +30,7 @@ function showaccounts_content(theAccountName, theAccountNum)
     tmp += '<a href="#transactions" class="ui-link-inherit">';
     tmp += '<h3 class="ui-li-heading">'+theAccountName+'</h3>';
     tmp += '<p class="ui-li-desc"><strong>'+theAccountNum+'</strong></p>';
-    tmp += '<p class=" ui-li-aside ui-li-desc"><!-- Balance was here ... --></p>';	
+    tmp += '<p class=" ui-li-aside ui-li-desc">'+TheBalance+'</p>';	
     tmp += '</a>';
     tmp += '</div>';
     tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>';
@@ -64,14 +64,14 @@ function showaccounts_Success(tx, results)
         if(tmpBank.toUpperCase() == thisBank.toUpperCase())
         {
             accCounter++;
-            tmpStr += showaccounts_content(results.rows.item(i).Acc_Name, results.rows.item(i).Account_Num);
+            tmpStr += showaccounts_content(results.rows.item(i).Acc_Name, results.rows.item(i).Account_Num,results.rows.item(i).Balance);
         }
         else
         {
             ht_str += showaccounts_header(tmpBank, accCounter) + tmpStr;
             accCounter = 1;
             tmpBank = thisBank;
-            tmpStr = showaccounts_content(results.rows.item(i).Acc_Name, results.rows.item(i).Account_Num);
+            tmpStr = showaccounts_content(results.rows.item(i).Acc_Name, results.rows.item(i).Account_Num,results.rows.item(i).Balance);
         }
 
         lastBank = thisBank;
