@@ -192,6 +192,7 @@ function  fnbfilewriter() {
 function finalcallback() {
 	startINIcallback();
 	/*when done with ini - write back to file*/
+	if (stop)
 	stopINI();
 }
 
@@ -210,7 +211,7 @@ function fileReaderSuccess(file) {
         if (file_text.length==0) {
 		//alert("new files");
 		console.log("file empty: in process of creating new - after callback (see stopINI)"); 
-            file_text="[categories]\r\nFood=SPAR,Checkers,spar,PICK,pick\r\nTravel=BP, Sasol, Engen, Shell, Gautrain\r\nFuel=BP,SASOL\r\nEntertainment=Wang, Top CD, Amazon\r\nOther=ATM\r\nTelecommunications=Vodacom, Telkom, Cell C, MTN\r\ngames=WARG,Top CD\r\nATM= OTM,otm,atm,ATM\r\nGamble=cas,CAS\r\nbanktrans=BANK\r\n[user]";
+            file_text="[categories]\r\nFood=SPAR,Checkers,spar,PICK,pick\r\nTravel=BP, Sasol, Engen, Shell, Gautrain\r\nFuel=BP,SASOL\r\nEntertainment=Wang, Top CD, Amazon\r\nOther=ATM\r\nTelecommunications=Vodacom, Telkom, Cell C, MTN\r\ngames=WARG,Top CD\r\nATM= OTM,otm,atm,ATM\r\nGamble=cas,CAS\r\nbanktrans=BANK\r\n[settings]\r\ntransmax=50\r\n";
 		
 		
 		
@@ -334,8 +335,14 @@ function failed() {
     
 
     var startINIcallback;
-    
+	var stop = true;
+function startINIwithoutStop(call) {
+startINIcallback = call;
+stop=false;
+    fileSystemInit();
+}
 function startINI(call) {
+stop = true;
 startINIcallback = call;
     fileSystemInit();
   //  alert("init success");
@@ -418,6 +425,22 @@ function INIget(section,key) {
     return null;
     
 }
+
+
+function INIgetsection(section) {
+
+    for (var k =0; k<theini.sections.length; k++ ) {
+        if (theini.sections[k].name == section) {
+           return theini.sections[k].items;
+			 
+		}
+    }
+    
+    
+    return null;
+    
+}
+
 
 function showContents() {
     alert(toStr());

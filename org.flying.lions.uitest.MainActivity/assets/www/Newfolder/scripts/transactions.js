@@ -30,7 +30,7 @@ function transactions_List(theAmount, theCategory, theAccount)
 
 function transactions_queryDB(tx) 
 {
-    tx.executeSql('SELECT * FROM SMS ORDER BY Date DESC, Time DESC LIMIT 15', [], transactions_Success, transactions_errorCB);
+    tx.executeSql('SELECT * FROM SMS ORDER BY Date DESC, Time DESC LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
 }
 
 function transactions_Success(tx, results)

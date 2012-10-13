@@ -22,145 +22,26 @@
             <script type="text/javascript" src="./javascript/Queue.compressed.js"></script>
 			<script type="text/javascript" src="./scripts/showaccounts.js"></script>
 			<script type="text/javascript" src="./scripts/addaccount.js"></script>
+			
+			<!--class for handling db queries-->
+					<script type="text/javascript" src="./scripts/dbhandlertest.js"></script>
+					
+			
                         <script type="text/javascript" src="./scripts/transactions.js"></script>
+						
+			<!-- for accounts settings page-->
+					<script type="text/javascript" src="./scripts/settingsaccountscript.js"></script>
+					
+			<!-- for graph settings page-->
+				<script type="text/javascript" src="./scripts/graphsettings.js"></script>
 			
             <script type="text/javascript" charset="utf-8" src="common.js"></script>
             <script type="text/javascript" charset="utf-8" src="statusbarnotification.js"></script>
 	
     
     <script type="text/javascript" src="./javascript/inisystem.js"></script>
-    <script type="text/javascript">
-        
-        var db = null;
-        var functionQueue = new Queue();
-        var typeQueue = new Queue();
-        
-        var lastSql = "";
-        
-        
-        function createIfNotExistTables()
-        {
-            functionQueue.enqueue('CREATE TABLE IF NOT EXISTS Bank_Account (Account_Num UNIQUE, Bank, Acc_Name, Balance)');
-            typeQueue.enqueue('CREATE');
-            
-            functionQueue.enqueue('CREATE TABLE IF NOT EXISTS Budget_Items (Category UNIQUE,Budget_Amount,Remaining)');
-            typeQueue.enqueue('CREATE');
-            
-            functionQueue.enqueue('CREATE TABLE IF NOT EXISTS sms (SMS_ID,Date,Time,Amount,Balance,Location,Account_Num,Category)');
-            typeQueue.enqueue('CREATE');
-            
-            functionQueue.enqueue('CREATE TABLE IF NOT EXISTS Recon (Transaction_ID,Type,Recon,Account_Num,SMS_ID)');
-            typeQueue.enqueue('CREATE');
-        }
-        
-        function dropTables()
-        {
-            functionQueue.enqueue('DROP TABLE IF EXISTS Bank_Account');
-            typeQueue.enqueue('DROP');
-            
-            functionQueue.enqueue('DROP TABLE IF EXISTS Budget_Items');
-            typeQueue.enqueue('DROP');
-            
-            functionQueue.enqueue('DROP TABLE IF EXISTS sms');
-            typeQueue.enqueue('DROP');
-            
-            functionQueue.enqueue('DROP TABLE IF EXISTS Recon');
-            typeQueue.enqueue('DROP');
-        }
-        
-        function checkQueue()
-        {
-        	console.log("CheckQueue");
-            db.transaction(queryDB, error, success);
-        }
-        
-        function queryDB(tx)
-        {        
-            var length = functionQueue.getLength();
-
-            //alert("length of Queue:"+length);
-            for(var i=0; i < length; i++)
-            {
-
-                var type = typeQueue.dequeue();
-                var sqlVal = functionQueue.dequeue();
-                //alert(type);
-                //alert(sqlVal);
-                lastSql = sqlVal;
-                if(sqlVal != "")
-                {
-                    if(type == 'DROP')
-                    {
-                        //alert('Drop occured');
-                        tx.executeSql(sqlVal);
-                    }
-                    if(type == 'CREATE')
-                    {
-                        //alert('Create occured');
-                        tx.executeSql(sqlVal);
-                    }
-                    if(type == 'INSERT')
-                    {
-                        tx.executeSql(sqlVal);
-                        //alert(sqlVal);
-                    }
-                }
-            }
-            
-            //alert('Data loaded succesfully!');
-
-            global_trans = tx;
-        }
-        
-        // Transaction error callback
-        function error(err) 
-        {
-            console.log("Error processing SQL: "+err.code);
-            alert("Error: Last SQL : "+lastSql);
-        }
-
-        // Transaction success callback
-        function success() 
-        {
-            console.log("success on database transaction.");
-            $('h3.loading').detach();
-        }
-        
-        function importInbox() {
-        	navigator.notification.progressStart("Importing Inbox","Importing...");
-		   window.plugins.SMSReader.getInbox("",
-			function(data){
-			      console.log("getINBOX+++++++++++Finised");
-				  getDirectoryEntries(got_direntries);
-				  navigator.notification.progressStop();
- 
-			},
-			function(e){
-				console.log(e);
-			});
-			
-
-	    }
-	    
-	    function upProgress(value) 
-        {
-            navigator.notification.progressValue(value);
-        }
-	    
-		
-	/*	
- $( '#one' ).live( 'pageinit',function(event){
-
-  init();
-  
-});*/
-
-
-		
-		
-    </script>
-        
-        <!--##################END-->
+	<script type="text/javascript" src="./scripts/init.js"></script>
+    
         
         
 </head> 
@@ -283,10 +164,11 @@
 	        
 	        <!-- Footer -->
 	        <!-- data-fullscreen="true" makes footer hide when not used -->
+                <!--
 	        <div data-role="footer" data-position="fixed" data-id="homefooter">
 	        	<h4>FOOTER</h4>
 	        </div>
-			
+		-->	
 			
 			
 </div>
@@ -311,11 +193,11 @@
 	        
 	        <div data-role="content">
 				<div data-role="controlgroup">
-				<a href="index.html" data-role="button">Accounts</a>
+				<a href="#settingsAccounts" data-role="button">Accounts</a>
 				<a href="javascript:importInbox();" data-role="button">Import Inbox</a>
 				<a href="index.html" data-role="button">Import CSV</a>
 				<a href="index.html" data-role="button">Export CSV</a>
-				<a href="index.html" data-role="button">Graph Settings</a>
+				<a href="#graphsettings" data-role="button">Graph Settings</a>
 				</div>
 	        	
 	        </div>
@@ -359,6 +241,110 @@
                 
 	</div>
 </div><!-- /page add account -->
+
+
+
+<!--settingsAccounts page-->
+<div style="min-height: 810px;" class="ui-page ui-body-a" tabindex="5" data-url="settingsAccounts" data-role="page" id="settingsAccounts" data-theme="a">
+
+	<!-- Header -->
+        	<div data-role="header" data-position="fixed" data-id="homeheader">
+        		<h1>Griffin Budgeter</h1>
+        		<a href="javascript:navigator.app.exitApp();" data-icon="home" class="ui-btn-right">EXIT</a>
+        		<div data-role="navbar">
+					<ul>
+						<li><a href="#one"  data-icon="home" >Home</a></li>
+						<li><a href="#transactions" data-icon="star">Transactions</a></li>
+						<li><a href="#graphMenu" data-icon="grid">Reports</a></li>
+						<li><a href="#settings" class="ui-btn-active ui-state-persist" data-icon="gear">Settings</a></li>
+					</ul>
+				</div>
+	        </div>
+	        
+	       <div  data-role="content" style="padding: 15px">
+				<ul id="settingsAccountscontent" data-role="listview" data-theme="d" data-divider-theme="d" class="ui-listview">
+				
+				
+				
+				
+				
+				
+				
+				</ul>
+	        	
+	        </div>
+			
+			<div data-role="footer" data-position="fixed">
+	        	<div data-role="navbar">
+					<ul>
+						<li><a href="#addacc">Add Account</a></li>
+						
+					</ul>
+				</div>
+	        </div>	
+</div><!-- page settingsAccounts -->
+
+
+<!--graphsettings page-->
+<div style="min-height: 810px;" class="ui-page ui-body-a" tabindex="1" data-url="graphsettings" data-role="page" id="graphsettings" data-theme="a">
+
+	<!-- Header -->
+        	<div data-role="header" data-position="fixed" data-id="homeheader">
+        		<h1>Griffin Budgeter</h1>
+        		<a href="javascript:navigator.app.exitApp();" data-icon="home" class="ui-btn-right">EXIT</a>
+        		<div data-role="navbar">
+					<ul>
+						<li><a href="#one"  data-icon="home" >Home</a></li>
+						<li><a href="#transactions"  data-icon="star">Transactions</a></li>
+						<li><a href="#graphMenu" data-icon="grid">Reports</a></li>
+						<li><a href="#settings" class="ui-btn-active ui-state-persist" data-icon="gear">Settings</a></li>
+					</ul>
+				</div>
+	        </div>
+	        
+	        <div data-role="content">
+				<ul id="graphsettingslist" data-role="listview" data-theme="d" data-divider-theme="d" class="ui-listview">
+					<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">
+						Graph Settings</li>
+						
+					
+					
+					<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">
+						<div class="ui-btn-inner ui-li">
+							
+							<div data-role="fieldcontain">			
+							<label style="white-space:normal" for="transmax">Maximum transactions to show</label>
+							<input type="range" name="transmax" id="transmax" value="50" min="0" max="100" data-highlight="true" />	
+							</div>
+							
+							
+							<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
+						</div>
+					</li>
+
+					
+				</ul>
+				<form id="catul">
+				
+				
+					</form>
+				
+						<div data-role="footer" data-position="fixed">
+						<div data-role="navbar">
+						<ul>
+							
+							<li><a href="javascript:updategraphsettings();">Update Settings</a></li>
+							
+						</ul>
+						</div>
+						</div>	
+				
+					
+	        </div>
+	        
+	        
+</div><!-- /page graphsettings -->
+
 
 
 

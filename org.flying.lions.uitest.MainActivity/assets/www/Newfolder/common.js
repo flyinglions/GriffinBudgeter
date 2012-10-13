@@ -21,8 +21,11 @@ $.mobile.defaultPageTransition="none";
 	
 }
 
+var  transactionlimit=15;
+
 function installFileOri(){
 	console.log("FINISH");
+	transactionlimit = INIget('settings','transmax');
 }
 
 	function onMenuKeyDown(){
@@ -81,6 +84,31 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
   
 		//execute add account scripts (addaccount page)
 		doaddaccount();
+		}
+	);
+	
+	$( '#transactions' ).live( 'pageshow',
+		function(event){
+			db.transaction(transactions_queryDB, transactions_errorCB);
+			
+		
+		}
+	);
+	
+	
+	$( '#settingsAccounts' ).live( 'pageshow',
+		function(event){
+  
+		//execute add account scripts (addaccount page)
+		showsettingsaccounts();
+		}
+	);
+	
+	$( '#graphsettings' ).live( 'pageshow',
+		function(event){
+  
+		//execute add account scripts (addaccount page)
+		showgraphsettings();
 		}
 	);
 	
