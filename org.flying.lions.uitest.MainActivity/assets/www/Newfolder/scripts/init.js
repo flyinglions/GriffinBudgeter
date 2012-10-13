@@ -46,6 +46,7 @@ var db = null;
             var length = functionQueue.getLength();
 
             //alert("length of Queue:"+length);
+            var continueOnFail = true;
             for(var i=0; i < length; i++)
             {
 
@@ -53,11 +54,12 @@ var db = null;
                 var sqlVal = functionQueue.dequeue();
                 //alert(type);
                 //alert(sqlVal);
+                lastSql += "\n-------------------\n";
                 lastSql = sqlVal;
                 if(sqlVal != "")
                 {
-                    try
-                    {
+                    //try
+                    //{
                         if(type == 'DROP')
                         {
                             //alert('Drop occured');
@@ -78,12 +80,12 @@ var db = null;
                             tx.executeSql(sqlVal);
                             //alert(sqlVal);
                         }
-                    }
-                    catch(err)
-                    {
-					if (debug_mode)
-                        alert(err.message+"\n"+sqlVal);
-                    }
+                    //}
+                    //catch(err)
+                    /*{
+                        if (debug_mode)
+                            alert(err.message+"\n"+sqlVal);
+                    }*/
                     
                 }
             }
@@ -105,6 +107,7 @@ var db = null;
         function success() 
         {
             console.log("success on database transaction.");
+            lastSql = "";
             $('h3.loading').detach();
         }
         

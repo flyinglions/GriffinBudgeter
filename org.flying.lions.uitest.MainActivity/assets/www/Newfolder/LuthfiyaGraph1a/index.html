@@ -41,7 +41,7 @@
             function getCategories()
             {
                 //Get Categories out of ini file...
-                var arrCats = INIgetsection('categories_BudgetAmounts');
+                var arrCats = INIgetsection('categoriesBudgetAmounts');
                 for (var i=0; i<arrCats.length; i++)
                 {
                     Categories.push(arrCats[i].name);
@@ -105,7 +105,7 @@
                 startINI(function()
                 {
                     //Get Categories out of ini file...
-                    var arrCats = INIgetsection('categories_BudgetAmounts');
+                    var arrCats = INIgetsection('categoriesBudgetAmounts');
                     for (var i=0; i<arrCats.length; i++)
                     {
                         var tmpCat = arrCats[i].name.split("_");

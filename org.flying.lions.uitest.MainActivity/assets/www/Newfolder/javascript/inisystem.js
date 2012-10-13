@@ -221,7 +221,7 @@ function fileReaderSuccess(file) {
                     file_text += catName[i]+"="+catDefaultValues[i]+"\r\n";
                     //Food=SPAR,Pick
                 }
-                file_text+="[categories_BudgetAmounts]\r\n";
+                file_text+="[categoriesBudgetAmounts]\r\n";
                 for(var i=0; i < catName.length; i++)
                 {
                     file_text += catName[i]+"_Amount=0\r\n";
@@ -459,7 +459,8 @@ function INIgetsection(section) {
 
 
 function showContents() {
-    alert(toStr());
+    if(debug_mode)
+        alert(toStr());
 }
 
 /***********************/
@@ -491,6 +492,7 @@ var file_to_read="";
 var readcallback;
 function failed_read(error) {
     console.log("reading error: "+error);
+	readcallback('');
 }
 
 function readFile(fname,call) {
@@ -728,6 +730,7 @@ function onDirReaderSuccess(dirEntries) {
     if(len > 0) {
 		
         for( i = 0; i < len; i++) {
+            //alert(dirEntries[i].name);
             if(dentries[i].isDirectory == true) {
 
                 console.log("dir: "+dirEntries[i].name);

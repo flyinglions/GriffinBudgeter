@@ -9,25 +9,29 @@ function transactions_Header(theDate, theTotal)
     return tmp;
 }
 
-function transactions_List(theAmount, theCategory, theAccount)
+function transactions_List(theAmount, theCategory, theAccount,theBalance)
 {
-    var tmp = '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
-    tmp += '<div class="ui-btn-text">';
-    //tmp += '<a href="transactions.html" class="ui-link-inherit">';
-    //tmp += '<h3 class="ui-li-heading">ABSA: cheque account</h3>';
-    tmp += '<h3 class="ui-li-heading">'+theAccount+'</h3>';
-    //tmp += '<p class="ui-li-desc"><strong>Category: Other</strong></p>';
-    tmp += '<p class="ui-li-desc"><strong>Category: '+theCategory+'</strong></p>';
-    //tmp += '<p class=" ui-li-aside ui-li-desc">R1021.00</p>';
-    tmp += '<p class=" ui-li-aside ui-li-desc">R'+theAmount+'</p>';
-    //tmp += '</a>';
-    tmp += '</div>';
-    tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow" style="background-color: blue;">&nbsp;</span>';
-    tmp += '</div>';
-    tmp += '</li>';
+   
+	var tmp='<li><a href="index.html"><h3>'+theAccount+'</h3><p>'+theCategory+'</p><p class="ui-li-aside"><strong>'+theAmount+'</strong></p></a>';
+	tmp+='<a  href="javascript:deleteconfirm(\''+theAmount+'\',\''+theBalance+'\');" data-rel="popup" data-position-to="window" data-transition="pop"></a></li>';
     
     return tmp;
 }
+
+function deleteconfirm(damount,dbalance) {
+navigator.notification.confirm('Are you sure you want to delete the transaction',onconfirm,'Delete?','Cancel,Delete');
+	function onconfirm(btnindex) {
+		if (btnindex==1) {
+			db_queries.push('delete from sms where Amount =\''+damount+'\' AND Balance=\''+dbalance+'\'');
+			doTransactions(ondeleted);
+		}
+	}
+	function ondeleted() {
+	alert('Transaction deleted.');
+	}
+
+}
+
 
 function transactions_queryDB(tx) 
 {
@@ -66,7 +70,7 @@ function transactions_Success(tx, results)
         {
             tmpCounter++;
         }
-        tmpStr += transactions_List(results.rows.item(i).Amount, results.rows.item(i).Category, results.rows.item(i).Account_Num);
+        tmpStr += transactions_List(results.rows.item(i).Amount, results.rows.item(i).Category, results.rows.item(i).Account_Num,results.rows.item(i).Balance);
         lastDate = results.rows.item(i).Date;
     }
     
@@ -76,6 +80,7 @@ function transactions_Success(tx, results)
     }
                     
     $('ul#transactions').html(ht_str);
+	$('ul#transactions').listview('refresh');
 }
 
 // Transaction error callback

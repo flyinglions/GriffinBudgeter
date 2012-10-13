@@ -51,6 +51,9 @@ function showaccounts_content(theAccountName, theAccountNum,TheBalance)
 }
 
 function getBalancefromPrev(num) {
+
+if (num=='')
+return '0';
 var k  =prevvals.indexOf(num);
 var p =  prevvals.substring(k);
 var p = p.substring(num.length+1,p.indexOf(';'));
@@ -101,6 +104,7 @@ function showaccounts_Success()
 	//var bal = income+expense;
 	//db_expense.item(k).Bank+' '+db_expense.item(k).Acc+': Balance '+bal
         var thisBank = bal.item(k).Bank;
+        //thisBank = "AfricaBank";
 		
         if(tmpBank.toUpperCase() == thisBank.toUpperCase())
         {
@@ -110,8 +114,10 @@ function showaccounts_Success()
         else
         {
             ht_str += showaccounts_header(tmpBank, accCounter) + tmpStr;
+            //alert(tmpBank+":"+accCounter);
             accCounter = 1;
             tmpBank = thisBank;
+            
             tmpStr = showaccounts_content(bal.item(k).Acc_Name, bal.item(k).Account_Num,thebalance);
         }
 

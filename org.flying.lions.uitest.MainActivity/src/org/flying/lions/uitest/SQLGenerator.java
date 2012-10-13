@@ -17,6 +17,9 @@ public class SQLGenerator {
     private String[] bankHolder = new String[10];
     private int bank = 0;
     private int bankAmount = 2;
+    
+    private String Bank_Balance = "";
+    private String Account_Num = "";
 
     public void buildSQL(String[] realValue) throws IOException {
         timeStamp = SMSHandler.getTimeStamp();
@@ -34,8 +37,12 @@ public class SQLGenerator {
     private String buildInsert(String[] realValue) throws FileNotFoundException, IOException {
         String SQLStatement = "INSERT INTO sms(Date,Time,Amount,Balance,Location,Account_Num,Category) values('";
         if (realValue.length == lengthCompare) {
+        	Bank_Balance = realValue[7];
+            Account_Num = realValue[1];
             SQLStatement += this.convertFromAbsa(realValue[3]) + "','" + timeStamp + "'," + realValue[5] + "," + this.getCorrectBalance(realValue[7]) + ",'" + realValue[4] + "','" + realValue[1] + "','" + this.getCategories(realValue[4]) + "');";
         } else {
+        	Bank_Balance = realValue[12];
+            Account_Num =  realValue[8] ;
             SQLStatement += this.getDateCorrect(realValue[15]) + "','" + timeStamp + "'," + realValue[2] + "," + this.getCorrectBalance(realValue[12]) + ",'" + realValue[6] + "','" + realValue[8] + "','" + this.getCategories(realValue[6]) + "');";
         }
 
@@ -208,42 +215,67 @@ public class SQLGenerator {
     }
 
     private void writePrev(float prev) throws IOException {
-    	
-    	Log.d("SQLWriter","writePrev");
-
-    	String[] lines = new String[2];
-    	
-        File sdcard = Environment.getExternalStorageDirectory();
         
-        File folder = new File(sdcard + "/MEM/ORI");
-        folder.mkdirs();
+        try{
+     // LogWriter.log("Writing prev" + prev);
+     // String[] lines = new String[maxBankCount];
+      File sdcard = Environment.getExternalStorageDirectory();//new File("");
+      String fullname= sdcard + "/MEM/ORI/", prevFileName;
+      File file = new File(fullname);
+      Scanner sc = new Scanner(file);
 
-      //Get the text file
-        File file = new File(sdcard + "/MEM/ORI", prevFileName); 
-        
-        Scanner sc = new Scanner(file);
+      //int place = 0;
+      
+      String newfile = "";
+      boolean exists=false;
+      while (sc.hasNextLine()) {
+               String[] tmp =  sc.nextLine().trim().split("=");
+          if (tmp[0].equals(Account_Num)) {
+              exists = true;
+              tmp[1] = Bank_Balance;
+          }
+          newfile+=tmp[0]+"="+tmp[1]+"\r\n";
+          
+          
+      }   
+      if (!exists) {            
+          newfile+=Account_Num+"="+Bank_Balance+"\r\n";
+      }
+      
+      sc.close();
+              
+      /*if(newBank && !isTrans){
+          lines[place] = this.getvalidAccount() +"=" +this.getCorrectBalance()+";";
+      //    System.out.println("-----------");
+        //  System.out.println("'"+lines[place]+"'" + place + " " + bankAmount);
+          bankAmount += 1;
+      }else{         
+              for (int y = 0; y < bankAmount; y++) {
+                  String compareLine = lines[y].substring(0,lines[y].indexOf("=")).trim();
+                 // System.out.println( compareLine + " da banke " + bankHolder[bank]);
+                  if (compareLine.toLowerCase().equals(bankHolder[bank].toLowerCase())) {
+                      lines[y] = bankHolder[bank] + "=" + prev + ";";
+                     // System.out.println(lines[y]);
+                  }
+              }
+      }*/
+      FileWriter fileWriter = new FileWriter(fullname);
 
-        int place = 0;
-        while (sc.hasNextLine()) {
-            lines[place] = sc.nextLine();
-            place += 1;
+     // System.out.println("-----------");
+      /*for (int y = 0; y < bankAmount; y++) {
+          fileWriter.write(lines[y] + "\r\n");
+      //    System.out.println(lines[y] +"\t\t\t"+ y);
+          fileWriter.flush();
+      }*/
+              
+      fileWriter.write(newfile);
+      fileWriter.flush();
+      fileWriter.close();
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        for (int y = 0; y < bankAmount; y++) {
-            if (lines[y].contains(bankHolder[bank])) {
-                lines[y] = bankHolder[bank] + "=" + prev + ";";
 
-            }
-        }
-    	
-    	
-		FileWriter fileWriter = new FileWriter("/mnt/sdcard/MEM/ORI/" + prevFileName);
-
-        for (int y = 0; y < bankAmount; y++) {
-            fileWriter.write(lines[y] + newLine);
-            fileWriter.flush();
-        }
-        fileWriter.close();
-    }
+  }
 
     private float getPrev() throws IOException {
     	Log.d("SQLWriter","getPrev");

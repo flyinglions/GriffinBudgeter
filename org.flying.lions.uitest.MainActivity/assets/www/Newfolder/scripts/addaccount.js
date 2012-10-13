@@ -8,7 +8,7 @@ var db;
 ///
 function addaccqueryDB(tx) {
     tx.executeSql('SELECT * FROM Bank_Account', [], bank_add_Accountsuccess, errorInsert);
-    tx.executeSql('SELECT * FROM sms', [], querySuccess, errorInsert);
+    tx.executeSql('SELECT * FROM sms GROUP BY Account_Num', [], querySuccess, errorInsert);
 }
 
 function updateDB(tx) 
@@ -29,12 +29,14 @@ function updateSuccess()
 
 function errorInsert(err) 
 {
-    alert("Error processing SQL: "+err.code+" : "+tmpSQL);
+    if (debug_mode)
+        alert("Error processing SQL: "+err.code+" : "+tmpSQL);
 }
 
 function errorCB(err) 
 {
-    alert("Error processing SQL: "+err.code+" : "+err.message);
+    if (debug_mode)
+        alert("Error processing SQL: "+err.code+" : "+err.message);
 }
 
 function bank_add_Accountsuccess(tx, results)
@@ -66,7 +68,7 @@ function querySuccess(tx, results) {
         }
         for(j = 0 ; j < newadd_Accounts.length; j++)
         {
-            var tmp = newadd_Accounts[j];
+            tmp = newadd_Accounts[j];
             if(tmp.toUpperCase() == accNum.toUpperCase())
             {
                 isNew = false;
