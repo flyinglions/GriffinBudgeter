@@ -38,7 +38,7 @@ function installFileOri(){
 
 function onDeviceReady()
 {
-navigator.splashscreen.hide();
+
 document.addEventListener("menubutton", onMenuKeyDown, false);
 
     startINI(installFileOri);
@@ -59,9 +59,17 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	
 	//in main index page -> show the accounts and their balances
 	//do the actual database queries
-	db.transaction(swacc_queryDB, showaccounts_errorCB);
-        db.transaction(transactions_queryDB, transactions_errorCB);
-        db.transaction(addaccqueryDB, errorInsert);
+	
+	/*db_queries.push('select Bank, b.Account_Num as num ,b.Acc_Name as Acc, sum(Amount) as Am from sms s JOIN Bank_Account b ON (s.Account_Num=b.Account_Num) where (s.Amount < 0) group by b.Account_Num ');
+	db_queries.push('select Bank, b.Account_Num as num,b.Acc_Name as Acc, sum(Amount) as Am from sms s JOIN Bank_Account b ON (s.Account_Num=b.Account_Num) where (s.Amount > 0) group by b.Account_Num ');*/
+	db_queries.push('select * from Bank_Account');
+	doTransactions(getprev);
+	
+	
+	
+	//db.transaction(swacc_queryDB, showaccounts_errorCB);
+        //db.transaction(transactions_queryDB, transactions_errorCB);
+        //db.transaction(addaccqueryDB, errorInsert);
 	
 	
 	
@@ -74,7 +82,14 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
   
 		//in main index page -> show the accounts and their balances
 		//do the actual database queries
-		db.transaction(swacc_queryDB, showaccounts_errorCB);
+		//select * from sms s where s.Account_Num IN (select b.Account_Num from Bank_Account b)  group by Account_Num order by date desc
+		//db_queries.push('select b.Bank as theBank,s.Balance as bal,b.Account_Num as num,b.Acc_Name as Acc  from sms s JOIN Bank_Account b ON (s.Account_Num=b.Account_Num)  group by num order by Date desc');
+		//db_queries.push('select Bank, b.Account_Num as num ,b.Acc_Name as Acc, s.Balance as Am from sms s JOIN Bank_Account b ON (s.Account_Num=b.Account_Num) where s.Date IN (select Date from sms ss where ss.Account_Num=s.Account_Num order by Date desc limit 1)  group by b.Account_Num ');
+		//db_queries.push('select Bank, b.Account_Num as num,b.Acc_Name as Acc, Amount as Am from sms s JOIN Bank_Account b ON (s.Account_Num=b.Account_Num) where s.Amount  group by b.Account_Num ');
+		db_queries.push('select Bank,Account_Num,Acc_Name from Bank_Account');
+		doTransactions(getprev);
+	
+		//db.transaction(swacc_queryDB, showaccounts_errorCB);
 		}
 	);
 	
@@ -112,7 +127,7 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 		}
 	);
 	
-
+navigator.splashscreen.hide();
 	
 
 }
@@ -199,12 +214,13 @@ function got_direntries() {
 	for (k=0;k<text_array.length; k++) 
         {
 	//alert(text_array[k]);//Wikus:)
-            var tmpData = text_array[k].split('\r\n');
+            var tmpData = text_array[k].split(';');
             for(var i = 0 ; i < tmpData.length; i++)
             {
                 //alert(tmpData[i]);
                 var statement = tmpData[i];
                 statement = statement.toUpperCase();
+                //alert(tmpData[i]);
                 
                 if(statement.indexOf("RECON") < 0)
                 {    

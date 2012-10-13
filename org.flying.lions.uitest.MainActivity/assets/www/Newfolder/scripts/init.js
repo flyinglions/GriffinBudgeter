@@ -4,7 +4,7 @@ var db = null;
         
         var lastSql = "";
         
-        
+        var debug_mode=true;
         function createIfNotExistTables()
         {
             functionQueue.enqueue('CREATE TABLE IF NOT EXISTS Bank_Account (Account_Num UNIQUE, Bank, Acc_Name, Balance)');
@@ -56,21 +56,35 @@ var db = null;
                 lastSql = sqlVal;
                 if(sqlVal != "")
                 {
-                    if(type == 'DROP')
+                    try
                     {
-                        //alert('Drop occured');
-                        tx.executeSql(sqlVal);
+                        if(type == 'DROP')
+                        {
+                            //alert('Drop occured');
+                            tx.executeSql(sqlVal);
+                        }
+                        if(type == 'CREATE')
+                        {
+                            //alert('Create occured');
+                            tx.executeSql(sqlVal);
+                        }
+                        if(type == 'INSERT')
+                        {
+                            tx.executeSql(sqlVal);
+                            //alert(sqlVal);
+                        }
+                        if(type == 'UPDATE')
+                        {
+                            tx.executeSql(sqlVal);
+                            //alert(sqlVal);
+                        }
                     }
-                    if(type == 'CREATE')
+                    catch(err)
                     {
-                        //alert('Create occured');
-                        tx.executeSql(sqlVal);
+					if (debug_mode)
+                        alert(err.message+"\n"+sqlVal);
                     }
-                    if(type == 'INSERT')
-                    {
-                        tx.executeSql(sqlVal);
-                        //alert(sqlVal);
-                    }
+                    
                 }
             }
             
@@ -83,7 +97,8 @@ var db = null;
         function error(err) 
         {
             console.log("Error processing SQL: "+err.code);
-            //alert("Error: Last SQL : "+lastSql);
+            if (debug_mode)
+			alert("Error: Last SQL : "+lastSql+" , "+err.code+";"+err.message);
         }
 
         // Transaction success callback

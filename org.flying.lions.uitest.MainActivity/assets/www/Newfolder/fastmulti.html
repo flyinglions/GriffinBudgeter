@@ -329,21 +329,58 @@
 				
 					</form>
 				
-						<div data-role="footer" data-position="fixed">
-						<div data-role="navbar">
-						<ul>
-							
-							<li><a href="javascript:updategraphsettings();">Update Settings</a></li>
-							
-						</ul>
-						</div>
-						</div>	
-				
-					
+						
 	        </div>
+        
+                <!-- Footer -->
+	        <!-- data-fullscreen="true" makes footer hide when not used -->
+	        <div data-role="footer" data-position="fixed">
+	        	<div data-role="navbar">
+					<ul>
+						<li><a href="javascript:updategraphsettings();">Update Settings</a></li>
+						<li><a href="delete.html">Filter</a></li>
+					</ul>
+				</div>
+	        </div>	
 	        
 	        
 </div><!-- /page graphsettings -->
+
+<!--add Category-->
+<div style="min-height: 810px;" class="ui-page ui-body-a" tabindex="4" data-url="addacc" data-role="page" id="addcat" data-theme="a">
+
+	<!-- Header -->
+        	<div data-role="header" data-position="fixed" data-id="homeheader">
+        		<h1>Griffin Budgeter</h1>
+        		<a href="javascript:navigator.app.exitApp();" data-icon="home" class="ui-btn-right">EXIT</a>
+        		
+	        </div>
+	        
+	        <div data-role="content" style="padding: 15px">
+		<div data-role="fieldcontain">
+			<label for="selectmenu2">
+				Choose:
+			</label>
+			<select name="selectmenu2" id="selectmenu2">
+				
+			</select>
+		</div>
+		
+		<div data-role="fieldcontain">			
+				<label  for="bank">Bank</label>
+				<input   id="bank"  value="" type="text">			
+		</div>
+		<div data-role="fieldcontain">			
+				<label for="acc_name">Account Name</label>
+				<input id="acc_name"  value="" type="text">			
+		</div>
+		
+		<input data-inline="true" align="middle" class="update" value="Update" type="submit">
+                <a href="#one"><input data-inline="true" align="middle" class="back" value="Back" type="button"></a>
+                
+                
+	</div>
+</div><!-- /page add account -->
 
 
 

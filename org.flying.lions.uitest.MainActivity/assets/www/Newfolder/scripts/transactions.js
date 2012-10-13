@@ -13,15 +13,16 @@ function transactions_List(theAmount, theCategory, theAccount)
 {
     var tmp = '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
     tmp += '<div class="ui-btn-text">';
-    tmp += '<a href="transactions.html" class="ui-link-inherit">';
+    //tmp += '<a href="transactions.html" class="ui-link-inherit">';
     //tmp += '<h3 class="ui-li-heading">ABSA: cheque account</h3>';
     tmp += '<h3 class="ui-li-heading">'+theAccount+'</h3>';
     //tmp += '<p class="ui-li-desc"><strong>Category: Other</strong></p>';
     tmp += '<p class="ui-li-desc"><strong>Category: '+theCategory+'</strong></p>';
     //tmp += '<p class=" ui-li-aside ui-li-desc">R1021.00</p>';
     tmp += '<p class=" ui-li-aside ui-li-desc">R'+theAmount+'</p>';
-    tmp += '</a></div>';
-    tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>';
+    //tmp += '</a>';
+    tmp += '</div>';
+    tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow" style="background-color: blue;">&nbsp;</span>';
     tmp += '</div>';
     tmp += '</li>';
     
@@ -81,5 +82,8 @@ function transactions_Success(tx, results)
 //
 function transactions_errorCB(err) 
 {
-    alert("Error processing SQL: "+err.code);
+    if(err.message == "undefined")
+    {
+        alert("Error processing SQL: "+err.code+" Message1:"+err.message);
+    }
 }

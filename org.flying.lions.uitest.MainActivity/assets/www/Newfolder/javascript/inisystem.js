@@ -210,9 +210,25 @@ function fileReaderSuccess(file) {
 
         if (file_text.length==0) {
 		//alert("new files");
-		console.log("file empty: in process of creating new - after callback (see stopINI)"); 
-            file_text="[categories]\r\nFood=SPAR,Checkers,spar,PICK,pick\r\nTravel=BP, Sasol, Engen, Shell, Gautrain\r\nFuel=BP,SASOL\r\nEntertainment=Wang, Top CD, Amazon\r\nOther=ATM\r\nTelecommunications=Vodacom, Telkom, Cell C, MTN\r\ngames=WARG,Top CD\r\nATM= OTM,otm,atm,ATM\r\nGamble=cas,CAS\r\nbanktrans=BANK\r\n[settings]\r\ntransmax=50\r\n";
+		console.log("file empty: in process of creating new - after callback (see stopINI)");
+                var catName = new Array("Food", "Travel", "Fuel", "Entertainment", "Other", "Telecommunications", "games", "ATM", "Gamble", "banktrans");
+                var catDefaultValues = new Array("SPAR,Checkers,spar,PICK,pick", "BP, Sasol, Engen, Shell, Gautrain", "BP,SASOL", "Wang, Top CD, Amazon", "ATM", "Vodacom, Telkom, Cell C, MTN", "WARG,Top CD", "OTM,otm,atm,ATM", "cas,CAS", "BANK");
+            //file_text="[categories]\r\nFood=SPAR,Checkers,spar,PICK,pick\r\nTravel=BP, Sasol, Engen, Shell, Gautrain\r\nFuel=BP,SASOL\r\nEntertainment=Wang, Top CD, Amazon\r\nOther=ATM\r\nTelecommunications=Vodacom, Telkom, Cell C, MTN\r\ngames=WARG,Top CD\r\nATM= OTM,otm,atm,ATM\r\nGamble=cas,CAS\r\nbanktrans=BANK\r\n[settings]\r\ntransmax=50\r\n";
 		
+                file_text="[categories]\r\n";
+                for(var i=0; i < catName.length; i++)
+                {
+                    file_text += catName[i]+"="+catDefaultValues[i]+"\r\n";
+                    //Food=SPAR,Pick
+                }
+                file_text+="[categories_BudgetAmounts]\r\n";
+                for(var i=0; i < catName.length; i++)
+                {
+                    file_text += catName[i]+"_Amount=0\r\n";
+                }
+                file_text+="[settings]\r\ntransmax=50\r\n";
+                
+                
 		
 		
         } /*else {

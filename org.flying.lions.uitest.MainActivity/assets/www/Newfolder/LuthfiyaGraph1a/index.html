@@ -10,6 +10,7 @@
     <script src="../theme/Wikus/jquery.mobile-1.1.0.min.js"></script>
     <link class="include" rel="stylesheet" type="text/css" href="../report/jquery.jqplot.min.css" />
     <script type="text/javascript" charset="utf-8" src="../cordova-1.9.0.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../javascript/inisystem.js"></script>
   </head>
   <body>
     <div data-role="page" data-theme="a">
@@ -27,12 +28,25 @@
             var Spent = new Array();
             var Budgeted = new Array();
             
+            var tmptx;
+            
             // Query the database
             ///
             function queryDB(tx) {
                 tx.executeSql('SELECT * FROM Bank_Account', [], bank_accountSuccess, errorCB);
-                tx.executeSql('SELECT * FROM Budget_Items', [], budgetSuccess, errorCB);
+                //tx.executeSql('SELECT * FROM Budget_Items', [], budgetSuccess, errorCB);
                 tx.executeSql('SELECT * FROM sms', [], querySuccess, errorCB);
+            }
+            
+            function getCategories()
+            {
+                //Get Categories out of ini file...
+                var arrCats = INIgetsection('categories_BudgetAmounts');
+                for (var i=0; i<arrCats.length; i++)
+                {
+                    Categories.push(arrCats[i].name);
+                    Budgeted.push(1*arrCats[i].val);
+                }
             }
             
             function bank_accountSuccess(tx, results)
@@ -83,95 +97,80 @@
                 return -1;
             }
             
-            function budgetSuccess(tx, results) {
-                var len = results.rows.length;
-                //alert(len);
-                //len = 1;
-                for (var i=0; i<len; i++)
-                {
-                    //alert(results.rows.item(i).Acc_Name);
-                    Categories.push(results.rows.item(i).Category);
-                    Budgeted.push(1*results.rows.item(i).Budget_Amount);
-                    //$("div h3").text();
-                }
-            }
 
             // Query the success callback
             //
             function querySuccess(tx, results) {
                 var len = results.rows.length;
-                var output = "";
-                
-                $('h3.loading').detach();
-                if(accounts.length == 0)
+                startINI(function()
                 {
-                    $('<h3>No Accounts Found.</h3>').appendTo('.ReportContent');
-                }
-                
-                /*
-                for (var i=0; i<len; i++)
-                {
-                    var tmpCategory = results.rows.item(i).Category;
-                    var exists = false;
-                    for(var j=0; j < Categories.length; j++)
+                    //Get Categories out of ini file...
+                    var arrCats = INIgetsection('categories_BudgetAmounts');
+                    for (var i=0; i<arrCats.length; i++)
                     {
-                        var thisCategory = Categories[j];
-                        if(thisCategory.toUpperCase() == tmpCategory.toUpperCase())
+                        var tmpCat = arrCats[i].name.split("_");
+                        Categories.push(tmpCat[0]);
+                        Budgeted.push(1*arrCats[i].val);
+                    }
+                    
+                    $('h3.loading').detach();
+                    if(accounts.length == 0)
+                    {
+                        $('<h3>No Accounts Found.</h3>').appendTo('.ReportContent');
+                    }
+                    
+                    for(var k = 0 ; k < accounts.length; k++)
+                    {
+                        $('<h3>'+accounts[k]+'</h3>').appendTo('.ReportContent');
+                        $('<div id="'+sanitize(acc_Num[k])+'" style="height:300px; width:300px;"></div>').appendTo('.ReportContent');
+
+                        Spent = new Array();
+                        //Budgeted = new Array();
+
+                        for(var j=0; j < Categories.length; j++)
                         {
-                            exists = true;
+                            Spent.push(0);
                         }
-                    }
-
-                    if(!exists)
-                    {
-                        Categories.push(tmpCategory);
-                    }
-                }
-                */
-                
-                for(var k = 0 ; k < accounts.length; k++)
-                {
-                    $('<h3>'+accounts[k]+'</h3>').appendTo('.ReportContent');
-                    $('<div id="'+sanitize(acc_Num[k])+'" style="height:300px; width:300px;"></div>').appendTo('.ReportContent');
-                    
-                    Spent = new Array();
-                    //Budgeted = new Array();
-                    
-                    for(var j=0; j < Categories.length; j++)
-                    {
-                        Spent.push(0);
-                    }
-                    
-                    for (var i=0; i<len; i++)
-                    {
-                        
-
-                        //alert(tmpCategory);
-                        if(sanitize(results.rows.item(i).Account_Num) == sanitize(acc_Num[k]))
+                        var notFound = true;
+                        for (var i=0; i<len; i++)
                         {
-                            var value = 1*results.rows.item(i).Amount;
-                            var tmpCategory = results.rows.item(i).Category;
-                            if(value < 0)
+
+
+                            //alert(tmpCategory);
+                            if(sanitize(results.rows.item(i).Account_Num) == sanitize(acc_Num[k]))
                             {
-                                Spent[getIndexInCategory(tmpCategory)] = 1*Spent[getIndexInCategory(tmpCategory)] - 1*results.rows.item(i).Amount;
+                                notFound = false;
+                                var value = 1*results.rows.item(i).Amount;
+                                var tmpCategory = results.rows.item(i).Category;
+                                if(value < 0)
+                                {
+                                    if(getIndexInCategory(tmpCategory) < 0)
+                                    {
+                                        alert("Category "+tmpCategory+" Not Found");
+                                    }
+                                    else
+                                    {
+                                        Spent[getIndexInCategory(tmpCategory)] = 1*Spent[getIndexInCategory(tmpCategory)] - 1*results.rows.item(i).Amount;
+                                    }
+                                }
                             }
+                            //alert(Spent[getIndexInCategory(tmpCategory)]);
                         }
-                        //alert(Spent[getIndexInCategory(tmpCategory)]);
-                    }
 
-                    if(len > 0)
-                    {
-                        if(Spent.length == 0)
+                        if(len > 0)
                         {
-                            for(var i = 0; i < Categories.length; i++)
+                            if(Spent.length == 0)
                             {
-                                Spent.push(0);
+                                for(var i = 0; i < Categories.length; i++)
+                                {
+                                    Spent.push(0);
+                                }
                             }
+                            //alert(Spent);
+                            plotGraph(sanitize(acc_Num[k]));
                         }
-                        //alert(Spent);
-                        plotGraph(sanitize(acc_Num[k]));
                     }
-                }
+                });
             }
             
             function plotGraph(name)
