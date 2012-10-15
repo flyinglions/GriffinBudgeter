@@ -56,6 +56,7 @@ function querySuccess(tx, results) {
 
     for (var i=0; i<len; i++)
     {
+	    
         var accNum = results.rows.item(i).Account_Num;
         var isNew = true;
         for(var j = 0 ; j < add_Accounts.length; j++)
@@ -78,6 +79,7 @@ function querySuccess(tx, results) {
         {
             newadd_Accounts.push(accNum);
             $("#selectmenu2").append('<option name="'+sanitize(accNum)+'" value="'+accNum+'">'+accNum+'</option>');
+		$("#selectmenu2").selectmenu("refresh");
         }
     }
 }
@@ -86,6 +88,7 @@ function querySuccess(tx, results) {
 
 function doaddaccount() {
 console.log("adding account page");
+	//$('#selectmenu2').html('');
 db.transaction(addaccqueryDB, errorCB, updateSuccess);
                 startup();
 				
