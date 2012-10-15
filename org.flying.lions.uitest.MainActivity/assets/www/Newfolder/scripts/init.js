@@ -4,7 +4,7 @@ var db = null;
         
         var lastSql = "";
         
-        var debug_mode=true;
+        var debug_mode=false;
         function createIfNotExistTables()
         {
             functionQueue.enqueue('CREATE TABLE IF NOT EXISTS Bank_Account (Account_Num UNIQUE, Bank, Acc_Name, Balance)');

@@ -11,7 +11,7 @@ var thebank =  $('input#'+acc_num+'bank').val();
 
 savesql = 'update Bank_Account set Acc_Name=\''+theacc_name+'\',Bank=\''+thebank+'\' WHERE Account_Num=\''+acc_num_with+'\'';
 
-db.transaction(updateAccSettingsquery, function() { alert('error during update'); }, sqlaccupdatesuccess);
+db.transaction(updateAccSettingsquery, function() { if (debug_mode) alert('error during update'); }, sqlaccupdatesuccess);
 }
 
 function updateAccSettingsquery(tx) {
@@ -20,7 +20,7 @@ tx.executeSql(savesql);
 
 function deleteAccSettings(acc_num) {
 savesql = 'delete from Bank_Account where Account_Num=\''+acc_num+'\'';
-db.transaction(deleteAccSettingsquery, function() { alert('error during delete'); }, sqlaccdeletesuccess);
+db.transaction(deleteAccSettingsquery, function() { if (debug_mode) alert('error during delete'); }, sqlaccdeletesuccess);
 }
 function deleteAccSettingsquery(tx) {
 tx.executeSql(savesql);
