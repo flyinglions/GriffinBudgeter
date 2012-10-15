@@ -28,6 +28,8 @@ tx.executeSql(savesql);
 function sqlaccdeletesuccess() {
 alert('Account deleted successfully.');
 showsettingsaccounts();
+db_queries.push('select * from Bank_Account');
+doTransactions(getprev);
 }
 
 function removeSpaces(s) {
@@ -47,6 +49,8 @@ var str ='';//$('ul#settingsAccountscontent').html();
 
 	var rows = db_results.shift().rows;
 	var len = rows.length;
+	if (len==0)
+	str= '<h3>No accounts yet</h3>';
 	//str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Add an Account</li><li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d"><div data-role="fieldcontain"><label  for="bank">Bank</label>	<input   id="bank"  value="" type="text">	</div><div data-role="fieldcontain">	<label for="acc_name">Account Name</label>	<input id="acc_name"  value="" type="text">	</div>	<input data-inline="true" align="middle" class="update" value="Update" type="submit"><br />	</li>';
 	for (var k=0; k<len; k++) {
 		var acc_num = rows.item(k).Account_Num;

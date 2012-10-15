@@ -37,16 +37,18 @@ function showaccounts_header(headingTitle, theTotal)
 
 function showaccounts_content(theAccountName, theAccountNum,TheBalance)
 {
-    var tmp = '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
+    /*var tmp = '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
     tmp += '<div class="ui-btn-inner ui-li">';
     tmp += '<div class="ui-btn-text">';
-    tmp += '<a href="#transactions" class="ui-link-inherit">';
+    tmp += '<a href="#settingsAccounts" class="ui-link-inherit">';
     tmp += '<h3 class="ui-li-heading">'+theAccountName+'</h3>';
     tmp += '<p class="ui-li-desc"><strong>'+theAccountNum+'</strong></p>';
     tmp += '<p class=" ui-li-aside ui-li-desc">'+TheBalance+'</p>';	
     tmp += '</a>';
     tmp += '</div>';
-    tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>';
+    tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>';*/
+		var tmp='<li><a href="#settingsAccounts"><h3>'+theAccountName+'</h3><p>'+theAccountNum+'</p><p class="ui-li-aside"><strong>'+TheBalance+'</strong></p></a>';
+	tmp+='<a  href="javascript:deleteAccSettings(\''+theAccountNum+'\');" data-rel="popup" data-position-to="window" data-transition="pop"></a></li>';
     return tmp;
 }
 
@@ -130,6 +132,7 @@ function showaccounts_Success()
         ht_str += showaccounts_header(lastBank, accCounter) + tmpStr;
     }
     $('ul#acc').html(ht_str);                
+    $('ul#acc').listview("refresh");    
 }
 
 // Transaction error callback
