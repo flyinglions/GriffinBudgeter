@@ -100,7 +100,7 @@ function startup()
     });
 }
 
-function replaceAll(exp, value)
+function replaceAlltwo(exp, value)
 {
     var newValue = value;
     while(newValue.indexOf(exp) > -1)
@@ -114,9 +114,10 @@ function sanitize(value)
 {
     var newValue = value;
 
-    newValue = replaceAll(".", newValue);
-    newValue = replaceAll("/", newValue);
-    newValue = replaceAll(" ", newValue);
+    newValue = replaceAlltwo(".", newValue);
+    newValue = replaceAlltwo("/", newValue);
+    newValue = replaceAlltwo(" ", newValue);
+	
 
     return newValue;
 }

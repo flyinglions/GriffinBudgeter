@@ -12,23 +12,25 @@ function transactions_Header(theDate, theTotal)
 function transactions_List(theAmount, theCategory, theAccount,theBalance)
 {
    
-	var tmp='<li><a href="index.html"><h3>'+theAccount+'</h3><p>'+theCategory+'</p><p class="ui-li-aside"><strong>'+theAmount+'</strong></p></a>';
+	var tmp='<li><a href="index.html"><h3>'+theAccount+'</h3><p>'+theCategory+'</p><p class="ui-li-aside"><strong>'+theAmount+':'+theBalance+'</strong></p></a>';
 	tmp+='<a  href="javascript:deleteconfirm(\''+theAmount+'\',\''+theBalance+'\');" data-rel="popup" data-position-to="window" data-transition="pop"></a></li>';
     
     return tmp;
 }
 
 function deleteconfirm(damount,dbalance) {
+	console.log("Perform deletion of transaction");
 navigator.notification.confirm('Are you sure you want to delete the transaction',onconfirm,'Delete?','Cancel,Delete');
 	function onconfirm(btnindex) {
-		if (btnindex==1) {
-			db_queries.push('delete from sms where Amount =\''+damount+'\' AND Balance=\''+dbalance+'\'');
-			doTransactions(ondeleted);
+		if (btnindex==2) {
+			console.log("deleting transaction:"+damount+":"+dbalance);
+			db.transaction(deletedoquery, db_error, deletesuccess);
+			function deletedoquery(tx) { tx.executeSql('DELETE FROM "SMS" where Amount ='+damount+' and Balance='+dbalance) ; }
+			function deletesuccess() { db.transaction(transactions_queryDB, transactions_errorCB); alert('Transaction deleted.');   }
+			
 		}
 	}
-	function ondeleted() {
-	alert('Transaction deleted.');
-	}
+	
 
 }
 

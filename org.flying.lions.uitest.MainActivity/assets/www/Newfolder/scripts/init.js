@@ -41,6 +41,17 @@ var db = null;
             db.transaction(queryDB, error, success);
         }
         
+	function sanitizeinsert(value)
+{
+    var newValue = value;
+
+    newValue = replaceAll("&#39;", newValue);
+	//newValue = replaceAll("\\'", newValue);
+	//newValue = replaceAll("&", newValue);
+
+    return newValue;
+}
+	
         function queryDB(tx)
         {        
             var length = functionQueue.getLength();
@@ -56,6 +67,7 @@ var db = null;
                 //alert(sqlVal);
                 lastSql += "\n-------------------\n";
                 lastSql = sqlVal;
+		    sqlVal = sanitizeinsert(sqlVal);
                 if(sqlVal != "")
                 {
                     //try

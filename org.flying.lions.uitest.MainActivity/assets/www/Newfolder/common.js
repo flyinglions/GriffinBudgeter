@@ -224,11 +224,11 @@ function got_direntries() {
         {
 	//alert(text_array[k]);//Wikus:)
             var theData = text_array[k];
-            theData = replaceAll('\n',theData,'');
-            theData = replaceAll('\r',theData,'');
+            /*theData = replaceAll('\n',theData,'');
+            theData = replaceAll('\r',theData,'');*/
             //theData = replaceAll('\'',theData,'');
             
-            var tmpData = theData.split(';');
+            var tmpData = theData.split('\r\n');
             for(var i = 0 ; i < tmpData.length; i++)
             {
                 //alert(tmpData[i]);
