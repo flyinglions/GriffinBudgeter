@@ -12,7 +12,7 @@ function transactions_Header(theDate, theTotal)
 function transactions_List(theAmount, theCategory, theAccount,theBalance)
 {
    
-	var tmp='<li><a href="index.html"><h3>'+theAccount+'</h3><p>'+theCategory+'</p><p class="ui-li-aside"><strong>'+theAmount+'</strong></p></a>';
+	var tmp='<li><a href="index.html"><h3>'+theAccount+'</h3><p>'+theCategory+'</p><p class="ui-li-aside"><strong>R'+theAmount+'</strong></p></a>';
 	tmp+='<a  href="javascript:deleteconfirm(\''+theAmount+'\',\''+theBalance+'\');" data-rel="popup" data-position-to="window" data-transition="pop"></a></li>';
     
     return tmp;
