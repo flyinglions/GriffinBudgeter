@@ -38,4 +38,5 @@
     <plugin name="SMSReader" value="org.flying.lions.uitest.SMSReader" />
     <plugin name="SMSReceiverPlugin" value="org.flying.lions.uitest.SMSReceiverPlugin"/>
     <plugin name="StatusBarNotification" value="org.flying.lions.uitest.StatusBarNotification"/>  
+    <plugin name="CSVImportExport" value="org.flying.lions.uitest.CSVImportExport"/>  
 </plugins>

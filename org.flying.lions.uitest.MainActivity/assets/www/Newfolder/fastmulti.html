@@ -17,11 +17,17 @@
         <script src="./theme/Wikus/jquery-1.7.1.min.js"></script>
         <script src="./theme/Wikus/jquery.mobile-1.1.1.min.js"></script>
         <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>
+        
+        <!-- PLUGINS -->
             <script type="text/javascript" charset="utf-8" src="smsread.js"></script>
             <script type="text/javascript" charset="utf-8" src="SMSReceiverPlugin.js"></script>
+            <script type="text/javascript" charset="utf-8" src="csvImportExport.js"></script>
+            <script type="text/javascript" charset="utf-8" src="statusbarnotification.js"></script>
+        <!-- CUSTOM JS -->
             <script type="text/javascript" src="./javascript/Queue.compressed.js"></script>
 			<script type="text/javascript" src="./scripts/showaccounts.js"></script>
 			<script type="text/javascript" src="./scripts/addaccount.js"></script>
+			<script type="text/javascript" src="./scripts/import_exportCSV.js"></script>
 			
 			<!--class for handling db queries-->
 					<script type="text/javascript" src="./scripts/dbhandlertest.js"></script>
@@ -36,7 +42,7 @@
 				<script type="text/javascript" src="./scripts/graphsettings.js"></script>
 			
             <script type="text/javascript" charset="utf-8" src="common.js"></script>
-            <script type="text/javascript" charset="utf-8" src="statusbarnotification.js"></script>
+            
 	
     
     <script type="text/javascript" src="./javascript/inisystem.js"></script>
@@ -192,9 +198,9 @@
 	        <div data-role="content">
 				<div data-role="controlgroup">
 				<a href="#settingsAccounts" data-role="button">Accounts</a>
-				<a href="javascript:importInbox();" data-role="button">Import Inbox</a>
-				<a href="index.html" data-role="button">Import CSV</a>
-				<a href="index.html" data-role="button">Export CSV</a>
+				<a href="javascript:showConfirmImportInbox();" data-role="button">Import Inbox</a>
+				<a href="javascript:showConfirmImportCSV();" data-role="button">Import SMSes from CSV file</a>
+				<a href="javascript:showConfirmExportCSV();" data-role="button">Export transactions to CSV file</a>
 				<a href="#graphsettings" data-role="button">Graph Settings</a>
 				</div>
 	        	
