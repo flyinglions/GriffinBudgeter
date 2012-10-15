@@ -51,7 +51,7 @@ public class CategoriesSorter {
 	                }
 	            }
 	        }
-	        return "Other";
+	        return location;
 	    }
 
 }

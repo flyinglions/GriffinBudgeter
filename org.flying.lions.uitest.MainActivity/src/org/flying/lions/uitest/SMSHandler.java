@@ -21,6 +21,7 @@ public class SMSHandler {
     private static int place = 0;
     private static String timeStamp = "";
     public static CategoriesSorter theSorter = null;
+    //public static LogWriter log = new LogWriter();
     
     public SMSHandler() throws FileNotFoundException, IOException {
         
@@ -33,8 +34,17 @@ public class SMSHandler {
 
     public void recieveSMS(String inSms) throws IOException {
 
-        smsString = inSms.replaceAll("\"", " ");
-      
+        inSms = inSms.replaceAll("\"", "");
+        inSms = inSms.replaceAll("'", "");
+        inSms = inSms.replaceAll("#", "");
+        inSms = inSms.replaceAll("$", "");
+        inSms = inSms.replaceAll("&", "");    
+        inSms = inSms.replaceAll(";", "");        
+       // System.out.println("adasdasd");
+        //LogWriter.log("---------------------------------");
+        //LogWriter.log("Parsing of '" + inSms + "' started");
+       
+        smsString = inSms;
         try{
         timeStamp = this.getTimeStampSMS();
         }catch(Exception e){}
@@ -47,16 +57,20 @@ public class SMSHandler {
         try {
             String tempCheck = inSms.substring(0,5); 
             if (!smsString.contains("reserved") && !tempCheck.contains("Absa") && !smsString.contains("fraud")) {
+                //LogWriter.log("Enter HC");
                 hardCodedFNB(inSms);
-                SQLGen.buildSQL(realValue);                
-                System.out.println("Sms valid1");
+                System.out.println("\n\nSms Hard:\n" + this);
+                //LogWriter.log(this.toString());
+                SQLGen.buildSQL(realValue);
                 currentLocation = 0;
                 isValid = true;
                 return;
             }
         } catch (Exception e) {
-            //e.printStackTrace();
+            //LogWriter.log("Error: "+e.getMessage());
+            //LogWriter.log("---------------------------------");
             System.err.println("SMS is not valid: '" + inSms + "'");
+           // e.printStackTrace();
             return;
         }
 
@@ -74,24 +88,19 @@ public class SMSHandler {
                 }
 
             } catch (Exception e) {
-                //e.printStackTrace();
+                //LogWriter.log("Error: " + e.getMessage());
+                //LogWriter.log("---------------------------------");                
                 System.err.println("SMS is not valid: '" + inSms + "'");
                 currentLocation = 0;
                 isValid = true;
+               // e.printStackTrace();
                 return;
             }
         }
-        System.out.println("Sms valid2");
-        Log.d("SMSHandler","Call smshandler");
-        try
-        {
-        	SQLGen.buildSQL(realValue);
-        	Log.d("SMSHANDLER", "SUCCESS");
-        }
-        catch(Exception ex)
-        {
-        	ex.printStackTrace();
-        }
+        System.out.println("\n\n" + this);
+        //LogWriter.log(this.toString());        
+        //LogWriter.log("---------------------------------");         
+        SQLGen.buildSQL(realValue);
         currentLocation = 0;
         isValid = true;
 
@@ -102,7 +111,7 @@ public class SMSHandler {
     }    
     
 
-    private void parseSMS(int where) {
+    private void parseSMS(int where) throws IOException {
         realValue[where] = ruleList[where].doRule(smsString, currentLocation);
     }
 
@@ -127,7 +136,7 @@ public class SMSHandler {
 
     private String getTimeStampSMS() {
         String returnString = "";
-        int beginIndex = smsString.lastIndexOf(";");
+        int beginIndex = smsString.lastIndexOf(":");
         returnString = smsString.substring(beginIndex + 1).trim();
         smsString = smsString.substring(0, beginIndex);
         return returnString;
@@ -142,6 +151,7 @@ public class SMSHandler {
     }
 
     private void hardCodedFNB(String inSms) {
+        
         int lastDot = inSms.lastIndexOf(".");
         //Case as stuff na die laaste dot kom 
         if ((lastDot + 2) >= inSms.length()) {
@@ -180,16 +190,24 @@ public class SMSHandler {
         realValue[13] = "*";
         realValue[14] = "*";
 
-        realValue[15] = inSms.substring(lastDot + 2, lastDot + 13);
+        realValue[15] = inSms.substring(lastDot + 2, lastDot + 13).replaceAll(",", "");
 
         realValue[8] = inSms.substring(accPlace, atPlace - 1);
         inSms = inSms.substring(rplace);
         int spacePlace = inSms.indexOf(" ");
-        realValue[2] = inSms.substring(1, spacePlace);
+        tempString = inSms.substring(1, spacePlace);
+        
+        if (inSms.contains("reserved for purchase")                    
+                    || inSms.contains("withdrawn from")
+                    || inSms.contains("paid from")
+                    || inSms.contains("t/fer from")
+                    || inSms.contains("Scheduled Payment from")) {tempString = "-"+tempString;}
+        
+        realValue[2] = tempString;
         inSms = inSms.substring(spacePlace + 1);
         spacePlace = inSms.indexOf(" ");
         realValue[5] = inSms.substring(0, spacePlace);
     }
-    
+
 }
 

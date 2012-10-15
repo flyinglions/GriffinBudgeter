@@ -9,18 +9,10 @@ public class MultipleSmsHandler {
     private  CategoriesSorter theSorter = null;
     
 public MultipleSmsHandler() throws FileNotFoundException, IOException {
-    try
-    {
-	absaHandler = new SMSHandler("ABSARules.ini");
+    absaHandler = new SMSHandler("ABSARules.ini");
     fnbHandler = new SMSHandler("FNBRules.ini");
-    
     theSorter = new CategoriesSorter(textFileName);
     SMSHandler.setTheSorter(theSorter);       
-    }
-    catch(Exception ex)
-    {
-    	ex.printStackTrace();
-    }
 }
 
 public void parseSMS(String inSms) throws IOException{
@@ -32,6 +24,8 @@ public void parseSMS(String inSms) throws IOException{
         fnbHandler.recieveSMS(inSms); 
     }}catch(Exception e){}
 }
+
+
 
 
 }

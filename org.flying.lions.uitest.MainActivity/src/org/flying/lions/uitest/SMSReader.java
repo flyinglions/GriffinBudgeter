@@ -99,7 +99,7 @@ public class SMSReader extends Plugin {
 			try
 			{
 				MultipleSmsHandler smsHand = new MultipleSmsHandler();
-		        smsHand.parseSMS(cur.getString(cur.getColumnIndex("body")) + ";" + cur.getString(cur.getColumnIndex("date")));
+		        smsHand.parseSMS(cur.getString(cur.getColumnIndex("body")) + ":" + cur.getString(cur.getColumnIndex("date")));
 		        Log.d(TAG, "SUCCESS");
 			}
 			catch(Exception ex)

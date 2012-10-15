@@ -28,7 +28,7 @@ public class RuleReader {
     }
 
     public void iniRules() throws IOException {
-     
+        
     	String tempString = null;
         File sdcard = Environment.getExternalStorageDirectory();
 
@@ -51,15 +51,15 @@ public class RuleReader {
         else
         {
 	   		 FileWriter fileWriter = new FileWriter("/mnt/sdcard/MEM/ORI/" + confFileName);
-	   		 
+
 	   		 if(confFileName.equals("ABSARules.ini"))
 	   			 tempString = "<Absa,;> <accName,,> <TransactionType,,> <Date,;> <Location,,> <\"R\"amount,,> * <\"R\"balance,.> * * *";
-	   			 	   		 
+
 	   		 if(confFileName.equals("FNBRules.ini"))
 	   			 tempString = "<FNB,;> * <\"R\"Cost,;> * * <TransactionType,;> <location,\"@\"|\"from\"|\".\"> * <accName,\"from\"> * * * <\"R\"balance,.> * * <Time,;*>";
-	   			 
+
 	   		 fileWriter.write(tempString);
-	
+
 		   	 fileWriter.flush();
 		   	 fileWriter.close();
         	
@@ -69,7 +69,22 @@ public class RuleReader {
        
     }
 
+    private int rulesSize() throws IOException {
+        int result = 0;
 
+        File locationFile = new File("");
+        String fileLocation = locationFile.getCanonicalPath().toString() + "\\" + confFileName;
+
+        File toReadFile = new File(fileLocation);
+        Scanner lineScanner = new Scanner(toReadFile);
+        lineScanner.useDelimiter(" ");
+
+        while (lineScanner.hasNext()) {
+            result += 1;
+            lineScanner.next();
+        }
+        return result;
+    }
 
     public String getConfFileName() {
         return confFileName;

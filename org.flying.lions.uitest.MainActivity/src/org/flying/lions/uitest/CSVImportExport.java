@@ -124,7 +124,8 @@ public class CSVImportExport extends Plugin {
     				String timestamp = tsLong.toString();
     				
     				MultipleSmsHandler smsHand = new MultipleSmsHandler();
-    		        smsHand.parseSMS(tempString+ ";" + timestamp);
+    		        smsHand.parseSMS(tempString+ ":" + timestamp);
+    		        //Log.d(TAG,tempString+ ";" + timestamp);
     		        
     		        
     		        incVal = counter * 100 / smsCount;
