@@ -53,8 +53,10 @@ function showaccounts_content(theAccountName, theAccountNum,TheBalance)
 function getBalancefromPrev(num) {
 
 if (num=='')
-return '0';
+return '0.0';
 var k  =prevvals.indexOf(num);
+if (k<0)
+	return '0.0';
 var p =  prevvals.substring(k);
 var p = p.substring(num.length+1,p.indexOf(';'));
 return p;
