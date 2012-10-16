@@ -468,7 +468,7 @@ function INIdeletekey(section,key) {
 		   //get the key
 			   for (var p =0; p<theini.sections[k].items.length; p++ ) {
 					if (theini.sections[k].items[p].name==key) {
-						theini.sections[k].items = theini.sections[k].items.splice(p,1);
+						theini.sections[k].items.splice(p,1);
 						return true;
 					}
 				}

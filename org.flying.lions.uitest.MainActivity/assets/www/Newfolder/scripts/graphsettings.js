@@ -17,28 +17,84 @@ function graphSettings_toggle(theElement)
     });
 }
 
+function update_category(cat) {
+var newcat = $('input#'+cat+'catid').val();
+var bud = $('input#'+cat+'budget').val();
+
+var catref = INIgetkeyref('categories',cat);
+var budgetref = INIgetkeyref('categoriesBudgetAmounts',cat+'_Amount');
+catref.name = newcat;
+budgetref.name = newcat+'_Amount';
+budgetref.val = bud;
+alert("Category updated");
+}
+function delete_the_category(cat) {
+
+navigator.notification.confirm(
+			'Are you sure you want to delete the category: "'+cat+'"',
+			onyescat,
+			'Import Inbox',
+			'Cancel,Yes'
+			);
+	function onyescat(bindex) {
+	if(bindex == 2) {
+	INIdeletekey('categories',cat);
+	INIdeletekey('categoriesBudgetAmounts',cat+'_Amount');
+
+	alert('Category deleted successfully');
+	retrievesettings();
+	}
+	}
+
+}
 function graphSettings_header(headingTitle)
 {
     var tmp = '<a href="javascript:graphSettings_toggle(\'graphSettings'+headingTitle+'\');" class="ui-link-inherit">';
-    tmp += '<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">';
+    tmp += '<li style="height:50px;" data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">';
     tmp += headingTitle;
     //tmp += '<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">'+theTotal+'</span>';
     tmp += '</li>';
+	
     tmp += '</a>';
+	
+	//edit of category
+	tmp+='<li style="display: none;" class="graphSettings'+headingTitle+'">';
+	var budget = INIget('categoriesBudgetAmounts',headingTitle+'_Amount');
+	tmp+='	<div data-role="fieldcontain"><label  for="'+headingTitle+'catid">New category</label><input type="text" id="'+headingTitle+'catid" value="'+headingTitle+'"  />';
+	tmp+='<label  for="'+headingTitle+'budget">New budget</label>	<input type="text" id="'+headingTitle+'budget" value="'+budget+'"  />';
+	tmp+='<input type="button" onclick="update_category(\''+headingTitle+'\');" value="Update category"/>	';
+	tmp+='<input type="button" onclick="delete_the_category(\''+headingTitle+'\');" value="Delete category"/> </div></li>';
+	
     return tmp;			
 }
-
+function delete_cat_value(par,cat_val) {
+var nval = INIget('categories',par).split(',');
+var newvalue = '';
+for (var k=0; k<nval.length; k++)
+if (nval[k]!=cat_val)
+newvalue+=nval[k]+',';
+newvalue = newvalue.substring(0,newvalue.length-1);
+//nval = nval.replace(cat_val,$("input#"+par+cat_val+"catid").val());
+INIset('categories',par,newvalue);
+alert('Deleted successfully');
+retrievesettings();
+}
 function graphSettings_content(theCategoryValue, theParent)
 {
-    var tmp = '<li data-icon="star" style="display: none;" class="graphSettings'+theParent+'" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
+    /*var tmp = '<li data-icon="star" style="display: none;" class="graphSettings'+theParent+'" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
     tmp += '<div class="ui-btn-inner ui-li">';
-    tmp += '<div class="ui-btn-text">';
+    tmp += '<div class="ui-btn-text"><img src="arrow.png" class="ui-li-icon">';
     tmp += '<a href="#" class="ui-link-inherit">';
-    tmp += '<h3 class="ui-li-heading"><img src="mCategory.png" class="ui-li-icon">'+theCategoryValue+'</h3>';
+    tmp += '<h3 style="left:20px;" class="ui-li-heading">'+theCategoryValue+'</h3>';
     //tmp += '<p class="ui-li-desc"><strong style="color: gray;">'+theAccountNum+'</strong></p>';
     tmp += '</a>';
     tmp += '</div>';
-    tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>';
+    tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>';*/
+	
+	var tmp = '<li style="display: none;"  class="graphSettings'+theParent+'">	<div>';
+tmp+='	<input type="text" id="'+theParent+theCategoryValue+'catid" value="'+theCategoryValue+'"  />	</div>	<div  data-role="controlgroup"  data-type="horizontal">	';
+tmp+='<a href="javascript:delete_cat_value(\''+theParent+'\',\''+theCategoryValue+'\');" style="width:120px; height:50px" data-role="button" data-icon="delete"  data-theme="b" data-inline="true">Delete</a>		</div>		</li>';
+	
     return tmp;
 }
 function addNewCategory() {
@@ -53,6 +109,18 @@ alert('Category added');
 function updateCategory() {
 //not implemented
 }
+function add_cat_value(cat_name) {
+var newval = $('input#'+cat_name+'_addto').val();
+if (newval=='') {
+alert('Recognizer cannot be empty');
+return;
+}
+
+var catref = INIgetkeyref('categories',cat_name);
+catref.val = catref.val+','+newval;
+retrievesettings();
+alert('Recognizer added');
+}
 function retrievesettings() 
 {
     var transmax = INIget('settings','transmax');
@@ -60,7 +128,7 @@ var str='';
     //$('input#transmax').val(transmax);
     //$('input#transmax').slider('refresh');
     categorylist = INIgetsection('categories');
-    
+	
  str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Graph Settings</li>';
 str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">						<div class="ui-btn-inner ui-li">														<div data-role="fieldcontain">										<label style="white-space:normal" for="transmax">Maximum transactions to show</label>							<input type="range" name="transmax" id="transmax" value="'+transmax+'" min="0" max="100" data-highlight="true" />								</div>						<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>						</div>					</li>	';
 	
@@ -78,6 +146,7 @@ str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-
     for (var k=0; k<categorylist.length; k++) 
     {
         var catname = categorylist[k].name;
+		
         //if (catname=='undefined')
         //break;
         var val = categorylist[k].val;
@@ -92,6 +161,12 @@ str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-
 		//update category
 		//var theupdatebutton  = '<li style="display: none;" class="ui-body ui-body-b"><fieldset class="ui-grid-a"><div class="ui-block-a"><button data-theme="a" onclick="updateCategory(\''+catname+'\');" >Update '+catname+'</button></div></fieldset></li>';
         str += graphSettings_header(catname) + values ;//+ theupdatebutton;
+		
+		
+		str += '<li style="display: none;"  class="graphSettings'+catname+'">	<div>';
+		str+='	<input type="text" id="'+catname+'_addto" value=""  />	</div>	<div  data-role="controlgroup"  data-type="horizontal">	';
+		str+='<a href="javascript:add_cat_value(\''+catname+'\');" style="width:200px; height:50px" data-role="button" data-icon="plus"  data-theme="b" data-inline="true">Add recognizer string</a>		</div>		</li>';
+	
         //str += '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d" data-role="fieldcontain"><label  for="'+catname+'">'+catname+'</label><input id="'+catname+'"  value="'+val+'" type="text"></li>';
         //str += '<li  data-role="fieldcontain"><label  for="'+catname+'">'+catname+'</label><input id="'+catname+'"  value="'+val+'" type="text"></li>';
     }
