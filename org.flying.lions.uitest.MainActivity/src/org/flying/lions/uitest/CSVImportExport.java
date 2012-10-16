@@ -155,7 +155,7 @@ public class CSVImportExport extends Plugin {
     
     private void exportCSV(String fileLocation, String transactions) throws IOException
     {
-    	String tempString = "EXPORT";
+    	String tempString = "Griffin Budgeter - ";
 
 		FileWriter fileWriter = new FileWriter("/mnt/sdcard/export.csv");
 		 
@@ -166,7 +166,7 @@ public class CSVImportExport extends Plugin {
 		fileWriter.flush();
 		fileWriter.close();
 		
-		currentPluginInstance.sendJavascript("javascript:alert(\"EXPORT\")");
+		currentPluginInstance.sendJavascript("javascript:alert(\"All transactions have been exported\")");
     	
     }
     
