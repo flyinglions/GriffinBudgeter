@@ -96,7 +96,7 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	
 	$( '#addacc' ).live( 'pageshow',
 		function(event){
-  
+  account_already_added = false;
 		//execute add account scripts (addaccount page)
 		doaddaccount();
 		}

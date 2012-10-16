@@ -3,7 +3,7 @@ var add_Accounts = new Array();
 var newadd_Accounts = new Array();
 var tmpSQL ="";
 var db;
-
+var account_already_added=false;
 // Query the database
 ///
 function addaccqueryDB(tx) {
@@ -15,7 +15,9 @@ function updateDB(tx)
 {
     //tmpSQL = "INSERT INTO Bank_Account (Account_Num, Bank, Acc_Name, Balance) VALUES ('SPR 1000','ABSA','Petrus van Der walt',0)";
     //alert(tmpSQL);
+	
     tx.executeSql(tmpSQL);
+	account_already_added = true;
     alert("Account added successfully!");
     $('select#selectmenu2').val("");
     $('#bank').val("");
@@ -127,9 +129,11 @@ function sanitize(value)
 
 function addAccount(tmpAcc_Num, tmpBank, tmpAcc_Name)
 {
+if (account_already_added)
+return;
     tmpSQL = "INSERT INTO Bank_Account (Account_Num, Bank, Acc_Name) VALUES ('"+tmpAcc_Num+"','"+tmpBank+"','"+tmpAcc_Name+"')";
     $('option[name="'+sanitize(tmpAcc_Num)+'"]').detach();
-    db = window.openDatabase("Database", "1.0", "Flying Lions Database", 10485760);
+    //db = window.openDatabase("Database", "1.0", "Flying Lions Database", 10485760);
     //$('option[name='+tmpAcc_Num).remove();
     db.transaction(updateDB, errorCB);
 }
