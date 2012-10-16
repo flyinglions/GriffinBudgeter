@@ -1,3 +1,7 @@
+var transactions_AccName = new Array();
+var transactions_Bank = new Array();
+var transactions_AccNum = new Array();
+
 function transactions_Header(theDate, theTotal)
 {
     var tmp  = '<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">';
@@ -11,9 +15,26 @@ function transactions_Header(theDate, theTotal)
 
 function transactions_List(theAmount, theCategory, theAccount,theBalance)
 {
-   
-	var tmp='<li><a href="#transactions"><h3>'+theAccount+'</h3><p>'+theCategory+'</p><p class="ui-li-aside"><strong>R'+theAmount+'</strong></p></a>';
-	tmp+='<a  href="javascript:deleteconfirm(\''+theAmount+'\',\''+theBalance+'\');" data-rel="popup" data-position-to="window" data-transition="pop"></a></li>';
+    var iPos = transactions_AccNum.indexOf(theAccount);
+    var tmp;
+    if(iPos > -1)
+    {
+        var tmp_Bank = transactions_Bank[iPos].toUpperCase();
+        if(tmp_Bank == "FNB")
+        {
+            tmp='<li style="background-image:url(\'fnb.png\'); background-size:60px 40px; background-repeat:no-repeat; background-position:center left;"><a href="#transactions"><h3 style="position: relative; left: 60px;">'+transactions_AccName[1*iPos]+'</h3><p style="position: relative; left: 60px;">'+theCategory+'</p><p class="ui-li-aside"><strong>R'+theAmount+'</strong></p></a>';
+        }
+        else
+        {
+            tmp='<li style="background-image:url(\'absa.png\'); background-size:60px 40px; background-repeat:no-repeat; background-position:center left;"><a href="#transactions"><h3 style="position: relative; left: 60px;">'+transactions_AccName[1*iPos]+'</h3><p style="position: relative; left: 60px;">'+theCategory+'</p><p class="ui-li-aside"><strong>R'+theAmount+'</strong></p></a>';
+        }
+    }
+    else
+    {
+        tmp='<li><a href="#transactions"><h3 style="position: relative; left: 60px;">'+theAccount+'</h3><p style="position: relative; left: 60px;">'+theCategory+'</p><p class="ui-li-aside"><strong>R'+theAmount+'</strong></p></a>';
+    }
+    
+    tmp+='<a  href="javascript:deleteconfirm(\''+theAmount+'\',\''+theBalance+'\');" data-rel="popup" data-position-to="window" data-transition="pop"></a></li>';
     
     return tmp;
 }
@@ -37,10 +58,24 @@ navigator.notification.confirm('Are you sure you want to delete the transaction'
 
 function transactions_queryDB(tx) 
 {
+    tx.executeSql('SELECT * FROM Bank_Account', [], transactions_Accountsuccess, transactions_errorCB);
+
 var where=''
 if (filter_account!='')
 where = 'WHERE Account_Num=\''+filter_account+'\'';
     tx.executeSql('SELECT * FROM SMS '+where+' ORDER BY Date DESC, Time DESC LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
+}
+
+function transactions_Accountsuccess(tx, results)
+{
+    var len = results.rows.length;
+    
+    for(var i = 0 ; i < len; i++)
+    {
+        transactions_Bank.push(results.rows.item(i).Bank);
+        transactions_AccName.push(results.rows.item(i).Acc_Name);
+        transactions_AccNum.push(results.rows.item(i).Account_Num);
+    }
 }
 
 function transactions_Success(tx, results)
