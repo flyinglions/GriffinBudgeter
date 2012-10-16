@@ -227,6 +227,7 @@ function fileReaderSuccess(file) {
                     file_text += catName[i]+"_Amount=0\r\n";
                 }
                 file_text+="[settings]\r\ntransmax=50\r\n";
+				file_text+="yearactive=2012\r\n";
                 
                 
 		
