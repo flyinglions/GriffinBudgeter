@@ -90,7 +90,8 @@ public class SMSReader extends Plugin {
         int incVal = 0;
         int counter = 0;
         
-        while (cur.moveToNext())
+        cur.moveToLast();
+        while (cur.moveToPrevious())
         {
         	counter+=1;
         	
