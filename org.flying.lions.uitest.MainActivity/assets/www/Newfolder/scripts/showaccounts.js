@@ -35,7 +35,7 @@ function showaccounts_header(headingTitle, theTotal)
     return tmp;			
 }
 
-function showaccounts_content(theAccountName, theAccountNum,TheBalance)
+function showaccounts_content(theAccountName, theAccountNum, TheBalance, theBank)
 {
     /*var tmp = '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
     tmp += '<div class="ui-btn-inner ui-li">';
@@ -47,7 +47,24 @@ function showaccounts_content(theAccountName, theAccountNum,TheBalance)
     tmp += '</a>';
     tmp += '</div>';
     tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>';*/
-		var tmp='<li><a href="#settingsAccounts"><h3>'+theAccountName+'</h3><p>'+theAccountNum+'</p><p class="ui-li-aside"><strong>'+TheBalance+'</strong></p></a>';
+    var tmp;
+    if(theBank == "FNB")
+    {
+        tmp='<li style="background-image:url(\'fnb.png\'); background-size:80px 50px; background-repeat:no-repeat; background-position:center top;"><a href="#settingsAccounts"><h3>'+theAccountName+'</h3><p>'+theAccountNum+'</p><p class="ui-li-aside"><strong>'+TheBalance+'</strong></p></a>';
+    }
+    else
+    {
+        if(theBank == "ABSA")
+        {
+            tmp='<li style="background-image:url(\'absa.png\'); background-size:80px 50px; background-repeat:no-repeat; background-position:center top;"><a href="#settingsAccounts"><h3>'+theAccountName+'</h3><p>'+theAccountNum+'</p><p class="ui-li-aside"><strong>'+TheBalance+'</strong></p></a>';
+        }
+        else
+        {
+            tmp='<li><a href="#settingsAccounts"><h3>'+theAccountName+'</h3><p>'+theAccountNum+'</p><p class="ui-li-aside"><strong>'+TheBalance+'</strong></p></a>';
+        }
+    }
+    
+
 	tmp+='<a  href="javascript:deleteAccSettings(\''+theAccountNum+'\');" data-rel="popup" data-position-to="window" data-transition="pop"></a></li>';
     return tmp;
 }
@@ -113,7 +130,7 @@ function showaccounts_Success()
         if(tmpBank.toUpperCase() == thisBank.toUpperCase())
         {
             accCounter++;
-            tmpStr += showaccounts_content(bal.item(k).Acc_Name,bal.item(k).Account_Num,thebalance);
+            tmpStr += showaccounts_content(bal.item(k).Acc_Name,bal.item(k).Account_Num,thebalance,thisBank.toUpperCase());
         }
         else
         {
@@ -122,7 +139,7 @@ function showaccounts_Success()
             accCounter = 1;
             tmpBank = thisBank;
             
-            tmpStr = showaccounts_content(bal.item(k).Acc_Name, bal.item(k).Account_Num,thebalance);
+            tmpStr = showaccounts_content(bal.item(k).Acc_Name, bal.item(k).Account_Num,thebalance,thisBank.toUpperCase());
         }
 
         lastBank = thisBank;

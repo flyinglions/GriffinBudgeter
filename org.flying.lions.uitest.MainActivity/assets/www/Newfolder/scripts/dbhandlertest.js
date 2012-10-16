@@ -18,6 +18,7 @@ db_results.push(results);
 
 function db_error(err) 
 {
+    if(debug_mode)
 	alert("Error processing SQL: "+err.code);
 }
 
