@@ -28,7 +28,7 @@
         <h3>Loading Accounts...</h3>
         <div id="chart1" style="height:300px; width:300px;"></div>
         <script class="code" type="text/javascript">
-              
+            var debug_mode=false;
              document.addEventListener("deviceready", onDeviceReady, false);
             //var expenses = [[2002, 50000], [2003, 45000], [2004, 39805], [2005, 68040], [2006, 99999], [2007, 104020], [2008, 15005], [2009, 10000], [2010, 25045], [2011, 75412]];
             //var income = [[2002, 112000], [2003, 122000], [2004, 104000], [2005, 99000], [2006, 121000], [2007, 148000], [2008, 114000], [2009, 133000], [2010, 161000], [2011, 173000]];
@@ -229,7 +229,8 @@
           // Transaction error callback
             //
             function errorCB(err) {
-                alert("Error processing SQL: "+err.code);
+                if(debug_mode)
+                    alert("Error processing SQL: "+err.code);
             }
 
 

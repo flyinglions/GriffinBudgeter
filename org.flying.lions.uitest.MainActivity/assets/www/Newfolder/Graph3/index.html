@@ -19,6 +19,7 @@
       <div data-role="content" data-theme="a" class="ReportContent">
           <h3 class="loading">Loading data...</h3>
         <script class="code" type="text/javascript">
+            var debug_mode=false;
             document.addEventListener("deviceready", onDeviceReady, false);
             var plot1 = new Array();
             var accounts = new Array();
@@ -220,7 +221,8 @@
           // Transaction error callback
             //
             function errorCB(err) {
-                alert("Error processing SQL: "+err.code);
+                if(debug_mode)
+                    alert("Error processing SQL: "+err.code);
             }
 
 
