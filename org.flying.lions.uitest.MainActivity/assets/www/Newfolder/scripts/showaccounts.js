@@ -50,13 +50,13 @@ function showaccounts_content(theAccountName, theAccountNum, TheBalance, theBank
     var tmp;
     if(theBank == "FNB")
     {
-        tmp='<li style="background-image:url(\'fnb.png\'); background-size:80px 50px; background-repeat:no-repeat; background-position:center top;"><a href="#settingsAccounts"><h3>'+theAccountName+'</h3><p>'+theAccountNum+'</p><p class="ui-li-aside"><strong>'+TheBalance+'</strong></p></a>';
+        tmp='<li style="background-image:url(\'fnb.png\'); background-size:80px 50px; background-repeat:no-repeat; background-position:center;"><a href="#settingsAccounts"><h3>'+theAccountName+'</h3><p>'+theAccountNum+'</p><p class="ui-li-aside"><strong>'+TheBalance+'</strong></p></a>';
     }
     else
     {
         if(theBank == "ABSA")
         {
-            tmp='<li style="background-image:url(\'absa.png\'); background-size:80px 50px; background-repeat:no-repeat; background-position:center top;"><a href="#settingsAccounts"><h3>'+theAccountName+'</h3><p>'+theAccountNum+'</p><p class="ui-li-aside"><strong>'+TheBalance+'</strong></p></a>';
+            tmp='<li style="background-image:url(\'absa.png\'); background-size:80px 50px; background-repeat:no-repeat; background-position:center;"><a href="#settingsAccounts"><h3>'+theAccountName+'</h3><p>'+theAccountNum+'</p><p class="ui-li-aside"><strong>'+TheBalance+'</strong></p></a>';
         }
         else
         {
