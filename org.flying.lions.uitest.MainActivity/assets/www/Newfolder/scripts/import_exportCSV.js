@@ -69,7 +69,7 @@ function onConfirmExportCSV(buttonIndex){
 		export_string+='Date,Time,Amount,Balance,Category,Account_Num\r\n';
 		var prog_inc_val=0;
 		if (len==0)
-		export_string+='There are no transaction in the database yet\r\n';
+		export_string+='There are no transactions in the database yet\r\n';
 		else
 		 prog_inc_val= 100/len;
 		

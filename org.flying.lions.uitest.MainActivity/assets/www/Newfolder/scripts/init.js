@@ -38,6 +38,7 @@ var db = null;
         function checkQueue()
         {
         	console.log("CheckQueue");
+			if (functionQueue.getLength()!=0)
             db.transaction(queryDB, error, success);
         }
         
@@ -60,7 +61,7 @@ var db = null;
             var continueOnFail = true;
             for(var i=0; i < length; i++)
             {
-
+				
                 var type = typeQueue.dequeue();
                 var sqlVal = functionQueue.dequeue();
                 //alert(type);

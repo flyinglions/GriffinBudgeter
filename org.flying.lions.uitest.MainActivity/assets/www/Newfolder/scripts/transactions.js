@@ -91,6 +91,7 @@ function transactions_errorCB(err)
 {
     if(err.message == "undefined")
     {
+	if (debug_mode)
         alert("Error processing SQL: "+err.code+" Message1:"+err.message);
     }
 }
