@@ -37,7 +37,10 @@ navigator.notification.confirm('Are you sure you want to delete the transaction'
 
 function transactions_queryDB(tx) 
 {
-    tx.executeSql('SELECT * FROM SMS ORDER BY Date DESC, Time DESC LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
+var where=''
+if (filter_account!='')
+where = 'WHERE Account_Num=\''+filter_account+'\'';
+    tx.executeSql('SELECT * FROM SMS '+where+' ORDER BY Date DESC, Time DESC LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
 }
 
 function transactions_Success(tx, results)
@@ -94,4 +97,31 @@ function transactions_errorCB(err)
 	if (debug_mode)
         alert("Error processing SQL: "+err.code+" Message1:"+err.message);
     }
+}
+
+//functionlityu for filtering by account
+var filter_account='';
+function filtertransaction(acc_num) {
+filter_account = acc_num;
+$.mobile.changePage($("#transactions"));
+}
+
+function updateAccountsOnPopup() {
+	var rows = db_results.shift().rows;
+	var updatestr='';
+	if (rows==undefined) {
+	updatestr='<h3>No Accounts added yet</h3>';
+	} else {
+		var len = rows.length;
+		var updatestr ='<li data-role="divider" data-theme="a">Choose Account</li>';
+		updatestr+='<li><a href="javascript:filtertransaction(\'\')">Show all transactions</a></li>';
+		for (var k=0; k<len; k++) {
+			updatestr+='<li><a href="javascript:filtertransaction(\''+rows.item(k).Account_Num+'\')">'+rows.item(k).Account_Num+'</a></li>';
+		}
+	}
+	
+	$('ul#transpopupui').html(updatestr);
+	$('ul#transpopupui').listview('refresh');
+	//$('ul#transpopupui').listview('refresh');
+	
 }

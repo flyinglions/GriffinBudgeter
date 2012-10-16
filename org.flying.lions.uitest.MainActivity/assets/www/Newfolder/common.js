@@ -127,6 +127,7 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 		}
 	);
 	
+	
 	$( '#graphsettings' ).live( 'pagehide',
 		function(event){
   
@@ -134,6 +135,16 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 		hidegraphsettings();
 		}
 	);
+	
+	$( '#transactionspopup' ).live( 'pageshow',
+		function(event){
+  
+		//execute transactionspopup scripts
+		db_queries.push('select Account_Num from Bank_Account');
+		doTransactions(updateAccountsOnPopup);
+		}
+	);
+	
 	
 navigator.splashscreen.hide();
 	
