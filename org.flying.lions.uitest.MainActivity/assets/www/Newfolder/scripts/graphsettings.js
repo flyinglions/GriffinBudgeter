@@ -26,6 +26,8 @@ var budgetref = INIgetkeyref('categoriesBudgetAmounts',cat+'_Amount');
 catref.name = newcat;
 budgetref.name = newcat+'_Amount';
 budgetref.val = bud;
+db_queries.push('UPDATE SMS SET Category=\''+newcat+'\' WHERE Category=\''+cat+'\'');
+retrievesettings();
 alert("Category updated");
 }
 function delete_the_category(cat) {
@@ -187,6 +189,8 @@ function showgraphsettings()
 function hidegraphsettings() {
 updatefields();
 stopINI();
+doTransactionsNoResults(function () {    } );
+
 }
 
 function updatefields() {
@@ -200,7 +204,6 @@ function updategraphsettings()
 	updatefields();
     /*for (var k=0; k<categorylist.length; k++)
     INIset('categories',categorylist[k].name,$('input#'+categorylist[k].name).val());*/
-
-    alert("Settings updated!");
+	
 	$.mobile.changePage($("#settings"));
 }

@@ -121,6 +121,8 @@ function transactions_Success(tx, results)
                     
     $('ul#transactions').html(ht_str);
 	$('ul#transactions').listview('refresh');
+	
+	
 }
 
 // Transaction error callback
@@ -132,6 +134,7 @@ function transactions_errorCB(err)
 	if (debug_mode)
         alert("Error processing SQL: "+err.code+" Message1:"+err.message);
     }
+	
 }
 
 //functionlityu for filtering by account
