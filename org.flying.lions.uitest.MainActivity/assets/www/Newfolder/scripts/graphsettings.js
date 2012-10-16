@@ -30,7 +30,7 @@ function graphSettings_header(headingTitle)
 
 function graphSettings_content(theCategoryValue, theParent)
 {
-    var tmp = '<li style="display: none;" class="graphSettings'+theParent+'" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
+    var tmp = '<li data-icon="star" style="display: none;" class="graphSettings'+theParent+'" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">';
     tmp += '<div class="ui-btn-inner ui-li">';
     tmp += '<div class="ui-btn-text">';
     tmp += '<a href="#" class="ui-link-inherit">';
@@ -55,14 +55,16 @@ function updateCategory() {
 function retrievesettings() 
 {
     var transmax = INIget('settings','transmax');
-
-    $('input#transmax').val(transmax);
-    $('input#transmax').slider('refresh');
+var str='';
+    //$('input#transmax').val(transmax);
+    //$('input#transmax').slider('refresh');
     categorylist = INIgetsection('categories');
     
-
+str+='<li style="" data-theme="a" data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Graph Settings</li>';
+str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">						<div class="ui-btn-inner ui-li">														<div data-role="fieldcontain">										<label style="white-space:normal" for="transmax">Maximum transactions to show</label>							<input type="range" name="transmax" id="transmax" value="50" min="0" max="100" data-highlight="true" />								</div>						<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>						</div>					</li>	';
+	
 	//category header
-    var str='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Custom categories</li>';
+     str='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Custom categories</li>';
 	
     //add of category
 	str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Add a category</li>';
