@@ -4,6 +4,8 @@ var newadd_Accounts = new Array();
 var tmpSQL ="";
 var db;
 var account_already_added=false;
+var supported_Banks = new Array("ABSA","FNB");
+var banks_added = false;
 // Query the database
 ///
 function addaccqueryDB(tx) {
@@ -20,7 +22,7 @@ function updateDB(tx)
 	account_already_added = true;
     alert("Account added successfully!");
     $('select#selectmenu2').val("");
-    $('#bank').val("");
+    $('select#bank').val("");
     $('#acc_name').val("");
 }
 
@@ -84,6 +86,15 @@ function querySuccess(tx, results) {
 		$("#selectmenu2").selectmenu("refresh");
         }
     }
+    if(!banks_added)
+    {
+        for(i = 0 ; i < supported_Banks.length; i++)
+        {
+            $("#bank").append('<option name="'+supported_Banks[i]+'" value="'+supported_Banks[i]+'">'+supported_Banks[i]+'</option>');
+            $("#bank").selectmenu("refresh");
+        }
+        banks_added = true;
+    }
 }
 
 
@@ -146,7 +157,7 @@ function updateadd_Accounts() {
         }
 
         var acc_name = $('input#acc_name').val();
-        var bank =  $('input#bank').val();
+        var bank =  $('select#bank').val();
 
         //alert("accnum"+account_num+"\nacc_name:"+acc_name+"\nbank:"+bank);
         addAccount(account_num,bank,acc_name);
