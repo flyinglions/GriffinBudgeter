@@ -131,7 +131,7 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 		function(event){
   
 		//execute graphsettings scripts (when transitioning to another page)
-		stopINI();
+		hidegraphsettings();
 		}
 	);
 	
