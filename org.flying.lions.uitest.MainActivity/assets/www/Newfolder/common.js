@@ -114,7 +114,7 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	$( '#settingsAccounts' ).live( 'pageshow',
 		function(event){
   
-		//execute add account scripts (addaccount page)
+		//execute settingsAccounts scripts 
 		showsettingsaccounts();
 		}
 	);
@@ -122,8 +122,16 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	$( '#graphsettings' ).live( 'pageshow',
 		function(event){
   
-		//execute add account scripts (addaccount page)
+		//execute graphsettings scripts
 		showgraphsettings();
+		}
+	);
+	
+	$( '#graphsettings' ).live( 'pagehide',
+		function(event){
+  
+		//execute graphsettings scripts (when transitioning to another page)
+		stopINI();
 		}
 	);
 	

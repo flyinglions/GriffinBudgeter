@@ -443,6 +443,43 @@ function INIget(section,key) {
     
 }
 
+function INIgetkeyref(section,key) {
+    for (var k =0; k<theini.sections.length; k++ ) {
+        if (theini.sections[k].name == section)
+            for (var p =0; p<theini.sections[k].items.length; p++ ) {
+                if (theini.sections[k].items[p].name==key) {
+                
+                    return theini.sections[k].items[p];
+                }
+            }
+        
+    }
+    
+    
+    return null;
+    
+}
+
+function INIdeletekey(section,key) {
+
+	for (var k =0; k<theini.sections.length; k++ ) {
+        if (theini.sections[k].name == section) {
+           thesection = theini.sections[k];
+		   //get the key
+			   for (var p =0; p<theini.sections[k].items.length; p++ ) {
+					if (theini.sections[k].items[p].name==key) {
+						theini.sections[k].items = theini.sections[k].items.splice(p,1);
+						return true;
+					}
+				}
+		   return false;		 
+		}
+    }
+	
+	return false;
+	
+}
+
 
 function INIgetsection(section) {
 

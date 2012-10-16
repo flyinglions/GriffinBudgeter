@@ -41,7 +41,17 @@ function graphSettings_content(theCategoryValue, theParent)
     tmp += '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>';
     return tmp;
 }
+function addNewCategory() {
+var newcat = $('input#settingsnewcategory').val();
+INIset('categories',newcat,'');
+INIset('categoriesBudgetAmounts',newcat+'_Amount','0');
+retrievesettings();
+alert('Category added');
+}
 
+function updateCategory() {
+//not implemented
+}
 function retrievesettings() 
 {
     var transmax = INIget('settings','transmax');
@@ -49,10 +59,17 @@ function retrievesettings()
     $('input#transmax').val(transmax);
     $('input#transmax').slider('refresh');
     categorylist = INIgetsection('categories');
-    var str='<ul  data-role="listview" data-theme="d" data-divider-theme="d" class="ui-listview">';
+    
 
-    //category header
-    str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Custom categories</li>';
+	//category header
+    var str='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Custom categories</li>';
+	
+    //add of category
+	str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Add a category</li>';
+	str+='<li data-role="fieldcontain"> <label  for="settingsnewcategory">New Category</label>   <input type="text"  id="settingsnewcategory"  name="settingsnewcategory"  value="" /></li>';
+	str+='<li class="ui-body ui-body-b"><fieldset class="ui-grid-a"><div class="ui-block-a"><button data-theme="a" onclick="addNewCategory();" >Add</button></div></fieldset></li>';
+	//end add
+	
     //str+='<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">						<div class="ui-btn-inner ui-li"><div class="ui-btn-text">';
     for (var k=0; k<categorylist.length; k++) 
     {
@@ -68,13 +85,20 @@ function retrievesettings()
             //alert(listOfValues[i]);
             values += graphSettings_content(listOfValues[i], catname);
         }
-        str += graphSettings_header(catname) + values;
+		//update category
+		//var theupdatebutton  = '<li style="display: none;" class="ui-body ui-body-b"><fieldset class="ui-grid-a"><div class="ui-block-a"><button data-theme="a" onclick="updateCategory(\''+catname+'\');" >Update '+catname+'</button></div></fieldset></li>';
+        str += graphSettings_header(catname) + values ;//+ theupdatebutton;
         //str += '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d" data-role="fieldcontain"><label  for="'+catname+'">'+catname+'</label><input id="'+catname+'"  value="'+val+'" type="text"></li>';
         //str += '<li  data-role="fieldcontain"><label  for="'+catname+'">'+catname+'</label><input id="'+catname+'"  value="'+val+'" type="text"></li>';
     }
-    str+='</ul>';
+	
+	
+	
+    
     //str+='<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></div></li>'
     $('#catul').html(str);
+	$('#catul').listview('refresh');
+	$('#catul').trigger('create');
 }
 
 function showgraphsettings() 
@@ -88,9 +112,9 @@ function updategraphsettings()
     transactionlimit = transmax;
     INIset('settings','transmax',transmax);
 
-    for (var k=0; k<categorylist.length; k++)
-    INIset('categories',categorylist[k].name,$('input#'+categorylist[k].name).val());
+    /*for (var k=0; k<categorylist.length; k++)
+    INIset('categories',categorylist[k].name,$('input#'+categorylist[k].name).val());*/
 
-    stopINI();
-    alert("Updated!");
+    alert("Settings updated!");
+	$.mobile.changePage($("#settings"));
 }
