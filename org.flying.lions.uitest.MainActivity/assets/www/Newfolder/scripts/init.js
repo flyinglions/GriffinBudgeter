@@ -18,6 +18,16 @@ var db = null;
             
             functionQueue.enqueue('CREATE TABLE IF NOT EXISTS Recon (Transaction_ID,Type,Recon,Account_Num,SMS_ID)');
             typeQueue.enqueue('CREATE');
+            /*
+                CREATE TRIGGER IF NOT EXISTS unique_row BEFORE INSERT ON sms 
+                BEGIN 
+                    DELETE FROM sms WHERE (Date = new.Date) AND (Amount = new.Amount) AND (Balance = new.Balance); 
+                END;
+             */
+            
+            
+            functionQueue.enqueue('CREATE TRIGGER IF NOT EXISTS unique_row BEFORE INSERT ON sms BEGIN DELETE FROM sms WHERE (Date = new.Date) AND (Amount = new.Amount) AND (Balance = new.Balance); END;');
+            typeQueue.enqueue('CREATE');
         }
         
         function dropTables()
@@ -163,7 +173,7 @@ function init_SelectSuccess(tx, results)
         function error(err) 
         {
             console.log("Error processing SQL: "+err.code);
-            if (debug_mode)
+            //if (debug_mode)
 			alert("Error: Last SQL : "+lastSql+" , "+err.code+";"+err.message);
         }
 
