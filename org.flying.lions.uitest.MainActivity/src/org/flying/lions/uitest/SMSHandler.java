@@ -32,7 +32,7 @@ public class SMSHandler {
     }
     
 
-    public void recieveSMS(String inSms) throws IOException {
+    public boolean recieveSMS(String inSms) throws IOException {
 
         inSms = inSms.replaceAll("\"", "");
         inSms = inSms.replaceAll("'", "");
@@ -64,14 +64,14 @@ public class SMSHandler {
                 SQLGen.buildSQL(realValue);
                 currentLocation = 0;
                 isValid = true;
-                return;
+                return true;
             }
         } catch (Exception e) {
             LogWriter.log("Error: "+e.getMessage());
             LogWriter.log("---------------------------------");
             System.err.println("SMS is not valid: '" + inSms + "'");
            // e.printStackTrace();
-            return;
+            return false;
         }
 
         for (int y = 0; y < messageSize; y++) {
@@ -84,7 +84,7 @@ public class SMSHandler {
                     System.err.println("SMS is not valid: '" + inSms + "'");
                     currentLocation = 0;
                     isValid = true;
-                    return;
+                    return false;
                 }
 
             } catch (Exception e) {
@@ -94,7 +94,7 @@ public class SMSHandler {
                 currentLocation = 0;
                 isValid = true;
                // e.printStackTrace();
-                return;
+                return false;
             }
         }
         System.out.println("\n\n" + this);
@@ -103,6 +103,7 @@ public class SMSHandler {
         SQLGen.buildSQL(realValue);
         currentLocation = 0;
         isValid = true;
+        return true;
 
     }
 

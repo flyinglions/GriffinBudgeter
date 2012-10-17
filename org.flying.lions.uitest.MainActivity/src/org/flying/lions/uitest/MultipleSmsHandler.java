@@ -15,14 +15,16 @@ public MultipleSmsHandler() throws FileNotFoundException, IOException {
     SMSHandler.setTheSorter(theSorter);       
 }
 
-public void parseSMS(String inSms) throws IOException{
+public boolean parseSMS(String inSms) throws IOException{
     try{
                 String tempCheck = inSms.substring(0,5);        
     if(tempCheck.contains("Absa")){
-        absaHandler.recieveSMS(inSms);
+        return absaHandler.recieveSMS(inSms);
     }else {
-        fnbHandler.recieveSMS(inSms); 
+        return fnbHandler.recieveSMS(inSms); 
     }}catch(Exception e){}
+    
+    return false;
 }
 
 

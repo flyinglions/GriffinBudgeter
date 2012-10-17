@@ -96,7 +96,27 @@ public class SMSReceiverPlugin extends Plugin {
 		        //String smsSimulation = " Absa: SPR 9437, Gesk, 29/06/12 DIREKTE DEBIET, DEAGOSTINI-4X000500, R-253.90, Saldo R4,093.75. Hulp 0860008600; VDWALPG043";
 				try
 				{
-			        smsHand.parseSMS(msg.getMessageBody() + ":" + msg.getTimestampMillis());
+			        if(smsHand.parseSMS(msg.getMessageBody() + ":" + msg.getTimestampMillis()))
+			        {
+			        
+						// When the Activity is not loaded, the currentPluginInstance is null
+						
+						if (currentPluginInstance != null)
+						{
+							// build code to call function
+							String code =  "javascript:" + callbackFunction + "(" + sms.toString() + ");";
+							
+					 	   	//Log.v(TAG + ":sendJavascript", code);
+				
+					 	   	// execute code
+					 	   	//currentPluginInstance.sendJavascript(code);
+					 	   	currentPluginInstance.sendJavascript("javascript:notificationCallback()");
+						}
+						else
+						{
+	
+						}
+			        }
 			        Log.d(TAG, "SUCCESS");
 				}
 				catch(Exception ex)
@@ -117,54 +137,7 @@ public class SMSReceiverPlugin extends Plugin {
 			}
 
 
-			// When the Activity is not loaded, the currentPluginInstance is null
-			
-			if (currentPluginInstance != null)
-			{
-				// build code to call function
-				String code =  "javascript:" + callbackFunction + "(" + sms.toString() + ");";
-				
-		 	   	//Log.v(TAG + ":sendJavascript", code);
-	
-		 	   	// execute code
-		 	   	//currentPluginInstance.sendJavascript(code);
-		 	   	currentPluginInstance.sendJavascript("javascript:notificationCallback()");
-			}
-			else
-			{
-				/*try
-				{
-					if(!sms.getString("bank").equals("NOT BANK SMS"))
-					{
-			            FileWriter fileWriter;
-			            try{
-			            	 fileWriter = new FileWriter("/mnt/sdcard/receivedSMS.txt", true);
-			            	 fileWriter.append(sms.toString());
-			            	 fileWriter.flush();
-			            	 fileWriter.close();
-			             }
-			            catch(Exception e){
-			                      e.printStackTrace();
-			             }
-					}
-				}
-				catch (JSONException e)
-				{
-			 	   	Log.e(TAG + ":sendMessage", "JSON exception");
-				}*/
-				
-				/*
-				 *     	 FileWriter fileWriter;
-					   	 fileWriter = new FileWriter("/mnt/sdcard/SQLStatements.txt", true);
-					   	 fileWriter.append(Insert + "\r\n");
-					     fileWriter.append(recon + "\r\n");
-					   	 fileWriter.flush();
-					   	 fileWriter.close();    	
-    	
-				 * 
-				 * 
-				 */
-			}
+
 		
 	}
 
