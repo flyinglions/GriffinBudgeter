@@ -11,18 +11,19 @@ import java.util.Calendar;
  */
 public class LogWriter {
     private static String logFileName = "LogFile.txt";
-    //private static String newLine = System.getProperty("line.separator");
+    private static String newLine = System.getProperty("line.separator");
     
    public static void log(String Insert) throws IOException {
-        String timeStamp = "";
-        Calendar cal = Calendar.getInstance();
-        
-        timeStamp = cal.getTime().toString();
-        File sdcard = new File("");
-        FileWriter fileWriter = new FileWriter("/mnt/sdcard/MEM/ORI/" + logFileName, true);
-        fileWriter.append(timeStamp+":"+Insert + "\r\n");
-        fileWriter.flush();
-        fileWriter.close();
+       
+//        String timeStamp = "";
+//        Calendar cal = Calendar.getInstance();
+//        
+//        timeStamp = cal.getTime().toString();
+//        File sdcard = new File("");
+//        FileWriter fileWriter = new FileWriter(sdcard.getCanonicalPath() + "\\MEM\\" + logFileName, true);
+//        fileWriter.append(timeStamp+":"+Insert + newLine);
+//        fileWriter.flush();
+//        fileWriter.close();
 
     }
     

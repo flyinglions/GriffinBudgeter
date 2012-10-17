@@ -24,18 +24,20 @@ public class SQLGenerator {
     private boolean isFirst = false;
 
     public void buildSQL(String[] realValue) throws IOException {
-        ////LogWriter.log("Starting SQL creation");
+        //LogWriter.log("Starting SQL creation");
         timeStamp = SMSHandler.getTimeStamp();
         tempReal = realValue;
         this.getBanks();
 
         if (realValue.length == lengthCompare) {
-            ////LogWriter.log("SQL creation for ABSA");
-            newBank = !this.isInBanks(this.correctAccounts(realValue[1]));
+            //LogWriter.log("SQL creation for ABSA");
+            realValue[1] = this.correctAccounts(realValue[1]);
+            newBank = !this.isInBanks(realValue[1]);
             this.writeToFile(this.buildInsert(realValue), this.buildRecon(realValue[7], realValue[5], realValue[4]), this.buildBalanceUpdate(realValue[1]));
         } else {
-            ////LogWriter.log("SQL creation for FNB");
-            newBank = !this.isInBanks(this.correctAccounts(realValue[8]));
+            //LogWriter.log("SQL creation for FNB");
+            realValue[8] = this.correctAccounts(realValue[8]);            
+            newBank = !this.isInBanks(realValue[8]);
             this.writeToFile(this.buildInsert(realValue), this.buildRecon(realValue[12], realValue[2], realValue[6]), this.buildBalanceUpdate(realValue[8]));
         }
         prevValue = 0;
@@ -44,7 +46,7 @@ public class SQLGenerator {
 
     private String buildInsert(String[] realValue) throws FileNotFoundException, IOException {
         String SQLStatement = "INSERT INTO sms(Date,Time,Amount,Balance,Location,Account_Num,Category) values('";
-        ////LogWriter.log("SQL Insert SMS started");
+        //LogWriter.log("SQL Insert SMS started");
         if (realValue.length == lengthCompare) {
             prevValue = Float.parseFloat(this.getCorrectBalance(realValue[7]));
             SQLStatement += this.convertFromAbsa(realValue[3]) + "','" + timeStamp + "'," + realValue[5] + "," + prevValue + ",'" + realValue[4] + "','" + realValue[1] + "','" + this.getCategories(realValue[4]) + "')";
@@ -84,7 +86,7 @@ public class SQLGenerator {
     private String buildRecon(String currBal, String diff, String Loc) throws IOException {
         String SQLStatement = "INSERT INTO Recon(Type,Recon,Account_Num,SMS_ID) values('";
         String recon = this.getRecon(currBal, diff);
-        ////LogWriter.log("SQL Insert Recon started");
+        //LogWriter.log("SQL Insert Recon started");
         if (recon.equals("0.00")) {
             return "";
         }
@@ -102,7 +104,6 @@ public class SQLGenerator {
         return SQLStatement;
     }
 
-
     private String getExspensesIncome(String inCurrancy) {
         if (inCurrancy.contains("-")) {
             return "Expense";
@@ -119,26 +120,24 @@ public class SQLGenerator {
     private void getBanks() throws IOException {
     	
         try{
-        //LogWriter.log("Getting the banks");
+        ////LogWriter.log("Getting the banks");
         	File sdcard = Environment.getExternalStorageDirectory();
             File folder = new File(sdcard + "/MEM/ORI");
             folder.mkdirs();
 
           //Get the text file
             File file = new File(sdcard + "/MEM/ORI", prevFileName);
-	        Scanner sc = new Scanner(file);
-	        //LogWriter.log("Got the file for banks");
-	        String singleLine = "";
-	        int place = 0;
-	        while (sc.hasNextLine()) {
-	            singleLine = sc.nextLine().trim();
-	            //        System.out.println("'" + singleLine + "'");
-	            bankHolder[place] = singleLine.substring(0, singleLine.indexOf("=")).trim();
-	            //    System.out.println(bankHolder[place]);
-	            place += 1;
-        }
-        // System.out.println(place);
-        bankAmount = place;
+            Scanner sc = new Scanner(file);
+            ////LogWriter.log("Got the file for banks");
+            String singleLine = "";
+            int place = 0;
+            while (sc.hasNextLine()) {
+                singleLine = sc.nextLine().trim();
+                bankHolder[place] = singleLine.substring(0, singleLine.indexOf("=")).trim();
+                place += 1;
+            }
+            // System.out.println(place);
+            bankAmount = place;
         }catch(Exception e){
             System.err.println("File not found");
             isFirst = true;
@@ -158,55 +157,59 @@ public class SQLGenerator {
    }    
     
     private String getRecon(String stringVal, String diff) throws IOException {
-        try{
-        //LogWriter.log("Getting the recon");
-        float prevSaldo = this.getPrev();
+        try {
+            //LogWriter.log("Getting the recon");
+            float prevSaldo = this.getPrev();
 
-        stringVal = stringVal.replaceAll(",", "");
-        diff = diff.replaceAll(",", "");
-        float currBal = Float.parseFloat(stringVal);
-        float currDiff = Float.parseFloat(diff);
-        float recon = 0;
+            stringVal = stringVal.replaceAll(",", "");
+            diff = diff.replaceAll(",", "");
+            float currBal = Float.parseFloat(stringVal);
+            float currDiff = Float.parseFloat(diff);
+            float recon = 0;
 
-        if (currBal == 0) {
-            if (prevSaldo == 0) {
-                prevSaldo = currBal;
-                this.writePrev(prevValue);
+            if (currBal == 0) {
+                if (prevSaldo == 0) {
+                    prevSaldo = currBal;
+                    this.writePrev(prevValue);
+                    return "0.00";
+                }
+                prevSaldo = prevValue + currDiff;
+                this.writePrev(prevSaldo);
                 return "0.00";
             }
-            prevSaldo = prevValue + currDiff;
+
+            if (prevSaldo == 0) {
+                prevSaldo = currBal;
+                this.writePrev(prevSaldo);
+                return "0.00";
+            }
+            float newBal = 0;
+
+            newBal = prevSaldo + currDiff;
+
+            if (currBal == newBal) {
+                prevSaldo = currBal;
+                this.writePrev(prevSaldo);
+                return "0.00";
+            } else {
+                recon = newBal - currBal;
+                prevSaldo = currBal;
+            }
             this.writePrev(prevSaldo);
+            recon = (float) (Math.round(recon * 100.00) / 100.00);
+            String reconString = String.valueOf(recon);
+            ////LogWriter.log("recon is " + reconString);
+            return reconString;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("PETRUS! WAT DE HELL!");
             return "0.00";
         }
-
-        if (prevSaldo == 0) {
-            prevSaldo = currBal;
-            this.writePrev(prevSaldo);
-            return "0.00";
-        }
-        float newBal = 0;
-
-        newBal = prevSaldo + currDiff;
-
-        if (currBal == newBal) {
-            prevSaldo = currBal;
-            this.writePrev(prevSaldo);
-            return "0.00";
-        } else {
-            recon = newBal - currBal;
-            prevSaldo = currBal;
-        }
-        this.writePrev(prevSaldo);
-        recon = (float) (Math.round(recon * 100.00) / 100.00);
-        String reconString = String.valueOf(recon);
-        //LogWriter.log("recon is " + reconString);
-        return reconString;
-        }catch(Exception e){e.printStackTrace();System.out.println("PETRUS! WAT DE HELL!");return "0.00";}
     }
 
     private void writeToFile(String Insert, String recon, String balUpdate) throws IOException {
         // System.out.println(Insert + newLine + recon);
-        //LogWriter.log("Writing to file");
+        ////LogWriter.log("Writing to file");
    	 	Log.d("SQLWriter","Writing SQLStatements");
  	
 		FileWriter fileWriter = new FileWriter("/mnt/sdcard/MEM/SQLStatements.txt", true);
@@ -223,7 +226,7 @@ public class SQLGenerator {
     private void writePrev(float prev) throws IOException {
 
         try {
-            //LogWriter.log("Writing prev" + prev);
+            ////LogWriter.log("Writing prev" + prev);
             String[] lines = new String[maxBankCount];
             
             File sdcard = Environment.getExternalStorageDirectory();
@@ -280,7 +283,7 @@ public class SQLGenerator {
 
     private float getPrev() throws IOException {
         
-        if(newBank && isFirst) {
+        if (newBank && isFirst) {
             return Float.parseFloat(this.getCorrectBalance());
         }
         String singleLine = "";
@@ -297,21 +300,21 @@ public class SQLGenerator {
             Scanner sc = new Scanner(file);
             String Account = this.getvalidAccount();
             String backUpString = "";
-            
-            while(sc.hasNextLine()){
+
+            while (sc.hasNextLine()) {
                 singleLine = sc.nextLine();
                 backUpString = singleLine.substring(0, singleLine.indexOf("=") - 1).trim();
-                if(backUpString.equals(Account)) {
+                if (backUpString.equals(Account)) {
                     break;
-                }                
+                }
             }
-            
+
             singleLine = singleLine.substring(singleLine.indexOf("=") + 1, singleLine.indexOf(";"));
             sc.close();
             // System.out.println(singleLine);
             return Float.parseFloat(singleLine);
         } else {
-    
+
 
             return 0;
         }
@@ -374,20 +377,23 @@ public class SQLGenerator {
     }
 
     private boolean isInBanks(String toCheck) {
-        try{
-        int leng = bankAmount;
-        if (leng <= 0) {
+        try {
+            int leng = bankAmount;
+            if (leng <= 0) {
+                return false;
+            }
+
+            for (int y = 0; y < leng; y++) {
+                if (toCheck.toLowerCase().equals(bankHolder[y].toLowerCase())) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
 
-        for (int y = 0; y < leng; y++) {
-            if (toCheck.toLowerCase().equals(bankHolder[y].toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
-        }catch(Exception e){e.printStackTrace();return false;}
-        
     }
 
     private String getvalidAccount() {

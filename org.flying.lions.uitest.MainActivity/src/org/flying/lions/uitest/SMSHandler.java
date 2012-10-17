@@ -21,7 +21,7 @@ public class SMSHandler {
     private static int place = 0;
     private static String timeStamp = "";
     public static CategoriesSorter theSorter = null;
-    //public static LogWriter log = new LogWriter();
+    public static LogWriter log = new LogWriter();
     
     public SMSHandler() throws FileNotFoundException, IOException {
         
@@ -41,8 +41,8 @@ public class SMSHandler {
         inSms = inSms.replaceAll("&", "");    
         inSms = inSms.replaceAll(";", "");        
        // System.out.println("adasdasd");
-        //LogWriter.log("---------------------------------");
-        //LogWriter.log("Parsing of '" + inSms + "' started");
+        LogWriter.log("---------------------------------");
+        LogWriter.log("Parsing of '" + inSms + "' started");
        
         smsString = inSms;
         try{
@@ -57,18 +57,18 @@ public class SMSHandler {
         try {
             String tempCheck = inSms.substring(0,5); 
             if (!smsString.contains("reserved") && !tempCheck.contains("Absa") && !smsString.contains("fraud")) {
-                //LogWriter.log("Enter HC");
+                LogWriter.log("Enter HC");
                 hardCodedFNB(inSms);
                 System.out.println("\n\nSms Hard:\n" + this);
-                //LogWriter.log(this.toString());
+                LogWriter.log(this.toString());
                 SQLGen.buildSQL(realValue);
                 currentLocation = 0;
                 isValid = true;
                 return;
             }
         } catch (Exception e) {
-            //LogWriter.log("Error: "+e.getMessage());
-            //LogWriter.log("---------------------------------");
+            LogWriter.log("Error: "+e.getMessage());
+            LogWriter.log("---------------------------------");
             System.err.println("SMS is not valid: '" + inSms + "'");
            // e.printStackTrace();
             return;
@@ -88,8 +88,8 @@ public class SMSHandler {
                 }
 
             } catch (Exception e) {
-                //LogWriter.log("Error: " + e.getMessage());
-                //LogWriter.log("---------------------------------");                
+                LogWriter.log("Error: " + e.getMessage());
+                LogWriter.log("---------------------------------");                
                 System.err.println("SMS is not valid: '" + inSms + "'");
                 currentLocation = 0;
                 isValid = true;
@@ -98,8 +98,8 @@ public class SMSHandler {
             }
         }
         System.out.println("\n\n" + this);
-        //LogWriter.log(this.toString());        
-        //LogWriter.log("---------------------------------");         
+        LogWriter.log(this.toString());        
+        LogWriter.log("---------------------------------");         
         SQLGen.buildSQL(realValue);
         currentLocation = 0;
         isValid = true;
@@ -210,4 +210,3 @@ public class SMSHandler {
     }
 
 }
-
