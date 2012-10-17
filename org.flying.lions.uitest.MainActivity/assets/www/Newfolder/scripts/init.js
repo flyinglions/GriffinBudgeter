@@ -52,6 +52,53 @@ var db = null;
 
     return newValue;
 }
+
+/*
+
+var multiArrVal = new Array();
+
+function checkIfExistInDb(value, tx)
+{
+    //INSERT INTO SMS(Date,Time,Amount,Balance,Location,Account_Num,Category) values('2012/06/30','1341076294478',
+    //    -149.00,5324.98,'CELL C SP 20438923 101444079','TJEK2017','Telecommunications')
+    //alert(value);
+    var iPos = value.indexOf("values('");
+    var tmpVal = value.substr(iPos+7);
+    tmpVal = tmpVal.substr(0,tmpVal.length-1);
+    //replaceAll(exp, value, newChar)
+    tmpVal = replaceAll("'", tmpVal, "");
+    var arrVal = tmpVal.split(",");
+    multiArrVal.push(arrVal);
+    //alert(arrVal);
+    //db.transaction(searchDb, error);
+    tx.executeSql('SELECT * FROM SMS WHERE Date="'+arrVal[0]+'" AND Time="'+arrVal[1]+'"', [], init_SelectSuccess, error);
+}
+
+function searchDb(tx)
+{
+    alert(multiArrVal);
+    
+}
+
+function init_SelectSuccess(tx, results)
+{
+    var len = results.rows.length;
+    alert(results.item(0).Date);
+    if(len < 1)
+    {
+        var sql = "INSERT INTO SMS(Date,Time,Amount,Balance,Location,Account_Num,Category) values('";
+        sql += arrVal[0]+"','"+arrVal[1]+"',"+arrVal[2]+","+arrVal[3]+",'"+arrVal[4]+"','"+arrVal[5]+"','"+arrVal[6]+"')";
+        alert("Adding SMS");
+        tx.executeSql(sql);
+    }
+    else
+    {
+        //if(debug_mode)
+            alert("SMS not added to db, already exists->"+arrVal[0]+" "+arrVal[1]);
+    }
+}
+*/
+
 	
         function queryDB(tx)
         {        
@@ -85,6 +132,10 @@ var db = null;
                         }
                         if(type == 'INSERT')
                         {
+                            //Check if record exist, if not then adds it.
+                            //checkIfExistInDb(sqlVal, tx);
+                            
+                            
                             tx.executeSql(sqlVal);
                             //alert(sqlVal);
                         }
@@ -112,7 +163,7 @@ var db = null;
         function error(err) 
         {
             console.log("Error processing SQL: "+err.code);
-            if (debug_mode)
+            //if (debug_mode)
 			alert("Error: Last SQL : "+lastSql+" , "+err.code+";"+err.message);
         }
 

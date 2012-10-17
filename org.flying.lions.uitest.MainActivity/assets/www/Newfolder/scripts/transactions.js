@@ -63,7 +63,7 @@ function transactions_queryDB(tx)
 var where=''
 if (filter_account!='')
 where = 'WHERE Account_Num=\''+filter_account+'\'';
-    tx.executeSql('SELECT * FROM SMS '+where+' ORDER BY Date DESC, Time DESC LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
+    tx.executeSql('SELECT * FROM (SELECT * FROM SMS GROUP BY Date, Time) '+where+' ORDER BY Date DESC, Time DESC  LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
 }
 
 function transactions_Accountsuccess(tx, results)
