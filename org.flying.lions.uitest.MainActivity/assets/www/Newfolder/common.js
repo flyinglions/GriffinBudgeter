@@ -151,6 +151,12 @@ navigator.splashscreen.hide();
 
 }
 
+window.onbeforeunload  =  function(e)
+{
+	window.plugins.SMSReceiverPlugin.unregister(null, null); 
+}
+
+
 
 
 function executeStartupEvents(){

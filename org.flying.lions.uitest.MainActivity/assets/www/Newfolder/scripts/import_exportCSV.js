@@ -39,7 +39,7 @@ function onConfirmImportInbox(buttonIndex){
 
 function showConfirmImportCSV(){
 	navigator.notification.confirm(
-			'Do you want to import Inbox messages?',
+			'Do you want to import SMSes from CSV file?',
 			onConfirmImportCSV,
 			'Import CSV file',
 			'Cancel,Yes'
