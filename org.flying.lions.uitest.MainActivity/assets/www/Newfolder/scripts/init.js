@@ -163,7 +163,7 @@ function init_SelectSuccess(tx, results)
         function error(err) 
         {
             console.log("Error processing SQL: "+err.code);
-            //if (debug_mode)
+            if (debug_mode)
 			alert("Error: Last SQL : "+lastSql+" , "+err.code+";"+err.message);
         }
 
