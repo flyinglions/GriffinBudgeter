@@ -224,6 +224,6 @@ function updategraphsettings()
 	updatefields();
     /*for (var k=0; k<categorylist.length; k++)
     INIset('categories',categorylist[k].name,$('input#'+categorylist[k].name).val());*/
-	
+	stopINI();
 	$.mobile.changePage($("#settings"));
 }
