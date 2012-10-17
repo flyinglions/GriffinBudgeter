@@ -69,6 +69,21 @@ function graphSettings_header(headingTitle)
 	
     return tmp;			
 }
+
+function edit_cat_value(par,cat_val) {
+var newval = $("input#"+par+cat_val+"catid").val();
+if (newval.trim()=='') {
+alert('Field cannot be empty');
+return;
+}
+
+var nval = INIgetkeyref('categories',par);
+nval.val = nval.val.replace(cat_val,newval);
+alert('Updated successfully');
+retrievesettings();
+
+}
+
 function delete_cat_value(par,cat_val) {
 var nval = INIget('categories',par).split(',');
 var newvalue = '';
@@ -95,7 +110,8 @@ function graphSettings_content(theCategoryValue, theParent)
 	
 	var tmp = '<li style="display: none;"  class="graphSettings'+theParent+'">	<div>';
 tmp+='	<input type="text" id="'+theParent+theCategoryValue+'catid" value="'+theCategoryValue+'"  />	</div>	<div  data-role="controlgroup"  data-type="horizontal">	';
-tmp+='<a href="javascript:delete_cat_value(\''+theParent+'\',\''+theCategoryValue+'\');" style="width:120px; height:50px" data-role="button" data-icon="delete"  data-theme="b" data-inline="true">Delete</a>		</div>		</li>';
+tmp+='<a href="javascript:delete_cat_value(\''+theParent+'\',\''+theCategoryValue+'\');" style="width:120px; height:50px" data-role="button" data-icon="delete"  data-theme="b" data-inline="true">Delete</a>	';
+tmp+='<a href="javascript:edit_cat_value(\''+theParent+'\',\''+theCategoryValue+'\');" style="width:120px; height:50px" data-role="button" data-icon="gear"  data-theme="b" data-inline="true">Edit</a>	</div>		</li>';
 	
     return tmp;
 }
@@ -119,7 +135,9 @@ return;
 }
 
 var catref = INIgetkeyref('categories',cat_name);
-catref.val = catref.val+','+newval;
+if (catref.val.trim()!='')
+newval = ','+newval;
+catref.val = catref.val+newval;
 retrievesettings();
 alert('Recognizer added');
 }
@@ -157,6 +175,8 @@ str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-
         var values = "";
         for(var i=0; i < listOfValues.length; i++)
         {
+		if (listOfValues[i].trim()=='')
+		break;
             //alert(listOfValues[i]);
             values += graphSettings_content(listOfValues[i], catname);
         }
