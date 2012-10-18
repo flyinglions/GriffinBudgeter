@@ -226,4 +226,5 @@ function updategraphsettings()
     INIset('categories',categorylist[k].name,$('input#'+categorylist[k].name).val());*/
 	stopINI();
 	$.mobile.changePage($("#settings"));
+	alert("Settings successfully updated");
 }
