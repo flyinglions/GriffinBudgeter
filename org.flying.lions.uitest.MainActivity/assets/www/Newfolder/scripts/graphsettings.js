@@ -143,6 +143,7 @@ alert('Recognizer added');
 }
 function retrievesettings() 
 {
+$('#catul').html('<h3>Loading...</h3>');
     var transmax = INIget('settings','transmax');
 var str='';
     //$('input#transmax').val(transmax);
@@ -150,7 +151,7 @@ var str='';
     categorylist = INIgetsection('categories');
 	
  str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Graph Settings</li>';
-str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">						<div class="ui-btn-inner ui-li">														<div data-role="fieldcontain">										<label style="white-space:normal" for="transmax">Maximum transactions to show</label>							<input type="range" name="transmax" id="transmax" value="'+transmax+'" min="0" max="100" data-highlight="true" />								</div>						<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>						</div>					</li>	';
+str+='	<li>						<div class="ui-btn-inner ui-li"><div data-role="fieldcontain"><label style="white-space:normal" for="transmax">Maximum transactions to show</label>							<input type="range" name="transmax" id="transmax" value="'+transmax+'" min="0" max="100" data-highlight="true" />								</div>												</div>					</li>	';
 	
 	//category header
      str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Custom categories</li>';
@@ -204,6 +205,7 @@ str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-
 
 function showgraphsettings() 
 {
+
     startINI(retrievesettings);
 }
 function hidegraphsettings() {
