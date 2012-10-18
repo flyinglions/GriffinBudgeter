@@ -105,8 +105,7 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	$( '#transactions' ).live( 'pageshow',
 		function(event){
 			currentpage=0;
-			$('ul#transactions').html('<h3>Loading...</h3>');
-			db.transaction(transactions_queryDB, transactions_errorCB);
+			refreshtransactions(false);
 			
 		
 		}

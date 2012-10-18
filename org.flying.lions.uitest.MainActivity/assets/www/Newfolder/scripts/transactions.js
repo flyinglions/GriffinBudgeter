@@ -65,8 +65,11 @@ var where=''
 if (filter_account!='')
 where = 'WHERE Account_Num=\''+filter_account+'\'';
 
+var limiting='';
+if (!infinityview)
+limiting = 'LIMIT '+transactionlimit +' OFFSET '+(currentpage*transactionlimit);
     //tx.executeSql('SELECT * FROM (SELECT * FROM SMS GROUP BY Date, Time) '+where+' ORDER BY Date DESC, Time DESC  LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
-    tx.executeSql('SELECT * FROM sms '+where+' ORDER BY Date DESC, Time DESC  LIMIT '+transactionlimit +' OFFSET '+(currentpage*transactionlimit), [], transactions_Success, transactions_errorCB);
+    tx.executeSql('SELECT * FROM sms '+where+' ORDER BY Date DESC, Time DESC '+limiting , [], transactions_Success, transactions_errorCB);
 }
 
 function transactions_Accountsuccess(tx, results)
@@ -81,6 +84,7 @@ function transactions_Accountsuccess(tx, results)
     }
 }
 
+infinityview=false;
 function transactions_Success(tx, results)
 {
     var len = results.rows.length;
@@ -89,9 +93,15 @@ function transactions_Success(tx, results)
     if(len == 0 && currentpage==0)
     {
         ht_str +='<h3>No Bank Transactions Found</h3>';
-    } else if (len==0) {
+    } else if (len==0 && infinityview==false) {
 		ht_str +='<h3>No other Transactions Found</h3>';
-	}
+	} else if (infinityview==false) {
+		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing '+len+' transactions.</li>';
+		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(true);" data-role="button" data-icon="refresh" >Show all transaction. No Limit</a></div></li> ';
+	} else if (infinityview) {
+		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing all transactions ('+len+')</li>';
+		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(false);" data-role="button" data-icon="refresh">Limit the number of transactions</a></div></li> ';
+		}
     
 //Get Transactions
     var prevDate = "";
@@ -124,12 +134,12 @@ function transactions_Success(tx, results)
         ht_str += transactions_Header(lastDate, tmpCounter) + tmpStr; 
 			
     }
-	if (len !=0 || currentpage>0) {
+	if (len !=0 || currentpage>0 && infinityview==false) {
 		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" >';
 		if(currentpage>0)
-			ht_str+='<a href="javascript:transgoback();" data-role="button" data-icon="arrow-l" >Previous</a>';
+			ht_str+='<a href="javascript:transgoback();" data-role="button" data-icon="arrow-l" >Previous '+transactionlimit+' transactions</a>';
 		if(len==transactionlimit)
-			ht_str+='<a href="javascript:transgonext(\''+len+'\');" data-role="button" data-icon="arrow-r" >Next</a>';
+			ht_str+='<a href="javascript:transgonext(\''+len+'\');" data-role="button" data-icon="arrow-r" >Next '+transactionlimit+' transactions</a>';
 		ht_str+='</div></li>';
     }        
     $('ul#transactions').html(ht_str);
@@ -141,16 +151,20 @@ function transactions_Success(tx, results)
 
 function transgoback() { 
 if (currentpage<=0) return; 
-$('ul#transactions').html('<h3>Loading...</h3>');
-currentpage-=1; db.transaction(transactions_queryDB, transactions_errorCB); 
+currentpage-=1;
+refreshtransactions(infinityview);
 }
+function refreshtransactions(infin) {
+infinityview = infin;
+$('ul#transactions').html('<h3>Loading...</h3>');
+ db.transaction(transactions_queryDB, transactions_errorCB); 
+}
+
 function transgonext(len) { 
 if (len==transactionlimit) {
 currentpage+=1;  
-$('ul#transactions').html('<h3>Loading...</h3>');
-db.transaction(transactions_queryDB, transactions_errorCB); 
-} else 
-return;
+refreshtransactions(infinityview);
+} 
 }
 
 // Transaction error callback
