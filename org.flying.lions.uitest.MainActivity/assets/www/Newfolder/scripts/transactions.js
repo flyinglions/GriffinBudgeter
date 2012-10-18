@@ -124,13 +124,14 @@ function transactions_Success(tx, results)
         ht_str += transactions_Header(lastDate, tmpCounter) + tmpStr; 
 			
     }
-	ht_str+='<li><div data-role="controlgroup" data-type="horizontal" >';
-	if(currentpage>0)
-	ht_str+='<a href="javascript:transgoback();" data-role="button" data-icon="arrow-l" >Previous</a>';
-	if(len==transactionlimit)
-	ht_str+='<a href="javascript:transgonext(\''+len+'\');" data-role="button" data-icon="arrow-r" >Next</a>';
-	ht_str+='</div></li>';
-                    
+	if (len !=0 || currentpage>0) {
+		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" >';
+		if(currentpage>0)
+			ht_str+='<a href="javascript:transgoback();" data-role="button" data-icon="arrow-l" >Previous</a>';
+		if(len==transactionlimit)
+			ht_str+='<a href="javascript:transgonext(\''+len+'\');" data-role="button" data-icon="arrow-r" >Next</a>';
+		ht_str+='</div></li>';
+    }        
     $('ul#transactions').html(ht_str);
 	$('ul#transactions').listview('refresh');
 	$('ul#transactions').trigger('create');
@@ -140,11 +141,13 @@ function transactions_Success(tx, results)
 
 function transgoback() { 
 if (currentpage<=0) return; 
+$('ul#transactions').html('<h3>Loading...</h3>');
 currentpage-=1; db.transaction(transactions_queryDB, transactions_errorCB); 
 }
-function transgonext() { 
+function transgonext(len) { 
 if (len==transactionlimit) {
 currentpage+=1;  
+$('ul#transactions').html('<h3>Loading...</h3>');
 db.transaction(transactions_queryDB, transactions_errorCB); 
 } else 
 return;
