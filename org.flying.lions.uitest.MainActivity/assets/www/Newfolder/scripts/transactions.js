@@ -118,8 +118,9 @@ function transactions_Success(tx, results)
     {        
         if(prevDate != results.rows.item(i).Date)
         {
-            prevDate = results.rows.item(i).Date;
-            ht_str += transactions_Header(results.rows.item(i).Date, tmpCounter) + tmpStr;
+			ht_str += transactions_Header(prevDate, tmpCounter) + tmpStr;           
+		   prevDate = results.rows.item(i).Date;
+           
             tmpStr = "";
             tmpCounter = 1;
         }
