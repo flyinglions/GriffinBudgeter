@@ -140,9 +140,9 @@ function transactions_Success(tx, results)
 	if (len !=0 || currentpage>0 && infinityview==false) {
 		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" >';
 		if(currentpage>0)
-			ht_str+='<a href="javascript:transgoback();" data-theme="b" data-role="button" data-icon="arrow-l" >Previous '+transactionlimit+' transactions</a>';
+			ht_str+='<a href="javascript:transgoback();" data-theme="b" data-role="button" data-icon="arrow-l" >Previous '+transactionlimit+'</a>';
 		if(len==transactionlimit)
-			ht_str+='<a href="javascript:transgonext(\''+len+'\');" data-theme="b" data-role="button" data-icon="arrow-r" >Next '+transactionlimit+' transactions</a>';
+			ht_str+='<a href="javascript:transgonext(\''+len+'\');" data-theme="b" data-role="button" data-icon="arrow-r" >Next '+transactionlimit+'</a>';
 		ht_str+='</div></li>';
     }        
     $('ul#transactions').html(ht_str);
