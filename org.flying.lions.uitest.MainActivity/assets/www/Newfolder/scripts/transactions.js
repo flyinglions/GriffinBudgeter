@@ -96,11 +96,13 @@ function transactions_Success(tx, results)
     } else if (len==0 && infinityview==false) {
 		ht_str +='<h3>No other Transactions Found</h3>';
 	} else if (infinityview==false) {
-		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing '+len+' transactions.</li>';
-		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(true);" data-role="button" data-icon="refresh" >Show all transaction. No Limit</a></div></li> ';
+	var tbegin = currentpage*transactionlimit;
+	var tend = currentpage*transactionlimit+len;
+		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing transactions ('+tbegin+' through ' +tend+').</li>';
+		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(true);" data-theme="b" data-role="button" data-icon="refresh" >Show all transaction. No Limit</a></div></li> ';
 	} else if (infinityview) {
 		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing all transactions ('+len+')</li>';
-		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(false);" data-role="button" data-icon="refresh">Limit the number of transactions</a></div></li> ';
+		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(false);" data-theme="b" data-role="button" data-icon="refresh">Limit the number of transactions</a></div></li> ';
 		}
     
 //Get Transactions
@@ -137,9 +139,9 @@ function transactions_Success(tx, results)
 	if (len !=0 || currentpage>0 && infinityview==false) {
 		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" >';
 		if(currentpage>0)
-			ht_str+='<a href="javascript:transgoback();" data-role="button" data-icon="arrow-l" >Previous '+transactionlimit+' transactions</a>';
+			ht_str+='<a href="javascript:transgoback();" data-theme="b" data-role="button" data-icon="arrow-l" >Previous '+transactionlimit+' transactions</a>';
 		if(len==transactionlimit)
-			ht_str+='<a href="javascript:transgonext(\''+len+'\');" data-role="button" data-icon="arrow-r" >Next '+transactionlimit+' transactions</a>';
+			ht_str+='<a href="javascript:transgonext(\''+len+'\');" data-theme="b" data-role="button" data-icon="arrow-r" >Next '+transactionlimit+' transactions</a>';
 		ht_str+='</div></li>';
     }        
     $('ul#transactions').html(ht_str);
