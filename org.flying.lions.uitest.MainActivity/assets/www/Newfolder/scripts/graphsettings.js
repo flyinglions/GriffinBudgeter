@@ -62,7 +62,7 @@ function graphSettings_header(headingTitle)
 	//edit of category
 	tmp+='<li style="display: none;" class="graphSettings'+headingTitle+'">';
 	var budget = INIget('categoriesBudgetAmounts',headingTitle+'_Amount');
-	tmp+='	<div data-role="fieldcontain"><label  for="'+headingTitle+'catid">New category</label><input type="text" id="'+headingTitle+'catid" value="'+headingTitle+'"  />';
+	tmp+='	<div data-role="fieldcontain"><label  for="'+headingTitle+'catid">Change category</label><input type="text" id="'+headingTitle+'catid" value="'+headingTitle+'"  />';
 	tmp+='<label  for="'+headingTitle+'budget">New budget</label>	<input type="text" id="'+headingTitle+'budget" value="'+budget+'"  />';
 	tmp+='<input type="button" onclick="update_category(\''+headingTitle+'\');" value="Update category"/>	';
 	tmp+='<input type="button" onclick="delete_the_category(\''+headingTitle+'\');" value="Delete category"/> </div></li>';
@@ -143,6 +143,7 @@ alert('Recognizer added');
 }
 function retrievesettings() 
 {
+$('#catul').html('<h3>Loading...</h3>');
     var transmax = INIget('settings','transmax');
 var str='';
     //$('input#transmax').val(transmax);
@@ -150,7 +151,7 @@ var str='';
     categorylist = INIgetsection('categories');
 	
  str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Graph Settings</li>';
-str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">						<div class="ui-btn-inner ui-li">														<div data-role="fieldcontain">										<label style="white-space:normal" for="transmax">Maximum transactions to show</label>							<input type="range" name="transmax" id="transmax" value="'+transmax+'" min="0" max="100" data-highlight="true" />								</div>						<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>						</div>					</li>	';
+str+='	<li>						<div class="ui-btn-inner ui-li"><div data-role="fieldcontain"><label style="white-space:normal" for="transmax">Maximum transactions to show</label>							<input type="range" name="transmax" id="transmax" value="'+transmax+'" min="0" max="100" data-highlight="true" />								</div>												</div>					</li>	';
 	
 	//category header
      str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Custom categories</li>';
@@ -159,7 +160,7 @@ str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-
 	str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Add a category</li>';
 	str+='<li data-role="fieldcontain"> <label  for="settingsnewcategory">New Category</label>   <input type="text"  id="settingsnewcategory"  name="settingsnewcategory"  value="" /></li>';
 	str+='<li data-role="fieldcontain"> <label  for="settingsbudgetcategory">Budget Amount</label>   <input type="text"  id="settingsbudgetcategory"  name="settingsbudgetcategory"  value="50" /></li>';
-	str+='<li class="ui-body ui-body-b"><fieldset class="ui-grid-a"><div class="ui-block-a"><button data-theme="a" onclick="addNewCategory();" >Add</button></div></fieldset></li>';
+	str+='<li class="ui-body ui-body-b"><fieldset class="ui-grid-a"><div class="ui-block-a"><button data-theme="b" onclick="addNewCategory();" >Add</button></div></fieldset></li>';
 	//end add
 	
     //str+='<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d">						<div class="ui-btn-inner ui-li"><div class="ui-btn-text">';
@@ -204,6 +205,7 @@ str+='	<li data-corners="false" data-shadow="false" data-iconshadow="true" data-
 
 function showgraphsettings() 
 {
+
     startINI(retrievesettings);
 }
 function hidegraphsettings() {
@@ -226,4 +228,5 @@ function updategraphsettings()
     INIset('categories',categorylist[k].name,$('input#'+categorylist[k].name).val());*/
 	stopINI();
 	$.mobile.changePage($("#settings"));
+	alert("Settings successfully updated");
 }

@@ -55,15 +55,21 @@ navigator.notification.confirm('Are you sure you want to delete the transaction'
 
 }
 
-
+var currentpage=0;
 function transactions_queryDB(tx) 
 {
+
     tx.executeSql('SELECT * FROM Bank_Account', [], transactions_Accountsuccess, transactions_errorCB);
 
 var where=''
 if (filter_account!='')
 where = 'WHERE Account_Num=\''+filter_account+'\'';
-    tx.executeSql('SELECT * FROM (SELECT * FROM SMS GROUP BY Date, Time) '+where+' ORDER BY Date DESC, Time DESC  LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
+
+var limiting='';
+if (!infinityview)
+limiting = 'LIMIT '+transactionlimit +' OFFSET '+(currentpage*transactionlimit);
+    //tx.executeSql('SELECT * FROM (SELECT * FROM SMS GROUP BY Date, Time) '+where+' ORDER BY Date DESC, Time DESC  LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
+    tx.executeSql('SELECT * FROM sms '+where+' ORDER BY Date DESC, Time DESC '+limiting , [], transactions_Success, transactions_errorCB);
 }
 
 function transactions_Accountsuccess(tx, results)
@@ -78,15 +84,26 @@ function transactions_Accountsuccess(tx, results)
     }
 }
 
+infinityview=false;
 function transactions_Success(tx, results)
 {
     var len = results.rows.length;
     
     var ht_str ='<h4>Overview:</h4>';
-    if(len == 0)
+    if(len == 0 && currentpage==0)
     {
         ht_str +='<h3>No Bank Transactions Found</h3>';
-    }
+    } else if (len==0 && infinityview==false) {
+		ht_str +='<h3>No other Transactions Found</h3>';
+	} else if (infinityview==false) {
+	var tbegin = currentpage*transactionlimit;
+	var tend = currentpage*transactionlimit+len;
+		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing transactions ('+tbegin+' through ' +tend+').</li>';
+		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(true);" data-theme="b" data-role="button" data-icon="refresh" >Show all transaction. No Limit</a></div></li> ';
+	} else if (infinityview) {
+		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing all transactions ('+len+')</li>';
+		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(false);" data-theme="b" data-role="button" data-icon="refresh">Limit the number of transactions</a></div></li> ';
+		}
     
 //Get Transactions
     var prevDate = "";
@@ -101,8 +118,9 @@ function transactions_Success(tx, results)
     {        
         if(prevDate != results.rows.item(i).Date)
         {
-            prevDate = results.rows.item(i).Date;
-            ht_str += transactions_Header(results.rows.item(i).Date, tmpCounter) + tmpStr;
+			ht_str += transactions_Header(prevDate, tmpCounter) + tmpStr;           
+		   prevDate = results.rows.item(i).Date;
+           
             tmpStr = "";
             tmpCounter = 1;
         }
@@ -116,13 +134,40 @@ function transactions_Success(tx, results)
     
     if(len > 0)
     {
-        ht_str += transactions_Header(lastDate, tmpCounter) + tmpStr;  
+        ht_str += transactions_Header(lastDate, tmpCounter) + tmpStr; 
+			
     }
-                    
+	if (len !=0 || currentpage>0 && infinityview==false) {
+		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" >';
+		if(currentpage>0)
+			ht_str+='<a href="javascript:transgoback();" data-theme="b" data-role="button" data-icon="arrow-l" >Previous '+transactionlimit+' transactions</a>';
+		if(len==transactionlimit)
+			ht_str+='<a href="javascript:transgonext(\''+len+'\');" data-theme="b" data-role="button" data-icon="arrow-r" >Next '+transactionlimit+' transactions</a>';
+		ht_str+='</div></li>';
+    }        
     $('ul#transactions').html(ht_str);
 	$('ul#transactions').listview('refresh');
+	$('ul#transactions').trigger('create');
 	
 	
+}
+
+function transgoback() { 
+if (currentpage<=0) return; 
+currentpage-=1;
+refreshtransactions(infinityview);
+}
+function refreshtransactions(infin) {
+infinityview = infin;
+$('ul#transactions').html('<h3>Loading...</h3>');
+ db.transaction(transactions_queryDB, transactions_errorCB); 
+}
+
+function transgonext(len) { 
+if (len==transactionlimit) {
+currentpage+=1;  
+refreshtransactions(infinityview);
+} 
 }
 
 // Transaction error callback
