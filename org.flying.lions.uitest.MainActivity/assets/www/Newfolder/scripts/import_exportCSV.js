@@ -113,7 +113,7 @@ function onConfirmExportCSV(buttonIndex){
 	} //extractalltransactions
 	if(buttonIndex == 2) {
 		navigator.notification.progressStart("Exporting all Transactions","Exporting...");
-		db_queries.push('SELECT * FROM SMS order by Date desc,Time desc');
+		db_queries.push('SELECT * FROM SMS order by Date ,Time ');
 		doTransactions(extractalltransactions)
 	}
 		

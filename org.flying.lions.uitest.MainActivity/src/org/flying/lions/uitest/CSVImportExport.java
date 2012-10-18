@@ -315,13 +315,11 @@ public class CSVImportExport extends Plugin {
        		 	prevfileWriter.write(prevstring);
        		 	prevfileWriter.flush();
        		 	prevfileWriter.close();
+      
        		 	
                 
         		FileWriter fileWriter = new FileWriter("/mnt/sdcard/MEM/importsqlstatements.txt", true);
-        		
-        		
-       		 	
-   			 
+
         		fileWriter.append(sqlStatement + "\r\n");
         		
         		fileWriter.flush();
