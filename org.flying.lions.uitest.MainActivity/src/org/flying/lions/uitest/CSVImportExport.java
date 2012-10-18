@@ -101,7 +101,7 @@ public class CSVImportExport extends Plugin {
     	
     	Log.d(TAG,sdcard.toString());
     	
-       	File file = new File("mnt/sdcard/test.csv");   
+       	File file = new File("mnt/sdcard/" + fileLoc);   
         
        	if(file.exists())
         {
@@ -197,7 +197,7 @@ public class CSVImportExport extends Plugin {
     	
     	File sdcard = Environment.getExternalStorageDirectory();
     	
-       	File file = new File("mnt/sdcard/export.csv");   
+       	File file = new File("mnt/sdcard/" + fileLoc);   
         
        	if(file.exists())
         {

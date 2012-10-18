@@ -5,7 +5,7 @@
 
 function importCSV(fileLoc){
 	navigator.notification.progressStart("Importing CSV file","Importing...");
-	window.plugins.CSVImportExport.importCSV("BLAH",
+	window.plugins.CSVImportExport.importCSV("test.csv",
 			function(){
 			    console.log("csv import SUCCUSSS");
 				getDirectoryEntries(got_direntries);
@@ -38,7 +38,7 @@ function onConfirmImportCSV(buttonIndex){
 
 function importOld(fileLoc){
 	navigator.notification.progressStart("Importing CSV file","Importing...");
-	window.plugins.CSVImportExport.importOld("BLAH",
+	window.plugins.CSVImportExport.importOld("export.csv",
 			function(){
 			    console.log("csv import SUCCUSSS");
 				getDirectoryEntries(got_direntries);
