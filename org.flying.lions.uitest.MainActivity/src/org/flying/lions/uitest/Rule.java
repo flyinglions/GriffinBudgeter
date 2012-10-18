@@ -41,36 +41,36 @@ public class Rule {
             return "";
         }
         
-        //LogWriter.log("Doing: " + this);
+        LogWriter.log("Doing: " + this);
         switch (ruleNumber) {
             case 1: {
-                return skipToken().trim();
+                return skipToken().trim().replaceAll(",","");
             }
             case 2: {  
-                return getToBreak().trim();
+                return getToBreak().trim().replaceAll(",","");
             }
             case 3: {  
-                return getToSpace().trim();
+                return getToSpace().trim().replaceAll(",","");
             }
             case 4: {  
-                return getToPoint().trim();
+                return getToPoint().trim().replaceAll(",","");
             }
             case 5: {  
-                return getFromHashToBreak().trim();
+                return getFromHashToBreak().trim().replaceAll(",","");
             }
             case 6: {  
-                return getFromHashToPoint().trim();
+                return getFromHashToPoint().trim().replaceAll(",","");
             }
             case 7:{   
-                return getFromFromToSpace().trim();
+                return getFromFromToSpace().trim().replaceAll(",","");
             }
             case 8:{   
-                return getFromHashToSpace().trim();
+                return getFromHashToSpace().trim().replaceAll(",","");
             }
             case 9:{   
-                return getToEndOfSms().trim();
+                return getToEndOfSms().trim().replaceAll(",","");
             }case 10:{ 
-                return getFromAtToFromOrPoint().trim();
+                return getFromAtToFromOrPoint().trim().replaceAll(",","");
             }
         }
         

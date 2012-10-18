@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class SQLGenerator {
 
-    //private String newLine = System.getProperty("line.separator");
+    //private String newLine = "\r\n";
     private String sqlFileName = "SQLStatements.txt";
     private String prevFileName = "prevValue.txt";
     private String timeStamp = "";
