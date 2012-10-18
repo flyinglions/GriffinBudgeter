@@ -46,7 +46,7 @@ function db_executeQueriesNoResults(tx) {
 function db_transactionSuccessNoResults() {
 	console.log("transaction success");
 	if (db_queries.length>0) {
-		db.transaction(db_executeQueriesNoResults, db_error, db_transactionSuccess);
+		db.transaction(db_executeQueriesNoResults, db_error, db_transactionSuccessNoResults);
 	} else {
 		db_done_callback();
 	}
