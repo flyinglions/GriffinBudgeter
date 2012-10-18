@@ -147,6 +147,48 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	);
 	
 	
+	/*
+	 * 
+	 * Swipe events for every page
+	 */
+	 $('#one').live('swipeleft swiperight',function(event){
+         if (event.type == "swipeleft") {
+             $.mobile.changePage('#transactions');
+             
+         }
+
+	});
+	 
+	 $('#transactions').live('swipeleft swiperight',function(event){
+         if (event.type == "swipeleft") {
+             $.mobile.changePage('#graphMenu');
+             
+         }
+         if (event.type == "swiperight") {
+             $.mobile.changePage('#one');
+             
+         }
+	 });
+	 
+	 $('#graphMenu').live('swipeleft swiperight',function(event){
+         if (event.type == "swipeleft") {
+             $.mobile.changePage('#settings');
+             
+         }
+         if (event.type == "swiperight") {
+             $.mobile.changePage('#transactions');
+             
+         }
+	 });
+	 
+	 $('#settings').live('swipeleft swiperight',function(event){
+         if (event.type == "swiperight") {
+             $.mobile.changePage('#graphMenu');
+             
+         }
+	 });
+	
+	
 navigator.splashscreen.hide();
 	
 
