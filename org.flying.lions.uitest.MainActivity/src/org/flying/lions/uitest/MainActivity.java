@@ -3,6 +3,7 @@ package org.flying.lions.uitest;
 import org.apache.cordova.DroidGap;
 
 import android.os.Bundle;
+import android.os.Debug;
 import android.app.Activity;
 import android.view.Menu;
 
@@ -15,9 +16,12 @@ public class MainActivity extends DroidGap {
         
         //super.setStringProperty("loadingDialog", "Wait,Loading Demo...");
         //super.setStringProperty("loadingPageDialog", "Loading page...");
-        
+        Debug.startMethodTracing("myapp");
+
         super.setIntegerProperty("splashscreen", R.drawable.splash);
         super.loadUrl("file:///android_asset/www/Newfolder/fastmulti.html",10000);
+        Debug.stopMethodTracing();
+
     }
 
 }

@@ -3,6 +3,7 @@ package org.flying.lions.uitest;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.json.JSONArray;
@@ -107,6 +108,7 @@ public class CSVImportExport extends Plugin {
         {
             Scanner lineScanner = new Scanner(file);
             int smsCount = 0;
+            
             while (lineScanner.hasNextLine()) {
                     lineScanner.nextLine();
                     smsCount++;
@@ -190,7 +192,7 @@ public class CSVImportExport extends Plugin {
 		currentPluginInstance.sendJavascript("javascript:alert(\"All transactions have been exported\")");
     	
     }
-    
+
     private void importOld(String fileLoc) throws IOException
     {
     	String tempString;
@@ -198,6 +200,22 @@ public class CSVImportExport extends Plugin {
     	File sdcard = Environment.getExternalStorageDirectory();
     	
        	File file = new File("mnt/sdcard/" + fileLoc);   
+       	
+       	//GETTING PREV
+       	File prevfile = new File("mnt/sdcard/MEM/ORI/PrevValue.txt");   
+       	ArrayList<String> acc_numbers = new ArrayList<String>();
+        ArrayList<String> acc_balances = new ArrayList<String>();
+        if (prevfile.exists()) {
+        	Scanner prevScanner = new Scanner(prevfile);
+        	while (prevScanner.hasNextLine()) {
+        		String[] s = prevScanner.nextLine().split("=");
+                s[1].replace(";","");
+                acc_numbers.add(s[0]);
+                acc_balances.add(s[1]);
+        	}
+        	prevScanner.close();
+        }
+        //END GETTING PREV
         
        	if(file.exists())
         {
@@ -219,6 +237,9 @@ public class CSVImportExport extends Plugin {
             tempString = sc.nextLine();
             tempString = sc.nextLine();
             
+            
+            
+            
             while (sc.hasNextLine()) {
             	tempString = sc.nextLine();
                 int commaIndex1 = 0;
@@ -227,12 +248,14 @@ public class CSVImportExport extends Plugin {
                 
                 //transaction counter
                 counter+=1;
-                
+                String tmpbalance="";
                 //SQL query example
                 //INSERT INTO sms(Date,Time,Amount,Balance,Location,Account_Num,Category) values('2012/05/22','10000',-206.26,13196.0,'Superspar Monument P','cheq Acc..909429','food')
                 for (int y = 0; y < 7; y++) {
                     commaIndex1 = tempString.indexOf(",");
-                
+                    
+                    
+                    
 	                try 
 	                {
 	                	if((commaIndex1 == -1) && (y==6))
@@ -247,6 +270,24 @@ public class CSVImportExport extends Plugin {
 	                		sqlStatement += sqlVal;
 	                	else
 	                		sqlStatement += "'" + sqlVal + "'";
+	                	
+	                	//SETTING
+	                	if (y==3)
+	                    	tmpbalance = sqlVal; 
+    	                if (y==5) { //acc_number
+    	                	if (acc_numbers.contains(sqlVal)) {
+    	                		for (int k=0; k<acc_numbers.size(); k++)
+    	                			if (acc_numbers.get(k).equals(sqlVal)) {
+    	                				acc_balances.set(k,tmpbalance);
+    	                				break;
+    	                			}    	                				
+    	                	} //update balance
+    	                	else {//does not exist, must add
+    	                		acc_numbers.add(sqlVal);
+    	                		acc_balances.add(tmpbalance);
+    	                	}     	                	
+    	                } //end y=5
+    	                //END SETTING
 	                	
 	                	
 	                } 
@@ -265,8 +306,21 @@ public class CSVImportExport extends Plugin {
                 
                 Log.d(TAG,"SQL ==> " + sqlStatement);
                 
+                //WRITING PREV VALUES
+                FileWriter prevfileWriter = new FileWriter("/mnt/sdcard/MEM/ORI/PrevValue.txt", false);
+        		String prevstring = "";
+        		for (int k=0; k<acc_balances.size(); k++) {
+        			prevstring=acc_numbers.get(k)+"="+acc_balances.get(k)+";\r\n";
+        		}
+       		 	prevfileWriter.write(prevstring);
+       		 	prevfileWriter.flush();
+       		 	prevfileWriter.close();
+       		 	
+                
         		FileWriter fileWriter = new FileWriter("/mnt/sdcard/MEM/importsqlstatements.txt", true);
-       		 
+        		
+        		
+       		 	
    			 
         		fileWriter.append(sqlStatement + "\r\n");
         		
