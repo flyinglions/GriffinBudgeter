@@ -88,7 +88,9 @@ infinityview=false;
 function transactions_Success(tx, results)
 {
     var len = results.rows.length;
-    
+    var fromstr = '';
+	if (filter_account!='')
+	fromstr = ' from "'+filter_account_name+'"';
     var ht_str ='<h4>Overview:</h4>';
     if(len == 0 && currentpage==0)
     {
@@ -98,10 +100,10 @@ function transactions_Success(tx, results)
 	} else if (infinityview==false) {
 	var tbegin = currentpage*transactionlimit;
 	var tend = currentpage*transactionlimit+len;
-		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing transactions ('+tbegin+' through ' +tend+').</li>';
+		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing transactions ('+tbegin+' through ' +tend+')'+fromstr+'.</li>';
 		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(true);" data-theme="b" data-role="button" data-icon="refresh" >Show all transaction. No Limit</a></div></li> ';
 	} else if (infinityview) {
-		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing all transactions ('+len+')</li>';
+		ht_str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Showing all transactions ('+len+')'+fromstr+'.</li>';
 		ht_str+='<li><div data-role="controlgroup" data-type="horizontal" ><a href="javascript:refreshtransactions(false);" data-theme="b" data-role="button" data-icon="refresh">Limit the number of transactions</a></div></li> ';
 		}
     
@@ -184,7 +186,9 @@ function transactions_errorCB(err)
 
 //functionlityu for filtering by account
 var filter_account='';
-function filtertransaction(acc_num) {
+var filter_account_name='';
+function filtertransaction(acc_num,acc_name) {
+filter_account_name=acc_name;
 filter_account = acc_num;
 $.mobile.changePage($("#transactions"));
 }
@@ -199,7 +203,7 @@ function updateAccountsOnPopup() {
 		var updatestr ='<li data-role="divider" data-theme="a">Choose Account</li>';
 		updatestr+='<li><a href="javascript:filtertransaction(\'\')">Show all transactions</a></li>';
 		for (var k=0; k<len; k++) {
-			updatestr+='<li><a href="javascript:filtertransaction(\''+rows.item(k).Account_Num+'\')">'+rows.item(k).Account_Num+'</a></li>';
+			updatestr+='<li><a href="javascript:filtertransaction(\''+rows.item(k).Account_Num+'\',\''+rows.item(k).Acc_Name+'\')">'+rows.item(k).Acc_Name+'</a></li>';
 		}
 	}
 	

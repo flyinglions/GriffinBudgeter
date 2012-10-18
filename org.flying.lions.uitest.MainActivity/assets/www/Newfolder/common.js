@@ -141,7 +141,7 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 		function(event){
   
 		//execute transactionspopup scripts
-		db_queries.push('select Account_Num from Bank_Account');
+		db_queries.push('select Account_Num,Acc_Name from Bank_Account');
 		doTransactions(updateAccountsOnPopup);
 		}
 	);
