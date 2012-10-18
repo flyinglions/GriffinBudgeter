@@ -172,8 +172,9 @@ function queryDB(tx)
 // Transaction error callback
 function error(err) 
 {
+	if (debug_mode)
     console.log("Error processing SQL: "+err.code);
-    //if (debug_mode)
+    if (debug_mode)
     alert("Error: Last SQL : "+lastSql+" , "+err.code+";"+err.message);
 }
 

@@ -159,7 +159,7 @@ function onDeviceReady()
 
     });
 	 
-    $('#transactions').live('swipeleft swiperight',function(event){
+   /* $('#transactions').live('swipeleft swiperight',function(event){
         if (event.type == "swipeleft") {
             $.mobile.changePage('#graphMenu');
              
@@ -168,7 +168,7 @@ function onDeviceReady()
             $.mobile.changePage('#one');
              
         }
-    });
+    });*/
 	 
     $('#graphMenu').live('swipeleft swiperight',function(event){
         if (event.type == "swipeleft") {
