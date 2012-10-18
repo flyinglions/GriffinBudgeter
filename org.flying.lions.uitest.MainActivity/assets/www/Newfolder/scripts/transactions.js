@@ -55,16 +55,18 @@ navigator.notification.confirm('Are you sure you want to delete the transaction'
 
 }
 
-
+var currentpage=0;
 function transactions_queryDB(tx) 
 {
+
     tx.executeSql('SELECT * FROM Bank_Account', [], transactions_Accountsuccess, transactions_errorCB);
 
 var where=''
 if (filter_account!='')
 where = 'WHERE Account_Num=\''+filter_account+'\'';
+
     //tx.executeSql('SELECT * FROM (SELECT * FROM SMS GROUP BY Date, Time) '+where+' ORDER BY Date DESC, Time DESC  LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
-    tx.executeSql('SELECT * FROM sms '+where+' ORDER BY Date DESC, Time DESC  LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
+    tx.executeSql('SELECT * FROM sms '+where+' ORDER BY Date DESC, Time DESC  LIMIT '+transactionlimit +' OFFSET '+(currentpage*transactionlimit), [], transactions_Success, transactions_errorCB);
 }
 
 function transactions_Accountsuccess(tx, results)
@@ -84,10 +86,12 @@ function transactions_Success(tx, results)
     var len = results.rows.length;
     
     var ht_str ='<h4>Overview:</h4>';
-    if(len == 0)
+    if(len == 0 && currentpage==0)
     {
         ht_str +='<h3>No Bank Transactions Found</h3>';
-    }
+    } else if (len==0) {
+		ht_str +='<h3>No other Transactions Found</h3>';
+	}
     
 //Get Transactions
     var prevDate = "";
@@ -117,14 +121,25 @@ function transactions_Success(tx, results)
     
     if(len > 0)
     {
-        ht_str += transactions_Header(lastDate, tmpCounter) + tmpStr;  
+        ht_str += transactions_Header(lastDate, tmpCounter) + tmpStr; 
+			
     }
+	ht_str+='<li><div data-role="controlgroup" data-type="horizontal" >';
+	if(currentpage>0)
+	ht_str+='<a href="javascript:transgoback();" data-role="button" data-icon="arrow-u" >Previous</a>';
+	if(len==transactionlimit)
+	ht_str+='<a href="javascript:transgonext();" data-role="button" data-icon="arrow-d" >Next</a>';
+	ht_str+='</div></li>';
                     
     $('ul#transactions').html(ht_str);
 	$('ul#transactions').listview('refresh');
+	$('ul#transactions').trigger('create');
 	
 	
 }
+
+function transgoback() { currentpage-=1; db.transaction(transactions_queryDB, transactions_errorCB); }
+function transgonext() { currentpage+=1;  db.transaction(transactions_queryDB, transactions_errorCB); }
 
 // Transaction error callback
 //

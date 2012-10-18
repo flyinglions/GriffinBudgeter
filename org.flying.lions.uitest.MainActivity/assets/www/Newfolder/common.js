@@ -104,6 +104,7 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 	
 	$( '#transactions' ).live( 'pageshow',
 		function(event){
+			currentpage=0;
 			db.transaction(transactions_queryDB, transactions_errorCB);
 			
 		
