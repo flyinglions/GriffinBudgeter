@@ -61,8 +61,8 @@ var str ='';//$('ul#settingsAccountscontent').html();
 		str+='<li data-role="fieldcontain"> <label  for="'+acc_num_no_spaces+'bank">Bank</label>   <input type="text"  id="'+acc_num_no_spaces+'bank"  name="'+acc_num_no_spaces+'bank"  value="'+rows.item(k).Bank+'" /></li>';
 		str+='<li data-role="fieldcontain"><label  for="'+acc_num_no_spaces+'accname">Account Name</label>   <input type="text"  id="'+acc_num_no_spaces+'accname" name="'+acc_num_no_spaces+'accname"  value="'+rows.item(k).Acc_Name+'"  /></li>';
 	
-		str+='<li class="ui-body ui-body-b"><fieldset class="ui-grid-a"><div class="ui-block-a"><button data-theme="a" onclick="updateAccSettings(\''+acc_num_no_spaces+'\',\''+acc_num+'\');" >Update</button></div>';
-	str+= '<div class="ui-block-b"><button data-theme="a" onclick="deleteAccSettings(\''+acc_num+'\');" >Delete</button></div>		</fieldset>		</li>';
+		str+='<li class="ui-body ui-body-b"><fieldset class="ui-grid-a"><div class="ui-block-a"><button data-theme="b" onclick="updateAccSettings(\''+acc_num_no_spaces+'\',\''+acc_num+'\');" >Update</button></div>';
+	str+= '<div class="ui-block-b"><button data-theme="b" onclick="deleteAccSettings(\''+acc_num+'\');" >Delete</button></div>		</fieldset>		</li>';
 		
 		
 	}
