@@ -67,6 +67,21 @@
                 return newValue;
             }
             
+            function getYear()
+            {
+                var arrSettings = INIgetsection('settings');
+                var activeYear = "2012";
+                for(var i=0; i <arrSettings.length;i++)
+                {
+                    if(arrSettings[i].name == "yearactive")
+                    {
+                        activeYear = arrSettings[i].val;
+                    }
+                }
+                
+                return activeYear;
+            }
+            
             function replaceAll(exp, value)
             {
                 newValue = value;
@@ -98,15 +113,18 @@
                     
                     for(var i = 0 ; i < len; i++)
                     {
-                        //alert(results.rows.item(i).Account_Num);
-                        //alert(sanitize(results.rows.item(i).Account_Num) +":"+ sanitize(acc_Num[j]))
-                        if(sanitize(results.rows.item(i).Account_Num) == sanitize(acc_Num[j]))
+                        if(results.rows.item(i).Date.substring(0,4) == getYear())
                         {
-                            if(results.rows.item(i).Amount < 0)
+                            //alert(results.rows.item(i).Account_Num);
+                            //alert(sanitize(results.rows.item(i).Account_Num) +":"+ sanitize(acc_Num[j]))
+                            if(sanitize(results.rows.item(i).Account_Num) == sanitize(acc_Num[j]))
                             {
-                                //alert(results.rows.item(i).Account_Num);
-                                //alert(results.rows.item(i).Amount);
-                                expenses[(1*getMonthPos(results.rows.item(i).Date))-1] = expenses[(1*getMonthPos(results.rows.item(i).Date))-1] - 1*results.rows.item(i).Amount;
+                                if(results.rows.item(i).Amount < 0)
+                                {
+                                    //alert(results.rows.item(i).Account_Num);
+                                    //alert(results.rows.item(i).Amount);
+                                    expenses[(1*getMonthPos(results.rows.item(i).Date))-1] = expenses[(1*getMonthPos(results.rows.item(i).Date))-1] - 1*results.rows.item(i).Amount;
+                                }
                             }
                         }
 

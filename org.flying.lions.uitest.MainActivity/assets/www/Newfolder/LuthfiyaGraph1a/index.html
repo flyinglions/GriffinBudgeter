@@ -28,6 +28,7 @@
             var Categories = new Array();
             var Spent = new Array();
             var Budgeted = new Array();
+            var Year = new Array();
             
             var tmptx;
             
@@ -36,7 +37,7 @@
             function queryDB(tx) {
                 tx.executeSql('SELECT * FROM Bank_Account', [], bank_accountSuccess, errorCB);
                 //tx.executeSql('SELECT * FROM Budget_Items', [], budgetSuccess, errorCB);
-                tx.executeSql('SELECT * FROM sms', [], querySuccess, errorCB);
+                tx.executeSql('SELECT * FROM sms', [], categoryQuerySuccess, errorCB);
             }
             
             function getCategories()
@@ -48,6 +49,21 @@
                     Categories.push(arrCats[i].name);
                     Budgeted.push(1*arrCats[i].val);
                 }
+            }
+            
+            function getYear()
+            {
+                var arrSettings = INIgetsection('settings');
+                var activeYear = "2012";
+                for(var i=0; i <arrSettings.length;i++)
+                {
+                    if(arrSettings[i].name == "yearactive")
+                    {
+                        activeYear = arrSettings[i].val;
+                    }
+                }
+                
+                return activeYear;
             }
             
             function bank_accountSuccess(tx, results)
@@ -101,7 +117,7 @@
 
             // Query the success callback
             //
-            function querySuccess(tx, results) {
+            function categoryQuerySuccess(tx, results) {
                 var len = results.rows.length;
                 startINI(function()
                 {
@@ -119,7 +135,7 @@
                     {
                         $('<h3>No Accounts Found.</h3>').appendTo('.ReportContent');
                     }
-                    
+                    alert(getYear());
                     for(var k = 0 ; k < accounts.length; k++)
                     {
                         $('<h3>'+accounts[k]+'</h3>').appendTo('.ReportContent');
@@ -143,16 +159,19 @@
                                 notFound = false;
                                 var value = 1*results.rows.item(i).Amount;
                                 var tmpCategory = results.rows.item(i).Category;
-                                if(value < 0)
+                                if(results.rows.item(i).Date.substring(0,4) == getYear())
                                 {
-                                    if(getIndexInCategory(tmpCategory) < 0)
+                                    if(value < 0)
                                     {
-                                        if(debug_mode)
-                                            alert("Category "+tmpCategory+" Not Found");
-                                    }
-                                    else
-                                    {
-                                        Spent[getIndexInCategory(tmpCategory)] = 1*Spent[getIndexInCategory(tmpCategory)] - 1*results.rows.item(i).Amount;
+                                        if(getIndexInCategory(tmpCategory) < 0)
+                                        {
+                                            if(debug_mode)
+                                                alert("Category "+tmpCategory+" Not Found");
+                                        }
+                                        else
+                                        {
+                                            Spent[getIndexInCategory(tmpCategory)] = 1*Spent[getIndexInCategory(tmpCategory)] - 1*results.rows.item(i).Amount;
+                                        }
                                     }
                                 }
                             }

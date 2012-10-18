@@ -65,6 +65,21 @@
                 return newValue;
             }
             
+            function getYear()
+            {
+                var arrSettings = INIgetsection('settings');
+                var activeYear = "2012";
+                for(var i=0; i <arrSettings.length;i++)
+                {
+                    if(arrSettings[i].name == "yearactive")
+                    {
+                        activeYear = arrSettings[i].val;
+                    }
+                }
+                
+                return activeYear;
+            }
+            
             function bank_accountSuccess(tx, results)
             {
                 var len = results.rows.length;
@@ -99,20 +114,25 @@
             function querySuccess(tx, results) {
                 var len = results.rows.length;
                // for (var i=0; i<len; i++){
+                if(acc_Num.length > 0)
+                {
                     for(var i = 0 ; i < len; i++)
                     {
                         //alert(results.rows.item(i).Amount);
-                        for(var j = 0 ; j < acc_Num.length; j++)
+                        if(results.rows.item(i).Date.substring(0,4) == getYear())
                         {
-                            if(sanitize(results.rows.item(i).Account_Num) == sanitize(acc_Num[j]))
+                            for(var j = 0 ; j < acc_Num.length; j++)
                             {
-                                if(results.rows.item(i).Amount < 0)
+                                if(sanitize(results.rows.item(i).Account_Num) == sanitize(acc_Num[j]))
                                 {
-                                    expenses[(1*getMonthPos(results.rows.item(i).Date))-1]= expenses[(1*getMonthPos(results.rows.item(i).Date))-1] + (-1)*results.rows.item(i).Amount;
-                                }
-                                else
-                                {
-                                    income[(1*getMonthPos(results.rows.item(i).Date))-1] = income[(1*getMonthPos(results.rows.item(i).Date))-1] + 1*results.rows.item(i).Amount;
+                                    if(results.rows.item(i).Amount < 0)
+                                    {
+                                        expenses[(1*getMonthPos(results.rows.item(i).Date))-1]= expenses[(1*getMonthPos(results.rows.item(i).Date))-1] + (-1)*results.rows.item(i).Amount;
+                                    }
+                                    else
+                                    {
+                                        income[(1*getMonthPos(results.rows.item(i).Date))-1] = income[(1*getMonthPos(results.rows.item(i).Date))-1] + 1*results.rows.item(i).Amount;
+                                    }
                                 }
                             }
                         }
@@ -204,6 +224,7 @@
                     });
                     
                     graphFix();
+                }
             }
             
             function graphFix()
