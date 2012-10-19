@@ -9,14 +9,14 @@ var accNameUp = new Array();
 
 var prevvals='';
 function getprev() {
-//prevvals = 
-readFile('MEM/ORI/prevValue.txt',gotprev);
+    //prevvals = 
+    readFile('MEM/ORI/prevValue.txt',gotprev);
 
 }
 function gotprev(txt) {
-prevvals = txt;
-//alert(txt);
-showaccounts_Success();
+    prevvals = txt;
+    //alert(txt);
+    showaccounts_Success();
 }
 
 /*function swacc_queryDB(tx) 
@@ -65,30 +65,30 @@ function showaccounts_content(theAccountName, theAccountNum, TheBalance, theBank
     }
     
 
-	tmp+='<a  href="javascript:deleteAccSettings(\''+theAccountNum+'\');" data-rel="popup" data-position-to="window" data-transition="pop"></a></li>';
+    tmp+='<a  href="javascript:deleteAccSettings(\''+theAccountNum+'\');" data-rel="popup" data-position-to="window" data-transition="pop"></a></li>';
     return tmp;
 }
 
 function getBalancefromPrev(num) {
 
-if (num=='')
-return '0.0';
-var k  =prevvals.indexOf(num);
-if (k<0)
-	return '0.0';
-var p =  prevvals.substring(k);
-var p = p.substring(num.length+1,p.indexOf(';'));
-return p;
+    if (num=='')
+        return '0.0';
+    var k  =prevvals.indexOf(num);
+    if (k<0)
+        return '0.0';
+    var p =  prevvals.substring(k);
+    var p = p.substring(num.length+1,p.indexOf(';'));
+    return p;
 }
 
 function showaccounts_Success()
 {
     
-	//var db_expense = db_results.shift().rows;
-	//var db_income = db_results.shift().rows;
-	var bal = db_results.shift().rows;
-	var len = bal.length;
-	//alert(len);
+    //var db_expense = db_results.shift().rows;
+    //var db_income = db_results.shift().rows;
+    var bal = db_results.shift().rows;
+    var len = bal.length;
+    //alert(len);
     var ht_str ='<h4>Overview:</h4>';
     if(len == 0)
     {
@@ -96,7 +96,7 @@ function showaccounts_Success()
     }
     //ht_str = header('Wikus');
 
-//Get Bank Accounts
+    //Get Bank Accounts
     var tmpBank = "";
     var tmpStr = "";
     var accCounter = 0;
@@ -104,26 +104,26 @@ function showaccounts_Success()
     
     if(len > 0)
     {
-	//alert(bal.item(0).Bank+':'+bal.item(0).Account_Num+':'+bal.item(0).Acc_Name);
+        //alert(bal.item(0).Bank+':'+bal.item(0).Account_Num+':'+bal.item(0).Acc_Name);
         tmpBank = bal.item(0).Bank;
     }
     var prevacc='';
     for (var k=0; k<len; k++)
     {
-	if (prevacc==bal.item(k).Account_Num) {	
-	break;
-	}
-	prevacc=bal.item(k).Account_Num;
-	var thebalance ='R'+ getBalancefromPrev(prevacc);
+        if (prevacc==bal.item(k).Account_Num) {	
+            break;
+        }
+        prevacc=bal.item(k).Account_Num;
+        var thebalance ='R'+ getBalancefromPrev(prevacc);
 	
-	//alert(bal.item(k).Acc_Name+bal.item(k).Account_Num+'=='+thebalance+'=='+bal.item(k).Bank);
+        //alert(bal.item(k).Acc_Name+bal.item(k).Account_Num+'=='+thebalance+'=='+bal.item(k).Bank);
 	
-	//var expense = Math.round(db_expense.item(k).Am);
-	/*var income =0;
+        //var expense = Math.round(db_expense.item(k).Am);
+        /*var income =0;
 	if (k<db_income.length)
 	income = Math.round(db_income.item(k).Am);*/
-	//var bal = income+expense;
-	//db_expense.item(k).Bank+' '+db_expense.item(k).Acc+': Balance '+bal
+        //var bal = income+expense;
+        //db_expense.item(k).Bank+' '+db_expense.item(k).Acc+': Balance '+bal
         var thisBank = bal.item(k).Bank;
         //thisBank = "AfricaBank";
 		
@@ -157,5 +157,5 @@ function showaccounts_Success()
 function showaccounts_errorCB(err) 
 {
     if (debug_mode)
-	alert("Error processing SQL: "+err.code);
+        alert("Error processing SQL: "+err.code);
 }

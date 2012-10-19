@@ -19,7 +19,7 @@ function updateDB(tx)
     //alert(tmpSQL);
 	
     tx.executeSql(tmpSQL);
-	account_already_added = true;
+    account_already_added = true;
     alert("Account added successfully!");
     $('select#selectmenu2').val("");
     $('select#bank').val("");
@@ -28,7 +28,7 @@ function updateDB(tx)
 
 function updateSuccess()
 {
-    //alert('Insert Success');
+//alert('Insert Success');
 }
 
 function errorInsert(err) 
@@ -83,7 +83,7 @@ function querySuccess(tx, results) {
         {
             newadd_Accounts.push(accNum);
             $("#selectmenu2").append('<option name="'+sanitize(accNum)+'" value="'+accNum+'">'+accNum+'</option>');
-		$("#selectmenu2").selectmenu("refresh");
+            $("#selectmenu2").selectmenu("refresh");
         }
     }
     if(!banks_added)
@@ -100,10 +100,10 @@ function querySuccess(tx, results) {
 
 
 function doaddaccount() {
-console.log("adding account page");
-	//$('#selectmenu2').html('');
-db.transaction(addaccqueryDB, errorCB, updateSuccess);
-                startup();
+    console.log("adding account page");
+    //$('#selectmenu2').html('');
+    db.transaction(addaccqueryDB, errorCB, updateSuccess);
+    startup();
 				
 }
 
@@ -140,8 +140,8 @@ function sanitize(value)
 
 function addAccount(tmpAcc_Num, tmpBank, tmpAcc_Name)
 {
-if (account_already_added)
-return;
+    if (account_already_added)
+        return;
     tmpSQL = "INSERT INTO Bank_Account (Account_Num, Bank, Acc_Name) VALUES ('"+tmpAcc_Num+"','"+tmpBank+"','"+tmpAcc_Name+"')";
     $('option[name="'+sanitize(tmpAcc_Num)+'"]').detach();
     //db = window.openDatabase("Database", "1.0", "Flying Lions Database", 10485760);
@@ -150,15 +150,15 @@ return;
 }
 
 function updateadd_Accounts() {
-        var account_num = $('select#selectmenu2').val();
-        if (account_num.length==0) {
+    var account_num = $('select#selectmenu2').val();
+    if (account_num.length==0) {
         alert("No account selected");
         return;
-        }
+    }
 
-        var acc_name = $('input#acc_name').val();
-        var bank =  $('select#bank').val();
+    var acc_name = $('input#acc_name').val();
+    var bank =  $('select#bank').val();
 
-        //alert("accnum"+account_num+"\nacc_name:"+acc_name+"\nbank:"+bank);
-        addAccount(account_num,bank,acc_name);
+    //alert("accnum"+account_num+"\nacc_name:"+acc_name+"\nbank:"+bank);
+    addAccount(account_num,bank,acc_name);
 }

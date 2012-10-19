@@ -186,18 +186,18 @@ function readFromFile() {
 /*callback functions for creating and writing to two files*/
 function  fnbfilewriter() {
 		
-		callwriteToFile("MEM/ORI/FNBRules.ini",finalcallback,"<FNB,;> * <\"R\"Cost,;> * * <TransactionType,;> <location,\"@\"|\"from\"|\".\"> * <accName,\"from\"> * * * <\"R\"balance,.> * * <Time,;*>");
+    callwriteToFile("MEM/ORI/FNBRules.ini",finalcallback,"<FNB,;> * <\"R\"Cost,;> * * <TransactionType,;> <location,\"@\"|\"from\"|\".\"> * <accName,\"from\"> * * * <\"R\"balance,.> * * <Time,;*>");
 }
 	
 function finalcallback() {
-	startINIcallback();
-	/*when done with ini - write back to file*/
-	if (stop)
-	stopINI();
+    startINIcallback();
+    /*when done with ini - write back to file*/
+    if (stop)
+        stopINI();
 }
 
 function absacallback() {
-	callwriteToFile("MEM/ORI/ABSARules.ini",fnbfilewriter,"<Absa,;> <accName,,> <TransactionType,,> <Date,;> <Location,,> <\"R\"amount,,> * <\"R\"balance,.> * * *");
+    callwriteToFile("MEM/ORI/ABSARules.ini",fnbfilewriter,"<Absa,;> <accName,,> <TransactionType,,> <Date,;> <Location,,> <\"R\"amount,,> * <\"R\"balance,.> * * *");
 }
 
 function fileReaderSuccess(file) {
@@ -206,28 +206,28 @@ function fileReaderSuccess(file) {
     reader.onloadend = function(e) {
     
         file_text = e.target.result;
-       // alert("read:"+file_text);
+        // alert("read:"+file_text);
 
         if (file_text.length==0) {
-		//alert("new files");
-		console.log("file empty: in process of creating new - after callback (see stopINI)");
-                var catName = new Array("Food", "Travel", "Transport", "Entertainment", "Telecommunications", "ATM" , "Bank Transfer");
-                var catDefaultValues = new Array("SPAR,Checkers,spar,PICK,pick", "BP, Sasol, Engen, Shell, Gautrain", "Wang, Top CD, Amazon",  "Vodacom, Telkom, Cell C, MTN", "OTM,otm,atm,ATM", "BANK");
+            //alert("new files");
+            console.log("file empty: in process of creating new - after callback (see stopINI)");
+            var catName = new Array("Food","Transport", "Entertainment", "Telecommunications", "ATM" , "Bank Transfer");
+            var catDefaultValues = new Array("SPAR,Checkers,spar,PICK,pick", "BP, Sasol, Engen, Shell, Gautrain", "Wang, Top CD, Amazon",  "Vodacom, Telkom, Cell C, MTN", "OTM,otm,atm,ATM", "BANK");
             //file_text="[categories]\r\nFood=SPAR,Checkers,spar,PICK,pick\r\nTravel=BP, Sasol, Engen, Shell, Gautrain\r\nFuel=BP,SASOL\r\nEntertainment=Wang, Top CD, Amazon\r\nOther=ATM\r\nTelecommunications=Vodacom, Telkom, Cell C, MTN\r\ngames=WARG,Top CD\r\nATM= OTM,otm,atm,ATM\r\nGamble=cas,CAS\r\nbanktrans=BANK\r\n[settings]\r\ntransmax=50\r\n";
 		
-                file_text="[categories]\r\n";
-                for(var i=0; i < catName.length; i++)
-                {
-                    file_text += catName[i]+"="+catDefaultValues[i]+"\r\n";
-                    //Food=SPAR,Pick
-                }
-                file_text+="[categoriesBudgetAmounts]\r\n";
-                for(var i=0; i < catName.length; i++)
-                {
-                    file_text += catName[i]+"_Amount=0\r\n";
-                }
-                file_text+="[settings]\r\ntransmax=50\r\n";
-				file_text+="yearactive=2012\r\n";
+            file_text="[categories]\r\n";
+            for(var i=0; i < catName.length; i++)
+            {
+                file_text += catName[i]+"="+catDefaultValues[i]+"\r\n";
+            //Food=SPAR,Pick
+            }
+            file_text+="[categoriesBudgetAmounts]\r\n";
+            for(var i=0; i < catName.length; i++)
+            {
+                file_text += catName[i]+"_Amount=0\r\n";
+            }
+            file_text+="[settings]\r\ntransmax=50\r\n";
+            file_text+="yearactive=2012\r\n";
                 
                 
 		
@@ -236,13 +236,13 @@ function fileReaderSuccess(file) {
 		
 		alert("NOT new files");
 	}*/
-	theini = new Ini(file_text);
-	createthedir(absacallback);
-        // alert("file_text: "+file_text);
+        theini = new Ini(file_text);
+        createthedir(absacallback);
+    // alert("file_text: "+file_text);
         
-		//startINIcallback();
-	/*when done with ini - write back to file*/
-	//stopINI();
+    //startINIcallback();
+    /*when done with ini - write back to file*/
+    //stopINI();
 		
 	
 	
@@ -265,23 +265,27 @@ ini = new Ini(file_text);*/
 
 var aftercreatedircallback;
 function createthedir(call) {
-	aftercreatedircallback = call;
-	window.requestFileSystem(1,0, createdirgotfs, failed);
+    aftercreatedircallback = call;
+    window.requestFileSystem(1,0, createdirgotfs, failed);
 	
 	
 }
 var createdirfs;
 function createdirgotfs(fs) {
-	createdirfs = fs;
-	console.log("creating dir: MEM/ORI");
-	fs.root.getDirectory("MEM", {create: true}, createori, finalcallback);
+    createdirfs = fs;
+    console.log("creating dir: MEM/ORI");
+    fs.root.getDirectory("MEM", {
+        create: true
+    }, createori, finalcallback);
 	
 }
 function oncreatesuccess(d) {
-	aftercreatedircallback();
+    aftercreatedircallback();
 }
 function createori(d) {
-createdirfs.root.getDirectory("MEM/ORI", {create: true}, oncreatesuccess, finalcallback);	
+    createdirfs.root.getDirectory("MEM/ORI", {
+        create: true
+    }, oncreatesuccess, finalcallback);	
 }
 
 /*Writing the file here*/
@@ -317,7 +321,7 @@ reader.readAsText(file);*/
 
 function failed() {
     console.log(error.code);
-    //alert("failed..");
+//alert("failed..");
 }
 
 
@@ -351,18 +355,18 @@ function failed() {
     
     
 
-    var startINIcallback;
-	var stop = true;
+var startINIcallback;
+var stop = true;
 function startINIwithoutStop(call) {
-startINIcallback = call;
-stop=false;
+    startINIcallback = call;
+    stop=false;
     fileSystemInit();
 }
 function startINI(call) {
-stop = true;
-startINIcallback = call;
+    stop = true;
+    startINIcallback = call;
     fileSystemInit();
-  //  alert("init success");
+//  alert("init success");
 //filename = "settings.ini";
    
   
@@ -462,21 +466,21 @@ function INIgetkeyref(section,key) {
 
 function INIdeletekey(section,key) {
 
-	for (var k =0; k<theini.sections.length; k++ ) {
+    for (var k =0; k<theini.sections.length; k++ ) {
         if (theini.sections[k].name == section) {
-           thesection = theini.sections[k];
-		   //get the key
-			   for (var p =0; p<theini.sections[k].items.length; p++ ) {
-					if (theini.sections[k].items[p].name==key) {
-						theini.sections[k].items.splice(p,1);
-						return true;
-					}
-				}
-		   return false;		 
-		}
+            thesection = theini.sections[k];
+            //get the key
+            for (var p =0; p<theini.sections[k].items.length; p++ ) {
+                if (theini.sections[k].items[p].name==key) {
+                    theini.sections[k].items.splice(p,1);
+                    return true;
+                }
+            }
+            return false;		 
+        }
     }
 	
-	return false;
+    return false;
 	
 }
 
@@ -485,9 +489,9 @@ function INIgetsection(section) {
 
     for (var k =0; k<theini.sections.length; k++ ) {
         if (theini.sections[k].name == section) {
-           return theini.sections[k].items;
+            return theini.sections[k].items;
 			 
-		}
+        }
     }
     
     
@@ -530,7 +534,7 @@ var file_to_read="";
 var readcallback;
 function failed_read(error) {
     console.log("reading error: "+error);
-	readcallback('');
+    readcallback('');
 }
 
 function readFile(fname,call) {
@@ -609,9 +613,9 @@ var writercallback;
 var text_to_write;
 var call_fname;
 function callwriteToFile(fname,call,text) {
-	call_fname = fname;
-   text_to_write = text;
-writercallback = call;
+    call_fname = fname;
+    text_to_write = text;
+    writercallback = call;
     window.requestFileSystem(1,0, successcallwriteToFile, failed_read);	
 }
 
@@ -629,7 +633,7 @@ function callwrite_gotFileEntry(theFile) {
 function callwrite_fileWriterSuccess(writer) {
     writer.onwrite = function(e) {
         console.log("Writing done!"+file_content);
-	    writercallback();
+        writercallback();
     };	
     writer.write(text_to_write);
 }
@@ -678,25 +682,27 @@ function file_error(error) {
 
 var directory_callback;
 function getDirectoryEntries(call) { 
-     directory_callback= call ;
-	// alert("in read entries");
+    directory_callback= call ;
+    // alert("in read entries");
     window.requestFileSystem(1, 0, onGetFileSystemSuccess, file_error);
 }
 
 function onGetFileSystemSuccess(fs) {  
     //theFileSystem = fs;
-   // var dr = fs.root.createReader();
-	fs.root.getDirectory("MEM", {create: true}, inMEM, file_error);
+    // var dr = fs.root.createReader();
+    fs.root.getDirectory("MEM", {
+        create: true
+    }, inMEM, file_error);
 
-    /*alert(dr);*/
-    // Get a list of all the entries in the directory
-   /* dr.readEntries(onDirReaderSuccess, file_error);*/
+/*alert(dr);*/
+// Get a list of all the entries in the directory
+/* dr.readEntries(onDirReaderSuccess, file_error);*/
 }
 var mementry;
 function inMEM(direntry) {
-var dr = direntry.createReader();
-mementry = direntry;
-dr.readEntries(onDirReaderSuccess, file_error);
+    var dr = direntry.createReader();
+    mementry = direntry;
+    dr.readEntries(onDirReaderSuccess, file_error);
 }
 /*function rootdir(direntries) {
 for( i = 0; i < len; i++) {
@@ -716,8 +722,8 @@ var text_array = new Array();
 var index =0;
 var dir_currentfile;
 function rec_gotFEntry(theFile) {
- dir_currentfile= theFile; 
-theFile.file(dir_gotFile,failed_read);
+    dir_currentfile= theFile; 
+    theFile.file(dir_gotFile,failed_read);
 }  
 
 //got file - now load the content:
@@ -730,24 +736,26 @@ function dir_gotFile(file) {
         if (text.length==0) {
             console.log("file empty!");
         } 
-		//text read
-			text_array[index]= text;
-			dir_currentfile.remove(success_delete,fail_delete);
-			index++;
-			file_counter++;
-			//console.log(file_counter+"BEFORE WHILE: dir_gotFile -> "+ dentries[file_counter].name);
-			while ( file_counter<dentries.length && dentries[file_counter].isDirectory==true ) {
-				console.log("dentries:"+dentries.length+"-"+file_counter+"IN WHILE: dir_gotFile -> "+ dentries[file_counter].name);
-				file_counter++;
-			}
-			//directory_callback();
-			if (file_counter>=dentries.length) {
-				directory_callback();
-				dir_entries_arr = new Array();
-				text_array = new Array();
-			} else
-			mementry.getFile(dentries[file_counter].name,{create : false},rec_gotFEntry,failed_read);  
-		};
+        //text read
+        text_array[index]= text;
+        dir_currentfile.remove(success_delete,fail_delete);
+        index++;
+        file_counter++;
+        //console.log(file_counter+"BEFORE WHILE: dir_gotFile -> "+ dentries[file_counter].name);
+        while ( file_counter<dentries.length && dentries[file_counter].isDirectory==true ) {
+            console.log("dentries:"+dentries.length+"-"+file_counter+"IN WHILE: dir_gotFile -> "+ dentries[file_counter].name);
+            file_counter++;
+        }
+        //directory_callback();
+        if (file_counter>=dentries.length) {
+            directory_callback();
+            dir_entries_arr = new Array();
+            text_array = new Array();
+        } else
+            mementry.getFile(dentries[file_counter].name,{
+                create : false
+            },rec_gotFEntry,failed_read);  
+    };
     
     reader.onloaderror = function(e) {
         console.log("could not load file contents");
@@ -762,9 +770,9 @@ function onDirReaderSuccess(dirEntries) {
     //var num_file_entries = 0;
     var i,  len;
     len = dirEntries.length;
-	dentries  = dirEntries;
-	console.log("length: "+dentries.length);
-	//boolean onefile=false;
+    dentries  = dirEntries;
+    console.log("length: "+dentries.length);
+    //boolean onefile=false;
     if(len > 0) {
 		
         for( i = 0; i < len; i++) {
@@ -776,13 +784,15 @@ function onDirReaderSuccess(dirEntries) {
             } else {
 			
                 console.log("file: "+dentries[i].name);
-				file_counter=i;
-				//onefile = true;
-				mementry.getFile(dentries[i].name,{create : false},rec_gotFEntry,failed_read);  
-				break;
-                //dir_entries_arr[num_file_entries] = dirEntries[i].name;
+                file_counter=i;
+                //onefile = true;
+                mementry.getFile(dentries[i].name,{
+                    create : false
+                },rec_gotFEntry,failed_read);  
+                break;
+            //dir_entries_arr[num_file_entries] = dirEntries[i].name;
 				
-                //num_file_entries =num_file_entries+1;
+            //num_file_entries =num_file_entries+1;
             }
         }
     //console.log("before calling");
@@ -791,7 +801,7 @@ function onDirReaderSuccess(dirEntries) {
         console.log("No entries found");
     
     }
-	/*if (!onefile) {
+/*if (!onefile) {
 	directory_callback();
 	}*/
   
