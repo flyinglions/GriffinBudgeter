@@ -100,6 +100,9 @@ public class CSVImportExport extends Plugin {
     	
     	File sdcard = Environment.getExternalStorageDirectory();
     	
+       	File deletefile = new File("mnt/sdcard/MEM/ORI/PrevValue.txt");
+       	boolean success = deletefile.delete();
+       	
        	File file = new File(fileLoc);   
         
        	if(file.exists())
@@ -198,6 +201,9 @@ public class CSVImportExport extends Plugin {
     	File sdcard = Environment.getExternalStorageDirectory();
     	
        	File file = new File(fileLoc);   
+       	File deletefile = new File("mnt/sdcard/MEM/ORI/PrevValue.txt");
+       	deletefile.delete();
+       	
        	
        	//GETTING PREV
        	File prevfile = new File("mnt/sdcard/MEM/ORI/PrevValue.txt");   
