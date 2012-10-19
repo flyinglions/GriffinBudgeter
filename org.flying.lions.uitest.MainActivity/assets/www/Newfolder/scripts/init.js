@@ -26,7 +26,7 @@ function createIfNotExistTables()
              */
             
             
-    functionQueue.enqueue('CREATE TRIGGER IF NOT EXISTS unique_row BEFORE INSERT ON sms BEGIN DELETE FROM sms WHERE (Date = new.Date) AND (Amount = new.Amount) AND (Balance = new.Balance); END;');
+    functionQueue.enqueue('CREATE TRIGGER IF NOT EXISTS unique_row BEFORE INSERT ON sms BEGIN DELETE FROM sms WHERE (Account_Num = new.Account_Num) AND (Date = new.Date) AND (Amount = new.Amount) AND (Balance = new.Balance); END;');
     typeQueue.enqueue('CREATE');
 }
         
