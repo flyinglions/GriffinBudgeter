@@ -100,9 +100,7 @@ public class CSVImportExport extends Plugin {
     	
     	File sdcard = Environment.getExternalStorageDirectory();
     	
-    	Log.d(TAG,sdcard.toString());
-    	
-       	File file = new File("mnt/sdcard/" + fileLoc);   
+       	File file = new File(fileLoc);   
         
        	if(file.exists())
         {
@@ -180,7 +178,7 @@ public class CSVImportExport extends Plugin {
     {
     	String tempString = "Griffin Budgeter - ";
 
-		FileWriter fileWriter = new FileWriter("/mnt/sdcard/export.csv");
+		FileWriter fileWriter = new FileWriter(fileLocation + ".csv");
 		 
 			 
 		fileWriter.write(tempString);
@@ -199,7 +197,7 @@ public class CSVImportExport extends Plugin {
     	
     	File sdcard = Environment.getExternalStorageDirectory();
     	
-       	File file = new File("mnt/sdcard/" + fileLoc);   
+       	File file = new File(fileLoc);   
        	
        	//GETTING PREV
        	File prevfile = new File("mnt/sdcard/MEM/ORI/PrevValue.txt");   

@@ -146,6 +146,14 @@ document.addEventListener("menubutton", onMenuKeyDown, false);
 		}
 	);
 	
+	$( '#fileselector' ).live( 'pageshow',
+			function(event){
+			$('#backBtn').hide();
+			
+			getFileSystem();
+			clickItemAction();
+			}
+		);
 	
 	/*
 	 * 

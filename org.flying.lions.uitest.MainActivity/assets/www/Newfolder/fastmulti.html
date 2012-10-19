@@ -12,7 +12,8 @@
         
         <!--##################Start of very long script includes ??? -->
         <link rel="stylesheet" href="./theme/Wikus/jquery.mobile-1.1.1.css" />	
-
+		<link rel="stylesheet" href="./theme/Wikus/style.css" />	
+		
         <!--<link rel="stylesheet" href="./theme/Wikus/jquery.mobile.structure-1.1.0.min.css" />-->
         <script src="./theme/Wikus/jquery-1.7.1.min.js"></script>
         <script src="./theme/Wikus/jquery.mobile-1.1.1.min.js"></script>
@@ -28,6 +29,7 @@
 			<script type="text/javascript" src="./scripts/showaccounts.js"></script>
 			<script type="text/javascript" src="./scripts/addaccount.js"></script>
 			<script type="text/javascript" src="./scripts/import_exportCSV.js"></script>
+			<script type="text/javascript" src="./scripts/fileselector.js"></script>
 			
 			<!--class for handling db queries-->
 					<script type="text/javascript" src="./scripts/dbhandlertest.js"></script>
@@ -228,9 +230,9 @@
 				<div data-role="controlgroup">
 				<a href="#settingsAccounts" data-role="button">Accounts</a>
 				<a href="javascript:showConfirmImportInbox();" data-role="button">Import Inbox</a>
-				<a href="javascript:showConfirmImportCSV();" data-role="button">Import SMSes from CSV file</a>
-				<a href="javascript:showConfirmExportCSV();" data-role="button">Export transactions to CSV file</a>
-				<a href="javascript:showConfirmImportOld();" data-role="button">Import transactions from CSV file</a>
+				<a href="javascript:disableFileSelector(1)" data-role="button">Import SMSes from CSV file</a>
+				<a href="javascript:enableFileSelector()" data-role="button">Export transactions to CSV file</a>
+				<a href="javascript:disableFileSelector(2)" data-role="button">Import transactions from CSV file</a>
 				<a href="#graphsettings" data-role="button">Graph Settings</a>
 				</div>
 	        	
@@ -238,6 +240,31 @@
 </div><!-- page settings -->
 
 
+<!--file selector-->
+<div style="min-height: 810px;" class="ui-page ui-body-a" data-url="fileselector" data-role="page" id="fileselector" data-theme="a">
+
+	<!-- Header -->
+      <div data-role="header" data-position="fixed">
+            <a id="backBtn" href="#" data-icon="arrow-l">Back</a>
+            <h1>File Explorer</h1>
+            <a id="homeBtn" href="#fileselector" data-icon="home">Home</a>
+      </div>
+      <div data-role="content">
+            <h4 id="dirTree">Folder</h4>
+
+			<div class="ui-grid-c" id="dirContent">
+			
+			</div>
+
+      </div>
+      
+      <div data-role="footer" data-position="fixed">
+      		<input type="text" id="fileName" value="default"/>
+            <a id="cancelBtn" href="#settings" data-icon="delete">Cancel</a>
+            <a id="select" href="javascript:returnDirPath();" data-icon="home" class="ui-disabled">Export here</a>
+      </div>	
+
+</div><!-- file selector -->
 
 
 <!--add accounts-->
@@ -322,7 +349,7 @@
 
 
 <!--graphsettings page-->
-<div style="min-height: 810px;" class="ui-page ui-body-a" tabindex="1" data-url="graphsettings" data-role="page" id="graphsettings" data-theme="a">
+<div style="min-height: 810px;" class="ui-page ui-body-a" tabindex="6" data-url="graphsettings" data-role="page" id="graphsettings" data-theme="a">
 
 	<!-- Header -->
         	<div data-role="header" data-position="fixed" data-id="homeheader" style="background-image:url('AppLogo.png'); background-repeat:no-repeat; background-position:left top;">
