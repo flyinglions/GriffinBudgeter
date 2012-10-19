@@ -145,13 +145,15 @@ function retrievesettings()
 {
     $('#catul').html('<h3>Loading...</h3>');
     var transmax = INIget('settings','transmax');
+    var activeYear = INIget('settings','yearactive');
     var str='';
     //$('input#transmax').val(transmax);
     //$('input#transmax').slider('refresh');
     categorylist = INIgetsection('categories');
 	
     str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Graph Settings</li>';
-    str+='	<li>						<div class="ui-btn-inner ui-li"><div data-role="fieldcontain"><label style="white-space:normal" for="transmax">Maximum transactions to show</label>							<input type="range" name="transmax" id="transmax" value="'+transmax+'" min="0" max="100" data-highlight="true" />								</div>												</div>					</li>	';
+    str+='	<li>						<div class="ui-btn-inner ui-li"><div data-role="fieldcontain"><label style="white-space:normal" for="transmax">Maximum transactions to show</label>							<input type="range" name="transmax" id="transmax" value="'+transmax+'" min="0" max="100" data-highlight="true" />								</div>												</div>';
+    str+='</li><li data-role="fieldcontain"> <label  for="settingsyearactive">Active Year</label>   <input type="text"  id="settingsyearactive"  name="settingsyearactive"  value="'+activeYear+'" /></li>	';
 	
     //category header
     str+='<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Custom categories</li>';
@@ -219,6 +221,8 @@ function updatefields() {
     var transmax = $('input#transmax').val();
     transactionlimit = transmax;
     INIset('settings','transmax',transmax);
+    var yearActive = $('input#settingsyearactive').val();
+    INIset('settings','yearactive',yearActive);
 }
 function updategraphsettings() 
 {

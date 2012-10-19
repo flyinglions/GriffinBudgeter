@@ -135,7 +135,7 @@
                     {
                         $('<h3>No Accounts Found.</h3>').appendTo('.ReportContent');
                     }
-                    alert(getYear());
+                    //alert(getYear());
                     for(var k = 0 ; k < accounts.length; k++)
                     {
                         $('<h3>'+accounts[k]+'</h3>').appendTo('.ReportContent');
@@ -165,6 +165,7 @@
                                     {
                                         if(getIndexInCategory(tmpCategory) < 0)
                                         {
+                                            Spent[getIndexInCategory('Other')] = 1*Spent[getIndexInCategory('Other')] - 1*results.rows.item(i).Amount;
                                             if(debug_mode)
                                                 alert("Category "+tmpCategory+" Not Found");
                                         }
