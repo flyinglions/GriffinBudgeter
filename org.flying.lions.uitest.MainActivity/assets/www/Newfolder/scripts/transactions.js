@@ -63,7 +63,6 @@ function deleteconfirm(damount,dbalance) {
 var currentpage=0;
 function transactions_queryDB(tx) 
 {
-
     tx.executeSql('SELECT * FROM Bank_Account', [], transactions_Accountsuccess, transactions_errorCB);
 
     var where=''
@@ -75,6 +74,9 @@ function transactions_queryDB(tx)
         limiting = 'LIMIT '+transactionlimit +' OFFSET '+(currentpage*transactionlimit);
     //tx.executeSql('SELECT * FROM (SELECT * FROM SMS GROUP BY Date, Time) '+where+' ORDER BY Date DESC, Time DESC  LIMIT '+transactionlimit, [], transactions_Success, transactions_errorCB);
     tx.executeSql('SELECT * FROM sms '+where+' ORDER BY Date DESC, Time DESC '+limiting , [], transactions_Success, transactions_errorCB);
+    tx.executeSql('SELECT * FROM sms', [], newtransactions_Accountsuccess, transactions_errorCB);
+    
+    
 }
 
 function transactions_Accountsuccess(tx, results)
@@ -87,6 +89,85 @@ function transactions_Accountsuccess(tx, results)
         transactions_AccName.push(results.rows.item(i).Acc_Name);
         transactions_AccNum.push(results.rows.item(i).Account_Num);
     }
+}
+
+function newtransactions_Accountsuccess(tx, results)
+{
+    var len = results.rows.length;
+    $('select#newTransAccNum').val("");
+    
+    for(var i = 0 ; i < len; i++)
+    {
+        //newtransactions_AccNum.push(results.rows.item(i).Account_Num);
+        $('#newTransAccNum option[name="'+sanitize(results.rows.item(i).Account_Num)+'"]').detach();
+        $("#newTransAccNum").append('<option name="'+sanitize(results.rows.item(i).Account_Num)+'" value="'+results.rows.item(i).Account_Num+'">'+results.rows.item(i).Account_Num+'</option>');
+        //$("#newTransAccNum").selectmenu("refresh");
+        
+    }
+    
+    startINI(function()
+    {
+        var arrCatsTrans = INIgetsection('categories');
+        for (i=0; i<arrCatsTrans.length; i++)
+        {
+            $('#newTransCat option[name="'+sanitize(arrCatsTrans[i].name)+'"]').detach();
+            $("#newTransCat").append('<option name="'+sanitize(arrCatsTrans[i].name)+'" value="'+arrCatsTrans[i].name+'">'+arrCatsTrans[i].name+'</option>');
+            //$("#newTransCat").selectmenu("refresh");
+        }
+    });
+}
+
+function checkTransAdd()
+{
+    //$('div#newtransactionspopup input.AddTrans').click(function()
+    //{
+        db.transaction(insertTransactionManually, transactions_errorCB);
+    //});
+}
+
+function insertTransactionManually(tx)
+{
+    /*
+     *  <label>Date</label><input type="text" value="" placeholder="yyyy/mm/dd"/>
+                    <label>Time</label><input type="text" value="0" />
+                    <label>Amount</label><input type="text" value="0.0" />
+                    <label>Category</label><select name="Category" id="newTransCat"></select>
+                    <label>Account_Num</label><select name="bank" id="newTransAccNum"></select>
+     */
+    if($('div#newtransactionspopup input.date').val() != '')
+    {
+        if($('div#newtransactionspopup input.amount').val() != '')
+        {
+            tx.executeSql("INSERT INTO sms(Date, Time, Amount, Balance, Category, Account_Num) VALUES('"+$('div#newtransactionspopup input.date').val()+"','0','"+$('div#newtransactionspopup input.amount').val()+"','0','"+$('div#newtransactionspopup select#newTransCat').val()+"','"+$('div#newtransactionspopup select#newTransAccNum').val()+"')");
+        }
+    }
+    
+    $('div#newtransactionspopup input.date').val("");
+    $('div#newtransactionspopup input.amount').val("");
+    $('div#newtransactionspopup select#newTransCat').val("");
+    $('div#newtransactionspopup select#newTransAccNum').val("");
+}
+
+function replaceAlltwo(exp, value)
+{
+    var newValue = value;
+    while(newValue.indexOf(exp) > -1)
+    {
+        newValue = newValue.replace(exp,"_");
+    }
+    return newValue;
+}
+
+function sanitize(value)
+{
+    var newValue = value;
+
+    newValue = replaceAlltwo(".", newValue);
+    newValue = replaceAlltwo("/", newValue);
+    newValue = replaceAlltwo(" ", newValue);
+	
+
+    return newValue;
 }
 
 infinityview=false;

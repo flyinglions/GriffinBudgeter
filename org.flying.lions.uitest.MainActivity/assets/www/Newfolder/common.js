@@ -45,6 +45,8 @@ function onDeviceReady()
     isPhoneGapReady = true;
 	
     isFirstRun = true;
+    
+    //checkTransAdd();
 	
 	
     /*read all files in MEM and delete them*/
